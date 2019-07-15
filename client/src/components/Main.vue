@@ -2,15 +2,14 @@
     <div id="app-main">
         <div class="content-wrapper">
             <tool-bar></tool-bar>
+            
             <transition name="fade" mode="out-in">
                 <div class="content-area">
-                <router-view/>
-                <!-- <editor v-if="active_content ==='editor'"></editor>
-                <viewer v-if="active_content ==='viewer'"></viewer>
-                <manager v-if="active_content ==='manager'"></manager>
-                <analysis v-if="active_content ==='analysis'"></analysis> -->
+                    <router-view/>
                 </div>
             </transition>
+            
+            
         </div>
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
     </div>

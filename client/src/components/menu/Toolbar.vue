@@ -1,6 +1,17 @@
 <template>
 <div class="toolbar-wrapper">
+    <div class="tool left">
+        <span style="font-size:1.2em;">
+            LAYOUT
+        </span>
+    </div>
+    
     <div style="flex:1 1 100%; "></div>
+    <div class="tool right">
+        <span style="font-size:1.2em;">
+            SAVE
+        </span>
+    </div>
     <div class="tool right" v-on:click="onFullScreen">
         <span style="font-size:1.2em;">
             <i class="fas fa-expand"></i>
