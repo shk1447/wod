@@ -62,4 +62,4 @@ typings/
 log
 
 # build output
-_bundle
+bundle
