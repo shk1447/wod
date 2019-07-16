@@ -1,17 +1,17 @@
 <template>
-    <el-input></el-input>
+    <div :style="props.style">
+        <el-input v-model="props.model"></el-input>
+    </div>
 </template>
 
 <script>
 
 export default {
-    name:'label-comp',
+    type:'two_comp',
+    name:'input-comp',
     props: ['props','action'],
     data () {
-        return {
-            _props: this.props,
-            _action: this.action
-        }
+        return { }
     },
     components : {
         

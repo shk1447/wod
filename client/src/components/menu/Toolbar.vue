@@ -1,17 +1,20 @@
 <template>
 <div class="toolbar-wrapper">
-    <div class="tool left">
-        <span style="font-size:1.2em;">
-            LAYOUT
-        </span>
-    </div>
-    
+    <template v-for="tool in tool.left" >
+        <div class="tool left" :key="tool.id" v-on:click="tool.action">
+            <span style="font-size:1.2em;">
+                <i v-if="tool.icon !== ''" :class="tool.icon"></i>{{tool.label}}
+            </span>
+        </div>
+    </template>
     <div style="flex:1 1 100%; "></div>
-    <div class="tool right">
-        <span style="font-size:1.2em;">
-            SAVE
-        </span>
-    </div>
+    <template v-for="tool in tool.right" >
+        <div class="tool right" :key="tool.id" v-on:click="tool.action">
+            <span style="font-size:1.2em;">
+                <i v-if="tool.icon !== ''" :class="tool.icon"></i>{{tool.label}}
+            </span>
+        </div>
+    </template>
     <div class="tool right" v-on:click="onFullScreen">
         <span style="font-size:1.2em;">
             <i class="fas fa-expand"></i>
@@ -28,7 +31,12 @@
 <script>
 export default {
     data () {
-        return {}
+        return {
+            tool: {
+                left:[],
+                right:[]
+            }
+        }
     },
     methods: {
         onFullScreen() {

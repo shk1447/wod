@@ -8,6 +8,7 @@
 
 export default {
     name:'three-layer-comp',
+    type:'two_comp',
     props: ['props','action'],
     data () {
         return { }

@@ -1,10 +1,12 @@
-import InputComp from "./InputComp.vue";
-import LabelComp from "./LabelComp.vue";
-import ButtonComp from "./ButtonComp.vue";
+
+import TwoComp from "./two_comp";
+import ThreeComp from "./three_comp";
 
 import ThreeLayerComp from "./ThreeLayerComp.vue";
 import TwoLayerComp from "./TwoLayerComp.vue";
 
-export default [
-    InputComp, LabelComp, ThreeLayerComp, TwoLayerComp, ButtonComp
-];
+export default {
+    two_comp : TwoComp,
+    three_comp : ThreeComp,
+    layer_comp : [ThreeLayerComp, TwoLayerComp]
+};

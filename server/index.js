@@ -14,21 +14,19 @@ var compression = require('compression');
 var helmet = require('helmet');
 
 const session = require('express-session')
-const KnexSessionStore = require('connect-session-knex')(session);
-
 const passport = require('passport');
 
 var cluster = require('cluster');
 var os = require('os');
 
-// rdbms connector & query builder
-const knex = require('knex');
-
 const socket = require('./socket');
 const router = require('./router');
 const runtime = require('./runtime');
 
-const model = require('./model');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
+//const mongoose_session = require('mongoose-session');
+
 
 khan = {
     service:true,
@@ -39,18 +37,6 @@ khan = {
 }
 
 module.exports = function(config) {
-    khan.database = knex({
-        client:config.database.type,
-        connection : config.database[config.database.type],
-        pool: {min:0,max:10}
-    })
-    khan.session_store = new KnexSessionStore({
-        knex:khan.database,
-        createtable :false,
-        tablename:"sessions"
-    })
-    khan.model = model();
-
     ClusterServer = {
         name: 'ClusterServer',
         
@@ -70,9 +56,6 @@ module.exports = function(config) {
                 // var webpack_analyzer = require('webpack-bundle-analyzer')
                 // webpack_analyzer.start(test);
                 
-                _.each(khan.model, (d,i) => {
-                    d.initialize();
-                })
                 for (i = 0; i < me.cpus; i += 1) {
                     var worker = cluster.fork();
 
@@ -139,8 +122,16 @@ module.exports = function(config) {
     app.use(bodyParser.urlencoded({limit:'5mb',extended:true}));
     app.use(bodyParser.json({limit:'5mb'}));
     app.use(busboy());
-
     app.use(cookieParser());
+
+    mongoose.Promise = global.Promise;
+
+    mongoose.connect(config.mongo_uri, {useNewUrlParser: true}).then(() => {
+        console.log('Successfully connected to mongodb');
+    }).catch((e) => {
+        console.log('Fail connected to mongodb : ', e);
+    })
+
     app.use(session({
         key: 'sid',
         secret: 'khan',
@@ -149,7 +140,7 @@ module.exports = function(config) {
         },
         saveUninitialized: false,
         resave: false,
-        store:khan.session_store,
+        store:new MongoStore({mongooseConnection:mongoose.connection}),
         rolling:true
     }));
 
@@ -166,8 +157,6 @@ module.exports = function(config) {
 
     router(app,config);
     khan['app'] = app;
-    runtime.init(khan);
-    runtime.load();
 
     var server = config.https ? https.createServer({
         key:fs.readFileSync(path.resolve(process.env.root_path, './cert/key.pem')),

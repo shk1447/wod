@@ -15,11 +15,7 @@ module.exports = function(app,config) {
     _.each(api, (routes, path) => {
         _.each(routes, (funcs, routeName) => {
             _.each(funcs, (func, funcName) => {
-                if(path !== 'auth') {
-                    app[routeName]('/' + path + '/' + funcName, ensureAuth, func);
-                } else {
-                    app[routeName]('/' + path + '/' + funcName, func);
-                }
+                app[routeName]('/' + path + '/' + funcName, func);
             })
         })
     })

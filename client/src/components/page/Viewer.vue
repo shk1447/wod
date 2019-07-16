@@ -1,5 +1,5 @@
 <template>
-  <div style="position:absolute;">
+  <div style="position:absolute;height:100%;width:100%;" @dragover="dragover" @drop="drop">
     <component v-for="item in instances" :key="item.id" :is="item.compName" :id="item.id" :props="item.props" :action="item.action"></component>
   </div>
 </template>
@@ -9,87 +9,25 @@
 export default {
     data () {
         return {
-            instances : [
-            {
-                id:"two_layer",
-                compName:"two-layer-comp",
-                props: {
-                    style: {
-                        "position":"absolute",
-                        "top":"10px",
-                        "left":"10px",
-                        "width": "800px",
-                        "height": "500px",
-                        "border": "1px solid black"
-                    },
-                    children: [{
-                        id:"test_input",
-                        compName:"input-comp",
-                        props:{
-                            model:"test",
-                            style: {
-                                "position":"absolute",
-                                "top":"30px",
-                                "left":"90px",
-                                "width": "100px"
-                            }
-                        },
-                        action:{
-                            change:function(e) {
-                                console.log(e);
-                            }
-                        }
-                    },{
-                        id:"test_button",
-                        compName:"button-comp",
-                        props:{
-                            label:"click",
-                            style: {
-                                "position":"absolute",
-                                "top":"30px",
-                                "left":"200px",
-                                "width": "100px"
-                            }
-                        },
-                        action:{
-                            change:function(e) {
-                                console.log(e);
-                            }
-                        }
-                    }]
-                },
-                action: {
-                    
-                }
-            },{
-                id:"three_layer",
-                compName:"three-layer-comp",
-                props: {
-                    style: {
-                        "position":"absolute",
-                        "top":"10px",
-                        "left":"820px",
-                        "width": "800px",
-                        "height":"500px",
-                        "border": "1px solid black"
-                    },
-                    children:[{
-                        id:"",
-                        compName:"",
-                        props:{
-                            path:""
-                        },
-                        action:{}
-                    }]
-                },
-                action: {
-
-                }
-            }]
+            instances : []
         }
     },
     components : {
         
+    },
+    methods: {
+        dragover(e) {
+            e.preventDefault();
+        },
+        drop(e) {
+            e.preventDefault();
+            var me = this;
+            me.$loading({})
+            var transfer_data = e.dataTransfer.getData("page");
+            var data = JSON.parse(transfer_data);
+            me.instances = data.instances;
+            me.$loading({}).close();
+        }
     },
     created() {
         console.log('created')

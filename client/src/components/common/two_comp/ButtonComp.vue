@@ -7,7 +7,7 @@
 <script>
 
 export default {
-    type:'two_layer',
+    type:'two_comp',
     name:'button-comp',
     props: ['props','action'],
     data () {

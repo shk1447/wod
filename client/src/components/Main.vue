@@ -1,17 +1,15 @@
 <template>
     <div id="app-main">
-        <div class="content-wrapper">
-            <tool-bar></tool-bar>
-            
-            <transition name="fade" mode="out-in">
-                <div class="content-area">
-                    <router-view/>
-                </div>
-            </transition>
-            
-            
+        <div class="content-wrapper" ref="content_area">
+            <tool-bar ref="tool_bar"></tool-bar>
+            <div class="content-area">
+                <router-view/>
+            </div>
+            <side-bar ref="side_bar"><side-bar>
         </div>
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
+
+        <page-modal ref="pageModal"></page-modal>
     </div>
 </template>
 
@@ -19,11 +17,14 @@
 
 import NavMenu from './menu/NavMenu.vue';
 import Toolbar from './menu/Toolbar.vue';
+import Sidebar from './menu/Sidebar.vue';
 
 import Editor from './page/Editor.vue';
 import Viewer from './page/Viewer.vue';
 import Manager from './page/Manager.vue';
 import Analysis from './page/Analysis.vue';
+
+import PageModal from './modal/CreatePageModal.vue';
 
 export default {
     props: {
@@ -31,23 +32,53 @@ export default {
     },
     data() {
         return {
-            active_content:'editor'
+            active_content:'editor',
+            tool:{
+                editor: {
+                    left:[],
+                    right:[{
+                        id:"",
+                        icon: "fas fa-cloud-upload-alt",
+                        label:'',
+                        action:this.onPagePopup
+                    }]
+                },
+                viewer: {
+                    left:[],
+                    right:[]
+                },
+                manager: {
+                    left:[],
+                    right:[]
+                },
+                analysis: {
+                    left:[],
+                    right:[]
+                }
+            }
         }
     },
     components: {
+        "page-modal": PageModal,
         "nav-menu" : NavMenu,
         "tool-bar" : Toolbar,
+        "side-bar" : Sidebar,
         "editor": Editor,
         "viewer": Viewer,
         "manager": Manager,
         "analysis": Analysis
     },
     methods: {
+        onPagePopup() {
+            this.$refs.pageModal.show();
+        },
         onCollapse(state) {
             console.log(state);
         },
         onItemClick(event, item) {
-            console.log(item);
+            // this.active_content = this.$route.name;
+            this.$refs.tool_bar.tool = this.tool[this.$route.name];
+            this.$refs.side_bar.content_area = this.$refs.content_area;
         }
     },
     beforeCreate() {
@@ -60,7 +91,10 @@ export default {
 
     },
     mounted() {
-        
+        // this.active_content = this.$route.name;
+        this.$refs.tool_bar.tool = this.tool[this.$route.name];
+        this.$refs.side_bar.content_area = this.$refs.content_area;
+        console.log('mounted');
     },
     beforeUpdate() {
         
