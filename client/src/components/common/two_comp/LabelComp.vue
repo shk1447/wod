@@ -1,5 +1,7 @@
 <template>
-    <label>{{props.label}}</label>
+    <div :style="props.style">
+        <label>{{props.label}}</label>
+    </div>
 </template>
 
 <script>
