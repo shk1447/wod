@@ -9,7 +9,7 @@
 export default {
     type:'two_comp',
     name:'input-comp',
-    props: ['props','action'],
+    props: ['props'],
     data () {
         return { }
     },

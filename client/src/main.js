@@ -24,12 +24,16 @@ import vmodal from 'vue-js-modal';
 Vue.use(vmodal);
 Vue.use(ElementUI, { locale });
 
+Vue.prototype.three_component = {};
+
 // Custom Components
 import common from './components/common';
 _.each(common, function(comp_list, type) {
     _.each(comp_list, function(comp, i) {
         if(comp.type === "two_comp") {
             Vue.component(comp.name, comp);
+        } else if(comp.type === "three_comp") {
+            Vue.prototype.three_component[comp.name] = comp.component;
         }
     })
 });

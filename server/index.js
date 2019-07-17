@@ -108,12 +108,12 @@ module.exports = function(config) {
 
     // middle-ware performance check!
     app.set('view cache', true);
+    app.use('/assets', express.static(path.resolve(process.env.root_path,'./assets')));
     app.use('/css', express.static(path.resolve(process.env.root_path,'./css')));
-    app.use('/icons', express.static(path.resolve(process.env.root_path,'./icons')));
     app.use('/js', express.static(path.resolve(process.env.root_path,'./js')));
-    app.use('/libs', express.static(path.resolve(process.env.root_path,'./libs')));
     app.use('/static', express.static(path.resolve(process.env.root_path,'./static')));
     app.use('/vendor', express.static(path.resolve(process.env.root_path,'./vendor')));
+    
     app.use(helmet());
     app.use(helmet.xssFilter());
     app.disable('x-powered-by');

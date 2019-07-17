@@ -9,12 +9,9 @@
 export default {
     type:'two_comp',
     name:'label-comp',
-    props: ['props','action'],
+    props: ['props'],
     data () {
-        return {
-            _props: this.props,
-            _action: this.action
-        }
+        return { }
     },
     components : {
         

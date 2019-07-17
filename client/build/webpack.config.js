@@ -49,9 +49,6 @@ var webpack_config = {
       cssProcessorOptions: { safe: true, map: { inline: false } }
     }),
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, '../src/libs'),
-      to: path.resolve(root_path, './libs')
-    },{
       from: path.resolve(__dirname, '../src/assets'),
       to: path.resolve(root_path, './assets')
     },{
