@@ -5,17 +5,17 @@
     "props": {
       "style": {
         "position": "absolute",
-		"overflow": "hidden",
-        "top": "10px",
-        "left": "10px",
+        "overflow": "hidden",
+        "top": "110px",
+        "left": "110px",
         "width": "200px",
         "height": "200px",
         "border": "1px solid red",
-		"background": "white",
-		"zIndex":"2"
+        "background": "white",
+        "zIndex": "2"
       },
       "children": [
-		{
+        {
           "id": "test_label",
           "compName": "label-comp",
           "props": {
@@ -32,23 +32,24 @@
       ]
     },
     "action": {}
-  },{
+  },
+  {
     "id": "two_layer",
     "compName": "two-layer-comp",
     "props": {
       "style": {
         "position": "absolute",
-		"overflow": "hidden",
+        "overflow": "hidden",
         "top": "10px",
         "left": "10px",
         "width": "800px",
         "height": "500px",
         "border": "1px solid black",
-		"background": "white",
-		"zIndex":"1"
+        "background": "white",
+        "zIndex": "1"
       },
       "children": [
-		{
+        {
           "id": "test_input",
           "compName": "input-comp",
           "props": {
@@ -100,7 +101,7 @@
     "props": {
       "style": {
         "position": "absolute",
-		"overflow": "hidden",
+        "overflow": "hidden",
         "top": "10px",
         "left": "810px",
         "width": "800px",
@@ -112,11 +113,11 @@
           "id": "turbine01",
           "compName": "turbine-comp",
           "props": {
-			"style":{
-				"x":300,
-				"y":0,
-				"z":0
-			}
+            "style": {
+              "x": 300,
+              "y": 0,
+              "z": 0
+            }
           }
         }
       ]
@@ -128,7 +129,7 @@
     "props": {
       "style": {
         "position": "absolute",
-		"overflow": "hidden",
+        "overflow": "hidden",
         "top": "510px",
         "left": "10px",
         "width": "800px",
@@ -140,31 +141,33 @@
           "id": "rack01",
           "compName": "rack-comp",
           "props": {
-			"style":{
-				"x":0,
-				"y":0,
-				"z":0
-			}
+            "style": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
           }
-        },{
+        },
+        {
           "id": "rack02",
           "compName": "rack-comp",
           "props": {
-			"style":{
-				"x":100,
-				"y":0,
-				"z":0
-			}
+            "style": {
+              "x": 100,
+              "y": 0,
+              "z": 0
+            }
           }
-        },{
+        },
+        {
           "id": "rack03",
           "compName": "rack-comp",
           "props": {
-			"style":{
-				"x":200,
-				"y":0,
-				"z":0
-			}
+            "style": {
+              "x": 200,
+              "y": 0,
+              "z": 0
+            }
           }
         }
       ]
@@ -176,7 +179,7 @@
     "props": {
       "style": {
         "position": "absolute",
-		"overflow": "hidden",
+        "overflow": "hidden",
         "top": "510px",
         "left": "810px",
         "width": "800px",
@@ -188,11 +191,11 @@
           "id": "boiler01",
           "compName": "boiler-comp",
           "props": {
-			"style":{
-				"x":0,
-				"y":0,
-				"z":0
-			}
+            "style": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
           }
         }
       ]
