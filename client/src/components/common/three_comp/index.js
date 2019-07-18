@@ -1,2 +1,4 @@
 import RackComp from './RackComp.js';
-export default [RackComp]
+import BoilerComp from './BoilerComp.js';
+import TurbineComp from './TurbineComp.js';
+export default [RackComp, BoilerComp, TurbineComp]

@@ -32,7 +32,7 @@ export default {
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             this.scene.background = new THREE.Color( 0xcccccc );
-            this.scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
+            this.scene.fog = new THREE.FogExp2( 0xcccccc, 0.0008 );
             this.renderer = new THREE.WebGLRenderer( { antialias: true } );
             this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
             this.container.appendChild( this.renderer.domElement );
@@ -45,8 +45,8 @@ export default {
             this.controls.dampingFactor = 0.25;
             this.controls.screenSpacePanning = false;
             this.controls.minDistance = 0;
-            this.controls.maxDistance = 500;
-            this.controls.maxPolarAngle = Math.PI / 2;
+            //this.controls.maxDistance = 500;
+            //this.controls.maxPolarAngle = Math.PI / 2;
 
             var manager = new THREE.LoadingManager(this.loadedModel);
             this.textureLoader = new THREE.TextureLoader(manager);
@@ -79,11 +79,15 @@ export default {
                     component.props = _.extend(component.props, comp.props);
                     component.updated();
 
-                    component.$texture = me.textureLoader.load(component.props.path.texture);
+                    //component.$texture = me.textureLoader.load(component.props.path.texture);
                     me.objLoader.load(component.props.path.obj, function(obj) {
                         component.$obj = obj;
                         component.$obj.traverse(function(child) {
-                            if(child.isMesh) child.material.map = component.$texture;
+                            console.log(child.name);
+                            if(child.isMesh && child.name) {
+                                let texture = me.textureLoader.load(component.props.path.texture.replace('{childName}', child.name));
+                                child.material.map = texture;
+                            }
                         })
                         me.components.push(component);
                         me.scene.add(component.$obj);
