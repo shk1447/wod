@@ -1,135 +1,201 @@
 [
-    {
-      "id": "two_layer_chart",
-      "compName": "two-layer-comp",
-      "props": {
-        "style": {
-          "position": "absolute",
-          "overflow": "hidden",
-          "top": "10px",
-          "left": "10px",
-          "width": "200px",
-          "height": "200px",
-          "border": "1px solid red",
-          "background": "white",
-          "zIndex":"2"
-        },
-        "children": [
-          {
-            "id": "test_label",
-            "compName": "label-comp",
-            "props": {
-              "label": "sub_label_chart임",
-              "style": {
-                "position": "absolute",
-                "top": "30px",
-                "left": "110px",
-                "width": "100px"
-              }
-            },
-            "action": {}
-          }
-        ]
+  {
+    "id": "two_layer_chart",
+    "compName": "two-layer-comp",
+    "props": {
+      "style": {
+        "position": "absolute",
+		"overflow": "hidden",
+        "top": "10px",
+        "left": "10px",
+        "width": "200px",
+        "height": "200px",
+        "border": "1px solid red",
+		"background": "white",
+		"zIndex":"2"
       },
-      "action": {}
-    },{
-      "id": "two_layer",
-      "compName": "two-layer-comp",
-      "props": {
-        "style": {
-          "position": "absolute",
-          "overflow": "hidden",
-          "top": "10px",
-          "left": "10px",
-          "width": "800px",
-          "height": "500px",
-          "border": "1px solid black",
-          "background": "white",
-          "zIndex":"1"
-        },
-        "children": [
-          {
-            "id": "test_input",
-            "compName": "input-comp",
-            "props": {
-              "model": "test",
-              "style": {
-                "position": "absolute",
-                "top": "30px",
-                "left": "90px",
-                "width": "100px"
-              }
-            },
-            "action": {}
+      "children": [
+		{
+          "id": "test_label",
+          "compName": "label-comp",
+          "props": {
+            "label": "sub_label_chart임",
+            "style": {
+              "position": "absolute",
+              "top": "30px",
+              "left": "110px",
+              "width": "100px"
+            }
           },
-          {
-            "id": "test_input",
-            "compName": "input-comp",
-            "props": {
-              "model": "test",
-              "style": {
-                "position": "absolute",
-                "top": "30px",
-                "left": "90px",
-                "width": "100px"
-              }
-            },
-            "action": {}
-          },
-          {
-            "id": "test_button",
-            "compName": "button-comp",
-            "props": {
-              "label": "click",
-              "style": {
-                "position": "absolute",
-                "top": "30px",
-                "left": "200px",
-                "width": "100px"
-              }
-            },
-            "action": {}
-          }
-        ]
-      },
-      "action": {}
+          "action": {}
+        }
+      ]
     },
-    {
-      "id": "three_layer",
-      "compName": "three-layer-comp",
-      "props": {
-        "style": {
-          "position": "absolute",
-          "overflow": "hidden",
-          "top": "10px",
-          "left": "810px",
-          "width": "800px",
-          "height": "500px",
-          "border": "1px solid black"
+    "action": {}
+  },{
+    "id": "two_layer",
+    "compName": "two-layer-comp",
+    "props": {
+      "style": {
+        "position": "absolute",
+		"overflow": "hidden",
+        "top": "10px",
+        "left": "10px",
+        "width": "800px",
+        "height": "500px",
+        "border": "1px solid black",
+		"background": "white",
+		"zIndex":"1"
+      },
+      "children": [
+		{
+          "id": "test_input",
+          "compName": "input-comp",
+          "props": {
+            "model": "test",
+            "style": {
+              "position": "absolute",
+              "top": "30px",
+              "left": "90px",
+              "width": "100px"
+            }
+          },
+          "action": {}
         },
-        "children": [
-          {
-            "id": "rack01",
-            "compName": "rack-comp",
-            "props": {
-              "style":{
-                  "x":0,
-                  "y":0,
-                  "z":0
-              }
+        {
+          "id": "test_input",
+          "compName": "input-comp",
+          "props": {
+            "model": "test",
+            "style": {
+              "position": "absolute",
+              "top": "30px",
+              "left": "90px",
+              "width": "100px"
             }
-          },{
-            "id": "rack02",
-            "compName": "rack-comp",
-            "props": {
-              "style":{
-                  "x":100,
-                  "y":0,
-                  "z":0
-              }
+          },
+          "action": {}
+        },
+        {
+          "id": "test_button",
+          "compName": "button-comp",
+          "props": {
+            "label": "click",
+            "style": {
+              "position": "absolute",
+              "top": "30px",
+              "left": "200px",
+              "width": "100px"
             }
+          },
+          "action": {}
+        }
+      ]
+    },
+    "action": {}
+  },
+  {
+    "id": "three_layer",
+    "compName": "three-layer-comp",
+    "props": {
+      "style": {
+        "position": "absolute",
+		"overflow": "hidden",
+        "top": "10px",
+        "left": "810px",
+        "width": "800px",
+        "height": "500px",
+        "border": "1px solid black"
+      },
+      "children": [
+        {
+          "id": "turbine01",
+          "compName": "turbine-comp",
+          "props": {
+			"style":{
+				"x":300,
+				"y":0,
+				"z":0
+			}
           }
-        ]
-      }
+        }
+      ]
     }
-  ]
+  },
+  {
+    "id": "three_layer2",
+    "compName": "three-layer-comp",
+    "props": {
+      "style": {
+        "position": "absolute",
+		"overflow": "hidden",
+        "top": "510px",
+        "left": "10px",
+        "width": "800px",
+        "height": "500px",
+        "border": "1px solid black"
+      },
+      "children": [
+        {
+          "id": "rack01",
+          "compName": "rack-comp",
+          "props": {
+			"style":{
+				"x":0,
+				"y":0,
+				"z":0
+			}
+          }
+        },{
+          "id": "rack02",
+          "compName": "rack-comp",
+          "props": {
+			"style":{
+				"x":100,
+				"y":0,
+				"z":0
+			}
+          }
+        },{
+          "id": "rack03",
+          "compName": "rack-comp",
+          "props": {
+			"style":{
+				"x":200,
+				"y":0,
+				"z":0
+			}
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "three_layer3",
+    "compName": "three-layer-comp",
+    "props": {
+      "style": {
+        "position": "absolute",
+		"overflow": "hidden",
+        "top": "510px",
+        "left": "810px",
+        "width": "800px",
+        "height": "500px",
+        "border": "1px solid black"
+      },
+      "children": [
+        {
+          "id": "boiler01",
+          "compName": "boiler-comp",
+          "props": {
+			"style":{
+				"x":0,
+				"y":0,
+				"z":0
+			}
+          }
+        }
+      ]
+    }
+  }
+]
