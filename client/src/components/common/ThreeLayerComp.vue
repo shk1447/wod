@@ -31,12 +31,13 @@ export default {
 
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
-            this.scene.background = new THREE.Color( 0xcccccc );
-            this.scene.fog = new THREE.FogExp2( 0xcccccc, 0.0008 );
-            this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+            //this.scene.background = new THREE.Color( 0x00000 );
+            //this.scene.fog = new THREE.FogExp2( 0xcccccc, 0.0008 );
+            this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
             this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
+            //this.renderer.setClearColor()
             this.container.appendChild( this.renderer.domElement );
-            this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 1000 );
+            this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
             this.camera.position.set( 400, 200, 0 );
             // controls
             this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
@@ -120,7 +121,6 @@ export default {
         this.objLoader = undefined;
 
         this.components = [];
-        window.test = this.components;
         console.log(this.three_component);
         console.log('created')
     },

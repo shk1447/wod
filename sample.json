@@ -90,6 +90,18 @@
             }
           },
           "action": {}
+        },{
+          "id": "test_label",
+          "compName": "chart-comp",
+          "props": {
+            "style": {
+              "position": "absolute",
+              "top": "30px",
+              "left": "300px",
+              "width": "300px",
+              "height": "300px"
+            }
+          }
         }
       ]
     },
@@ -184,7 +196,8 @@
         "left": "810px",
         "width": "800px",
         "height": "500px",
-        "border": "1px solid black"
+        "border": "1px solid black",
+        "background": "black"
       },
       "children": [
         {
