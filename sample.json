@@ -1,39 +1,5 @@
 [
   {
-    "id": "two_layer_chart",
-    "compName": "two-layer-comp",
-    "props": {
-      "style": {
-        "position": "absolute",
-        "overflow": "hidden",
-        "top": "110px",
-        "left": "110px",
-        "width": "200px",
-        "height": "200px",
-        "border": "1px solid red",
-        "background": "white",
-        "zIndex": "2"
-      },
-      "children": [
-        {
-          "id": "test_label",
-          "compName": "label-comp",
-          "props": {
-            "label": "sub_label_chart임",
-            "style": {
-              "position": "absolute",
-              "top": "30px",
-              "left": "110px",
-              "width": "100px"
-            }
-          },
-          "action": {}
-        }
-      ]
-    },
-    "action": {}
-  },
-  {
     "id": "two_layer",
     "compName": "two-layer-comp",
     "props": {
@@ -50,56 +16,124 @@
       },
       "children": [
         {
-          "id": "test_input",
-          "compName": "input-comp",
+          "id": "test_pie_chart",
+          "compName": "pie-chart-comp",
           "props": {
-            "model": "test",
             "style": {
-              "position": "absolute",
-              "top": "30px",
-              "left": "90px",
-              "width": "100px"
+              "top": "50px",
+              "left": "0px",
+              "width": "450px",
+              "height": "200px"
+            },
+            "option" :{
+              "title": {
+                  "text": "Customized Pie",
+                  "subtext": "Customized Pie",
+                  "x": "center",
+                  "y": "middle",
+                  "textStyle": {
+                      "color": "#333"
+                  }
+              },
+              "tooltip" : {
+                  "trigger": "item",
+                  "formatter": "{a} <br/>{b} : {c} ({d}%)"
+              },
+              "series" : [
+                  {
+                      "name":"PIE DATA NAME",
+                      "type":"pie",
+                      "radius" : "50%",
+                      "center": ["50%", "50%"],
+                      "data":[
+                          {"value":335, "name":"DATA 1"},
+                          {"value":310, "name":"DATA 2"},
+                          {"value":274, "name":"DATA 3"},
+                          {"value":235, "name":"DATA 4"},
+                          {"value":400, "name":"DATA 5"}
+                      ],
+                      "label": {
+                          "normal": {
+                              "textStyle": {
+                                  "color": "rgba(32, 32, 32, 0.7)"
+                              }
+                          }
+                      },
+                      "labelLine": {
+                          "normal": {
+                              "lineStyle": {
+                                  "color": "rgba(32, 32, 32, 0.5)"
+                              },
+                              "smooth": 0.2,
+                              "length": 10,
+                              "length2": 20
+                          }
+                      }
+                  }
+              ]
             }
-          },
-          "action": {}
-        },
+          }
+        }, 
         {
-          "id": "test_input",
-          "compName": "input-comp",
-          "props": {
-            "model": "test",
-            "style": {
-              "position": "absolute",
-              "top": "30px",
-              "left": "90px",
-              "width": "100px"
-            }
-          },
-          "action": {}
-        },
-        {
-          "id": "test_button",
-          "compName": "button-comp",
-          "props": {
-            "label": "click",
-            "style": {
-              "position": "absolute",
-              "top": "30px",
-              "left": "200px",
-              "width": "100px"
-            }
-          },
-          "action": {}
-        },{
-          "id": "test_label",
-          "compName": "chart-comp",
+          "id": "test_line_chart",
+          "compName": "line-chart-comp",
           "props": {
             "style": {
-              "position": "absolute",
               "top": "30px",
-              "left": "300px",
-              "width": "300px",
-              "height": "300px"
+              "left": "0px",
+              "width": "450px",
+              "height": "250px"
+            },
+            "option" : {
+              "title": {
+                "text": "Line Chart"
+              },
+              "tooltip": {
+                "trigger": "axis"
+              },
+              "grid": {
+                "left": "3%",
+                "right": "4%",
+                "bottom": "3%",
+                "containLabel": true
+              },
+              "xAxis": {
+                "type": "category",
+                "boundaryGap": false,
+                "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                "style": {
+                  "width": 30
+                }
+              },
+              "yAxis": {
+                "type": "value"
+              },
+              "series": [{
+                  "name": "DATA 1",
+                  "type": "line",
+                  "data": [120, 112, 101, 14, 90, 230, 210]
+                },
+                {
+                  "name": "DATA 2",
+                  "type": "line",
+                  "data": [220, 882, 391, 234, 290, 330, 310]
+                },
+                {
+                  "name": "DATA 3",
+                  "type": "line",
+                  "data": [150, 232, 201, 154, 190, 730, 410]
+                },
+                {
+                  "name": "DATA 4",
+                  "type": "line",
+                  "data": [320, 332, 601, 334, 390, 530, 320]
+                },
+                {
+                  "name": "DATA 5",
+                  "type": "line",
+                  "data": [820, 432, 901, 934, 490, 1330, 1020]
+                }
+              ]
             }
           }
         }
