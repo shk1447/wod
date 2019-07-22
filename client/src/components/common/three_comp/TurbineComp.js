@@ -8,6 +8,7 @@ export default {
             path : {
                 obj:'/assets/models/turbine/turbineGenerator_ET.obj',
                 texture:'/assets/models/turbine/maps/{childName}.png',
+                material : '/assets/models/turbine/turbineGenerator_ET.mtl'
             },
             style:{
                 x:0,

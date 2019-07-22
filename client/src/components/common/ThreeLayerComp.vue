@@ -1,5 +1,5 @@
 <template>
-    <div ref="three_container" :style="props.style">
+    <div ref="three_container" :style="props.style" @click="FrameStopAndStart">
 
     </div>
 </template>
@@ -7,6 +7,9 @@
 <script>
 import _ from 'lodash';
 import { setTimeout } from 'timers';
+import * as THREE from 'three'
+import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
+import * as OrbitControls from 'three-orbitcontrols'
 
 export default {
     name:'three-layer-comp',
@@ -18,9 +21,7 @@ export default {
     methods: {
         animate() {
             this._requestAnimationID = requestAnimationFrame( this.animate );
-
             this.controls.update();
-
             this.render();
         },
         render() {
@@ -28,7 +29,6 @@ export default {
         },
         init() {
             var me = this;
-
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             //this.scene.background = new THREE.Color( 0x00000 );
@@ -40,18 +40,18 @@ export default {
             this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
             this.camera.position.set( 400, 200, 0 );
             // controls
-            this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+            this.controls = new OrbitControls( this.camera, this.renderer.domElement );
             //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
             this.controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
             this.controls.dampingFactor = 0.25;
             this.controls.screenSpacePanning = false;
             this.controls.minDistance = 0;
-            //this.controls.maxDistance = 500;
-            //this.controls.maxPolarAngle = Math.PI / 2;
+            this.controls.maxDistance = 100000;
+            this.controls.maxPolarAngle = Math.PI / 2;
 
             var manager = new THREE.LoadingManager(this.loadedModel);
             this.textureLoader = new THREE.TextureLoader(manager);
-            this.objLoader = new THREE.OBJLoader(manager);
+            // this.objLoader = new THREE.OBJLoader(manager);
 
             manager.onProgress = function(item, loaded, total) {
                 console.log(item, loaded, total);
@@ -66,6 +66,9 @@ export default {
             this.scene.add( light );
             var light = new THREE.AmbientLight( 0x222222 );
             this.scene.add( light );
+
+            //프레임 stop, start 테스트 toggle 값
+            this.toggleFrameStop = true;
         },
         loadedModel() {
             console.log('loaded model');
@@ -73,6 +76,9 @@ export default {
         addChildren() {
             var me = this;
             if(this.props.children && this.props.children.length > 0) {
+                var mtlLoader = new MTLLoader();
+                var objLoader = new OBJLoader();
+
                 _.each(this.props.children, function(comp, i) {
                     var component = new me.three_component[comp.compName]();
                     component.created();
@@ -80,34 +86,56 @@ export default {
                     component.props = _.extend(component.props, comp.props);
                     component.updated();
 
-                    //component.$texture = me.textureLoader.load(component.props.path.texture);
-                    me.objLoader.load(component.props.path.obj, function(obj) {
-                        component.$obj = obj;
-                        component.$obj.traverse(function(child) {
-                            console.log(child.name);
-                            if(child.isMesh && child.name) {
-                                let texture = me.textureLoader.load(component.props.path.texture.replace('{childName}', child.name));
-                                child.material.map = texture;
-                            }
+                    mtlLoader.load(component.props.path.material, (materials)=>{
+                        materials.preload();
+                        objLoader.setMaterials(materials);
+                        objLoader.load(component.props.path.obj,(object)=>{
+                            component.$obj = object;
+                            me.components.push(component);
+                            me.scene.add(component.$obj);
+                            console.log(component.props.style);
+                            component.mounted();
                         })
-                        me.components.push(component);
-                        me.scene.add(component.$obj);
-                        console.log(component.props.style);
-                        component.mounted();
-                    },function(xhr) {
-                        if ( xhr.lengthComputable ) {
-                            var percentComplete = xhr.loaded / xhr.total * 100;
-                            console.log( 'model ' + Math.round( percentComplete, 2 ) + '% downloaded' );
-                        }
-                    }, function(err) {
-                        console.log(err);
                     })
+                    //component.$texture = me.textureLoader.load(component.props.path.texture);
+                    // me.objLoader.load(component.props.path.obj, function(obj) {
+                    //     component.$obj = obj;
+                    //     component.$obj.traverse(function(child) {
+                    //         console.log(child.name);
+                    //         if(child.isMesh && child.name) {
+                    //             let texture = me.textureLoader.load(component.props.path.texture.replace('{childName}', child.name));
+                    //             child.material.map = texture;
+                    //         }
+                    //     })
+                    //     me.components.push(component);
+                    //     me.scene.add(component.$obj);
+                    //     console.log(component.props.style);
+                    //     component.mounted();
+                    // },function(xhr) {
+                    //     if ( xhr.lengthComputable ) {
+                    //         var percentComplete = xhr.loaded / xhr.total * 100;
+                    //         console.log( 'model ' + Math.round( percentComplete, 2 ) + '% downloaded' );
+                    //     }
+                    // }, function(err) {
+                    //     console.log(err);
+                    // })
                 })
+            }
+        },
+        FrameStopAndStart(){
+            if(this.toggleFrameStop === false){
+                //frame start
+                this.animate();
+                this.toggleFrameStop = true;
+                this.controls.autoRotate = true;
+            }else{
+                cancelAnimationFrame(this._requestAnimationID);
+                this.toggleFrameStop = false;
             }
         }
     },
     components : {
-        
+
     },
     created() {
         console.log('three created props' , this.props);
@@ -131,6 +159,7 @@ export default {
         this.init();
         this.animate();
         this.addChildren();
+        this.controls.autoRotate = true;
     },
     updated() {
         //this.animate();
@@ -143,8 +172,9 @@ export default {
         this.renderer = undefined;
 
         this.components = [];
+        if(this._requestAnimationID)
+            cancelAnimationFrame(this._requestAnimationID);
 
-        cancelAnimationFrame(this._requestAnimationID);
         console.log('destroyed')
     }
 }

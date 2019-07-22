@@ -8,6 +8,7 @@ export default {
             path : {
                 obj:'/assets/models/boiler/boiler_ET.obj',
                 texture:'/assets/models/boiler/maps/{childName}.png',
+                material : '/assets/models/boiler/boiler_ET.mtl'
             },
             style:{
                 x:0,

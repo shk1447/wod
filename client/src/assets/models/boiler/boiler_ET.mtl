@@ -1,44 +1,43 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 17.06.2019 14:17:27
+# File Created: 22.07.2019 13:36:56
 
-newmtl Material__41173368
+newmtl Material__63
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
+	Tf 1.0000 1.0000 1.0000
 	illum 2
 	Ka 0.5880 0.5880 0.5880
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\boiler.png
-	map_Kd D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\boiler.png
+	map_Ka \assets\models\boiler\maps\boiler.png
+	map_Kd \assets\models\boiler\maps\boiler.png
 
-newmtl Material__41173319
+newmtl Material__65
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
+	Tf 1.0000 1.0000 1.0000
 	illum 2
 	Ka 0.5880 0.5880 0.5880
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\pipe_A.png
-	map_Kd D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\pipe_A.png
+	map_Kd \assets\models\boiler\maps\pipe_A.png
 
-newmtl Material__41173410
+newmtl Material__64
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
 	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
+	Tf 1.0000 1.0000 1.0000
 	illum 2
 	Ka 0.5880 0.5880 0.5880
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\boiler02_A.png
-	map_Kd D:\04_????\02_?? ????\???OEM\??_????\modeling\00?????\boiler_ET\boiler02_A.png
+	map_Ka \assets\models\boiler\maps\boiler02.png
+	map_Kd \assets\models\boiler\maps\boiler02.png
