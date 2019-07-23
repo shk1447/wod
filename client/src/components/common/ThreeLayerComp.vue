@@ -1,5 +1,5 @@
 <template>
-    <div ref="three_container" :style="props.style" @click="FrameStopAndStart">
+    <div ref="three_container" :style="props.style">
 
     </div>
 </template>
@@ -10,21 +10,54 @@ import { setTimeout } from 'timers';
 import * as THREE from 'three'
 import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
 import * as OrbitControls from 'three-orbitcontrols'
+import ThreeLayerControl from './util/ThreeLayerControl.js';
 
 export default {
     name:'three-layer-comp',
     type:'two_comp',
     props: ['props'],
     data () {
-        return { }
+        return {
+            control:false,
+            position:{
+                x:0,
+                y:0,
+                z:2500
+            },
+            event: {
+                x:0,
+                y:0
+            }
+        }
     },
     methods: {
+        onStartCamera(e) {
+            this.control = true;
+            console.log('start camera', e)
+            this.event.x = e.offsetX;
+            this.event.y = e.offsetY;
+        },
+        onStopCamera(e) {
+            this.control = false;
+            this.event.x = 0;
+            this.event.y = 0;
+            console.log('stop camera', e)
+        },
+        onControlCamera(e) {
+            if(this.control) {
+                console.log('control camera', e)
+                this.position.x = this.event.x - e.offsetX;
+                this.position.y = this.event.y - e.offsetY;
+                this.$forceUpdate();
+            }
+        },
         animate() {
             this._requestAnimationID = requestAnimationFrame( this.animate );
             this.controls.update();
             this.render();
         },
         render() {
+            // this.camera.position.set( this.position.x, this.position.y, this.position.z );
             this.renderer.render( this.scene, this.camera );
         },
         init() {
@@ -38,10 +71,14 @@ export default {
             //this.renderer.setClearColor()
             this.container.appendChild( this.renderer.domElement );
             this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
+
             this.camera.position.set( 400, 200, 0 );
+            // this.cameraHelper = new THREE.CameraHelper( this.camera );
+            // this.scene.add(this.cameraHelper);
+            
             // controls
             this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-            //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+            // this.controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
             this.controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
             this.controls.dampingFactor = 0.25;
             this.controls.screenSpacePanning = false;
@@ -97,6 +134,8 @@ export default {
                             component.mounted();
                         })
                     })
+                    
+
                     //component.$texture = me.textureLoader.load(component.props.path.texture);
                     // me.objLoader.load(component.props.path.obj, function(obj) {
                     //     component.$obj = obj;
@@ -159,10 +198,16 @@ export default {
         this.init();
         this.animate();
         this.addChildren();
-        this.controls.autoRotate = true;
+        
+        
+        //this.animate();
+        //this.render();
+        // this.controls.autoRotate = true;
     },
     updated() {
         //this.animate();
+        console.log('updated!!!!!')
+        this.render();
     },
     destroyed() {
         this.container = undefined;
