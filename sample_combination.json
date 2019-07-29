@@ -14,13 +14,32 @@
       },
       "children": [
         {
+          "id": "test_image_upload",
+          "compName": "image-upload-comp",
+          "props": {
+            "style": {
+              "position": "absolute",
+              "top": "0%",
+              "left": "50%",
+              "width": "50%",
+              "height": "50%",
+              "text-align":"center"
+            },
+            "image" : {
+              "label":"기본이미지",
+              "url": "/assets/img/flow_diagram.jpg",
+              "fit": "fill"
+            }
+          }
+        },
+        {
           "id": "test_pie_chart",
           "compName": "pie-chart-comp",
           "props": {
             "style": {
               "top": "0%",
               "left": "0%",
-              "width": "100%",
+              "width": "50%",
               "height": "40%"
             },
             "option": {
