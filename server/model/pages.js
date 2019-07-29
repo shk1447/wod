@@ -20,4 +20,8 @@ pageSchema.statics.findOneById = function(id) {
     return this.findOne({id});
 };
 
+pageSchema.statics.removeById = function(id) {
+    return this.remove({page_id: id});
+};
+
 module.exports = mongoose.model('Page', pageSchema);

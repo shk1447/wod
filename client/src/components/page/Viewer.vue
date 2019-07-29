@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 
 export default {
     data () {
@@ -22,11 +23,14 @@ export default {
         drop(e) {
             e.preventDefault();
             var me = this;
-            me.$loading({})
+            me.instances = [];
             var transfer_data = e.dataTransfer.getData("page");
             var data = JSON.parse(transfer_data);
-            me.instances = data.instances;
-            me.$loading({}).close();
+            setTimeout(function() {
+                me.$loading({})
+                me.instances = data.instances;
+                me.$loading({}).close();
+            },0)
         }
     },
     created() {

@@ -19,11 +19,6 @@ export default {
     data () {
         return {
             control:false,
-            position:{
-                x:0,
-                y:0,
-                z:2500
-            },
             event: {
                 x:0,
                 y:0
@@ -46,8 +41,8 @@ export default {
         onControlCamera(e) {
             if(this.control) {
                 console.log('control camera', e)
-                this.position.x = this.event.x - e.offsetX;
-                this.position.y = this.event.y - e.offsetY;
+                this.props.position.x = this.event.x - e.offsetX;
+                this.props.position.y = this.event.y - e.offsetY;
                 this.$forceUpdate();
             }
         },
@@ -62,6 +57,7 @@ export default {
         },
         init() {
             var me = this;
+            
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             //this.scene.background = new THREE.Color( 0x00000 );
@@ -72,7 +68,7 @@ export default {
             this.container.appendChild( this.renderer.domElement );
             this.camera = new THREE.PerspectiveCamera( 60, this.container.clientWidth / this.container.clientHeight, 1, 10000 );
 
-            this.camera.position.set( 400, 200, 0 );
+            this.camera.position.set( me.props.position.x, me.props.position.y, me.props.position.z );
             // this.cameraHelper = new THREE.CameraHelper( this.camera );
             // this.scene.add(this.cameraHelper);
             
