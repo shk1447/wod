@@ -4,6 +4,9 @@
         @node-drag-start="onDragStart">
             <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span><i :class="'far fa-file-alt'"></i>   {{ data.page_id }}</span>
+                <sapn>
+                    <i class="el-icon-delete tree-delete" @click="() => {onDeletePage(data)}"></i>
+                </sapn>
             </span>
         </el-tree>
     </div>
@@ -26,6 +29,12 @@ export default {
 
     },
     methods: {
+        onDeletePage(item) {
+            var me = this;
+            api.pages.delPage(item).then(function(res) {
+                me.refreshPagePanel();
+            })
+        },
         onDragStart(node, e) {
             var transfer_page = node.data;
 
@@ -62,5 +71,18 @@ export default {
 <style>
 .page-tree {
     background : transparent;
+}
+
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+}
+
+.tree-delete:hover {
+    color:red !important;
 }
 </style>

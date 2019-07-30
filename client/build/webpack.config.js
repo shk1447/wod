@@ -24,16 +24,6 @@ var webpack_config = {
     chunkFilename: 'js/[id].js'
   },
   plugins: [
-    new UglifyJsPlugin({
-      minimize:process.env.mode === 'development' ? true : false,
-      uglifyOptions: {
-        compress: {
-          warnings: false
-        }
-      },
-      sourceMap: process.env.mode === 'development' ? true : false,
-      parallel: true
-    }),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: 'css/[name].css',
@@ -116,6 +106,16 @@ var webpack_config = {
 }
 
 if(process.env.mode === "development") {
+  webpack_config.plugins.push(new UglifyJsPlugin({
+    minimize:process.env.mode === 'development' ? true : false,
+    uglifyOptions: {
+      compress: {
+        warnings: false
+      }
+    },
+    sourceMap: process.env.mode === 'development' ? true : false,
+    parallel: true
+  }))
   webpack_config.plugins.push(
     new BundleAnalyzerPlugin({
       analyzerMode: 'disabled',

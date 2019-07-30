@@ -12,5 +12,11 @@ export default {
         return http.post(url, params).then(function(res) {
             return res;
         });
+    },
+    delPage: function(params) {
+        var url = "/pages/delete";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
     }
 }

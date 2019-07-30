@@ -15,8 +15,7 @@ export default {
     type:'two_comp',
     props: ['props'],
     data () {
-        return {
-        }
+        return {}
     },
     methods: {
         render() {
@@ -24,15 +23,21 @@ export default {
         },
         init() {
             var me = this;
+
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
             this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
             this.container.appendChild( this.renderer.domElement );
 
+
             this.camera = new THREE.PerspectiveCamera( this.props.camera.fov, this.props.camera.aspect, this.props.camera.near, this.props.camera.far);
             this.camera.position.set(this.props.camera.position.x, this.props.camera.position.y, this.props.camera.position.z);
 
+
+            this.camera.position.set( me.props.position.x, me.props.position.y, me.props.position.z );
+            // this.cameraHelper = new THREE.CameraHelper( this.camera );
+            // this.scene.add(this.cameraHelper);
             // controls
             this.controls = new OrbitControl( this.camera, this.renderer.domElement );
             this.controls.enableDamping = true;

@@ -18,6 +18,13 @@ module.exports = {
             }).catch((err) => {
                 res.status(500).send(err);
             })
+        },
+        "delete": function(req,res,next) {
+            pages.removeById(req.body.page_id).then(() => {
+                res.status(200).send();
+            }).catch((err) => {
+                res.status(500).send(err);
+            })
         }
     }
 }
