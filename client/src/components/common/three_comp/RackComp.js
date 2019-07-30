@@ -8,6 +8,7 @@ export default {
             path : {
                 obj:'/assets/models/rack/hpRack_RK.obj',
                 texture:'/assets/models/rack/maps/{childName}.png',
+                material : '/assets/models/rack/hpRack_RK.mtl'
             },
             style:{
                 x:0,

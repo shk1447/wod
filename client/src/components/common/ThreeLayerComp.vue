@@ -34,10 +34,6 @@ export default {
             this.camera = new THREE.PerspectiveCamera( this.props.camera.fov, this.props.camera.aspect, this.props.camera.near, this.props.camera.far);
             this.camera.position.set(this.props.camera.position.x, this.props.camera.position.y, this.props.camera.position.z);
 
-
-            this.camera.position.set( me.props.position.x, me.props.position.y, me.props.position.z );
-            // this.cameraHelper = new THREE.CameraHelper( this.camera );
-            // this.scene.add(this.cameraHelper);
             // controls
             this.controls = new OrbitControl( this.camera, this.renderer.domElement );
             this.controls.enableDamping = true;
