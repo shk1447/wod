@@ -1,6 +1,9 @@
 <template>
     <div ref="three_container" :style="props.style">
-        <h1>HELLO THREE JS!</h1>
+        <CameraControlPanel
+                @zoomIn="zoomIn"
+                @zoomOut = "zoomOut"
+        ></CameraControlPanel>
     </div>
 </template>
 
@@ -8,16 +11,24 @@
 import _ from 'lodash';
 import * as THREE from 'three'
 import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
-import OrbitControl from './util/OrbitControl/OrbitControl'
+import OrbitControl from './util/OrbitControl/OrbitControl';
+import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 
 export default {
     name:'three-layer-comp',
     type:'two_comp',
     props: ['props'],
     data () {
-        return {}
+        return {
+        }
     },
     methods: {
+        zoomIn(){
+            this.controls.zoomIn();
+        },
+        zoomOut(){
+            this.controls.zoomOut();
+        },
         render() {
             this.renderer.render(this.scene, this.camera);
         },
@@ -95,7 +106,7 @@ export default {
             }
         }
     },
-    components : {},
+    components : {CameraControlPanel},
     created() {
         console.log('three created props' , this.props);
         this.container = undefined;
@@ -108,6 +119,7 @@ export default {
         this.objLoader = undefined;
 
         this.components = [];
+
         console.log(this.three_component);
         console.log('created')
     },

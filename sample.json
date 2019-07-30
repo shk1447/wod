@@ -93,7 +93,7 @@
               ]
             }
           }
-        }, 
+        },
         {
           "id": "test_line_chart",
           "compName": "line-chart-comp",
@@ -167,6 +167,17 @@
     "id": "three_layer",
     "compName": "three-layer-comp",
     "props": {
+      "camera" : {
+        "near" : 1,
+        "far" : 10000,
+        "fov" : 60,
+        "aspect" : 1.6,
+        "position" : {
+          "x" : 400,
+          "y" : 400,
+          "z" : 400
+        }
+      },
       "style": {
         "position": "absolute",
         "overflow": "hidden",
@@ -195,6 +206,17 @@
     "id": "three_layer2",
     "compName": "three-layer-comp",
     "props": {
+      "camera" : {
+        "near" : 1,
+        "far" : 10000,
+        "fov" : 60,
+        "aspect" : 1.6,
+        "position" : {
+          "x" : 400,
+          "y" : 400,
+          "z" : 400
+        }
+      },
       "style": {
         "position": "absolute",
         "overflow": "hidden",
@@ -206,8 +228,8 @@
       },
       "children": [
         {
-          "id": "rack01",
-          "compName": "rack-comp",
+          "id": "turbine01",
+          "compName": "turbine-comp",
           "props": {
             "style": {
               "x": 0,
@@ -245,6 +267,17 @@
     "id": "three_layer3",
     "compName": "three-layer-comp",
     "props": {
+      "camera" : {
+        "near" : 1,
+        "far" : 10000,
+        "fov" : 60,
+        "aspect" : 1.6,
+        "position" : {
+          "x" : 400,
+          "y" : 400,
+          "z" : 400
+        }
+      },
       "style": {
         "position": "absolute",
         "overflow": "hidden",
@@ -252,8 +285,7 @@
         "left": "810px",
         "width": "800px",
         "height": "500px",
-        "border": "1px solid black",
-        "background": "black"
+        "border": "1px solid black"
       },
       "children": [
         {

@@ -5,7 +5,7 @@
             <div class="content-area">
                 <router-view/>
             </div>
-            <side-bar ref="side_bar"><side-bar>
+            <side-bar ref="side_bar"></side-bar>
         </div>
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
 
@@ -82,10 +82,10 @@ export default {
         }
     },
     beforeCreate() {
-        
+
     },
     created() {
-        
+
     },
     beforeRouteUpdate(to, from) {
 
@@ -97,16 +97,16 @@ export default {
         console.log('mounted');
     },
     beforeUpdate() {
-        
+
     },
     updated() {
-        
+
     },
     beforeDestroy() {
-        
+
     },
     destroyed() {
-        
+
     }
 }
 </script>
@@ -130,15 +130,15 @@ export default {
         width:15px;
         _background-color:#f0f0f0;
     }
-    
+
     ::-webkit-scrollbar-corner {
     }
-    
+
     ::-webkit-scrollbar-thumb {
         border-radius: 15px;
         border:4px solid rgba(255,255,255,0);
         background-clip:content-box;
-        background-color: #e8eef1; 
+        background-color: #e8eef1;
     }
     .content-wrapper.show {
         width:calc(100% - 350px);
@@ -153,13 +153,13 @@ export default {
         -webkit-transition: left .3s, width .3s;
         transition: left .3s, width .3s;
     }
-    
+
     #app-main {
         width:100%;
         height:100%;
     }
 
     .content-area {
-        height: calc(100% -50px);
+        height: calc(100% - 50px);
     }
 </style>
