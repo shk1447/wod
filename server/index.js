@@ -113,6 +113,7 @@ module.exports = function(config) {
     app.use('/js', express.static(path.resolve(process.env.root_path,'./js')));
     app.use('/static', express.static(path.resolve(process.env.root_path,'./static')));
     app.use('/vendor', express.static(path.resolve(process.env.root_path,'./vendor')));
+    app.use('/login', express.static(path.resolve(process.env.root_path,'./login')));
     
     app.use(helmet());
     app.use(helmet.xssFilter());

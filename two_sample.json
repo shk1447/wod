@@ -1,0 +1,40 @@
+[
+    {
+      "id": "two_layer",
+      "compName": "two-layer-comp",
+      "props": {
+        "style": {
+          "position": "absolute",
+          "overflow": "hidden",
+          "top": "10px",
+          "left": "10px",
+          "width": "800px",
+          "height": "500px",
+          "border": "1px solid black",
+          "background": "#ddd",
+          "zIndex": "1"
+        },
+        "children": [
+          {
+            "id": "test_image_upload",
+            "compName": "image-upload-comp",
+            "props": {
+              "style": {
+                "position": "absolute",
+                "top": "250px",
+                "left": "470px",
+                "width": "300px",
+                "height": "200px"
+              },
+              "image": {
+                "label": "기본이미지",
+                "url": "/assets/img/flow_diagram.jpg",
+                "fit": "fill"
+              }
+            }
+          }
+        ]
+      },
+      "action": {}
+    }
+  ]

@@ -7,7 +7,7 @@ module.exports = function(app,config) {
         if(req.isAuthenticated()) {
             next();
         } else {
-            res.redirect('/#/');
+            res.redirect('/login');
         }
     }
 
@@ -15,12 +15,20 @@ module.exports = function(app,config) {
     _.each(api, (routes, path) => {
         _.each(routes, (funcs, routeName) => {
             _.each(funcs, (func, funcName) => {
-                app[routeName]('/' + path + '/' + funcName, func);
+                if(path === 'users' && (funcName === 'login' || funcName === 'logout')) {
+                    app[routeName]('/' + path + '/' + funcName, func);
+                } else {
+                    app[routeName]('/' + path + '/' + funcName, ensureAuth, func);
+                }
             })
         })
     })
 
     app.get('/', function(req,res,next) {
-        res.sendFile(path.resolve(process.env.root_path, './index.html'));
+        if(req.isAuthenticated()) {
+            res.sendFile(path.resolve(process.env.root_path, './index.html'));
+        } else {
+            res.redirect('/login');
+        }
     })
 }

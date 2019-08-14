@@ -73,10 +73,9 @@ export default {
     right:0px;
     bottom:0px;
     width:10px;
+    background: url("../../assets/img/grip.png") no-repeat 50% 50%;
     cursor: col-resize;
     z-index: 10;
-    background: #f3f3f3;
-    border-left:1px solid #e0e3eb;
     border-right:1px solid #e0e3eb;
 }
 
