@@ -251,10 +251,14 @@ export default (function() {
         var x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k
         var node_info = {
-            id:'test' + (activeNodes.length + 1),
-            name:'test' + (activeNodes.length + 1),
+            id:'receiver' + (activeNodes.length + 1),
+            name:'receiver' + (activeNodes.length + 1),
             x:x,
-            y:y
+            y:y,
+            input:false,output:true,
+            props:{
+                protocol:''
+            }
         }
         addNodes(node_info);
     };
@@ -337,6 +341,8 @@ export default (function() {
         d3.event.preventDefault();
         
         selected_id = node_info.id
+
+        Vue.custom_events.emit('selected_item', node_info);
         
         redraw();
     }
@@ -368,46 +374,23 @@ export default (function() {
             node.w = node_size;
             node.h = node_size;
             
-            var anim_alarm = node.append("circle")
-                                .attr("r", node_size)
-                                .attr("fill", "rgba(255,0,0,0)")
-                                .style("stroke-width", 0)
-            // var anim_alarm2 = node.append("circle")
-            //                 .attr("r", node_size)
-            //                 .attr("fill", "rgba(255,0,0,0)")
-            //                 .style("stroke-width", 0)
+            // var anim_alarm = node.append("circle")
+            //                     .attr("r", node_size)
+            //                     .attr("fill", "rgba(255,0,0,0)")
+            //                     .style("stroke-width", 0)
             
-            // var anim_alarm3 = node.append("circle")
+            // d.animate = function () {
+            //     if(d.status === 0) {
+            //         return;
+            //     }
+            //     anim_alarm.attr('r', node_size*0).attr('opacity', 1).style("stroke-width", 0).style("stroke", d.status > 0 ? "red" : 'blue');
+            //     anim_alarm.transition()
+            //                 .duration(1000)
             //                 .attr("r", node_size)
-            //                 .attr("fill", "rgba(255,0,0,0)")
-            //                 .style("stroke-width", 0)
-            
-            d.animate = function () {
-                if(d.status === 0) {
-                    return;
-                }
-                anim_alarm.attr('r', node_size*0).attr('opacity', 1).style("stroke-width", 0).style("stroke", d.status > 0 ? "red" : 'blue');
-                anim_alarm.transition()
-                            .duration(1000)
-                            .attr("r", node_size)
-                            .attr('opacity', 0)
-                            .style("stroke-width", 2.5)
-                        .on("end", d.animate)
-                // anim_alarm2.attr('r', node_size*0.6).attr('opacity', 1).style("stroke-width", 0).style("stroke", d.status > 0 ? "red" : 'blue');
-                // anim_alarm2.transition()
-                //             .duration(1000)
-                //             .attr("r", node_size*1.4)
-                //             .attr('opacity', 0)
-                //             .style("stroke-width", 2.5)
-                //         .on("end", d.animate)
-                // anim_alarm3.attr('r', node_size*0.9).attr('opacity', 1).style("stroke-width", 0).style("stroke", d.status > 0 ? "red" : 'blue');
-                // anim_alarm3.transition()
-                //                     .duration(1000)
-                //                     .attr("r", node_size*1.4)
-                //                     .attr('opacity', 0)
-                //                     .style("stroke-width", 2.5)
-                //                 .on("end", d.animate)
-            }
+            //                 .attr('opacity', 0)
+            //                 .style("stroke-width", 2.5)
+            //             .on("end", d.animate)
+            // }
 
             
             d.node = node.append("rect")
@@ -417,7 +400,8 @@ export default (function() {
                 .attr("width", node_size*8)
                 .attr("height", node_size*2)
 
-            node.append("circle")
+            if(d.output) {
+                node.append("circle")
                 .attr("class", "port")
                 .attr("cx", node_size*8)
                 .attr("cy", node_size)
@@ -432,8 +416,10 @@ export default (function() {
                 .on('mouseup', (function() { var node = d; return function(d,i) { portMouseUp(d3.select(this),node,'output') }})() )
                 .on('mouseover', (function() { var node = d; return function(d,i) { portMouseOver(d3.select(this),node,'output') }})() )
                 .on('mouseout', (function() { var node = d; return function(d,i) { portMouseOut(d3.select(this),node,'output') }})() )
+            }
 
-            node.append("circle")
+            if(d.input) {
+                node.append("circle")
                 .attr("class", "port")
                 .attr("cx", 0)
                 .attr("cy", node_size)
@@ -448,6 +434,7 @@ export default (function() {
                 .on('mouseup', (function() { var node = d; return function(d,i) { portMouseUp(d3.select(this),node,'input') }})() )
                 .on('mouseover', (function() { var node = d; return function(d,i) { portMouseOver(d3.select(this),node,'input') }})() )
                 .on('mouseout', (function() { var node = d; return function(d,i) { portMouseOut(d3.select(this),node,'input') }})() )
+            }
             
             d.node.style("cursor", "pointer")
                 .attr("class", "node")
@@ -462,11 +449,10 @@ export default (function() {
 
             var text_node = node.append('svg:text').attr('x', node_size*4).attr('y', node_size)
                 .style('stroke', 'none').style('dominant-baseline', 'central').style("text-anchor", "middle").style('fill', 'rgb(53, 53, 53)')
-                .text('Data Receiver');
+                .text(d.id);
 
             d.update = function() {
                 if(d.detail) {
-                    
                     var tspan = text_node.selectAll('tspan').data(Object.keys(d.detail), function(d) { return d; });
                     tspan.exit().remove();
                     var tspanEnter = tspan.enter().append('tspan');
@@ -490,8 +476,8 @@ export default (function() {
             var thisNode = d3.select(this);
             
             thisNode.attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
-            d.animate();
-            d.update();
+            // d.animate();
+            // d.update();
             if(selected_id === d.id) {
                 d.node.classed('selected', true)
                 d.node.attr('filter', 'url(#' + activeDropShadow + ')' );
@@ -614,6 +600,14 @@ export default (function() {
     }
 
     return {
+        getPosition: function(event) {
+            var x = Math.round((event.offsetX - outer_transform.x) / outer_transform.k);
+            var y = Math.round((event.offsetY - outer_transform.y) / outer_transform.k);
+            return {
+                x: x,
+                y: y
+            }
+        },
         clear: function() {
             activeNodes = [];
             activeLinks = [];

@@ -65,7 +65,11 @@ export default {
                 },
                 manager: {
                     left:[],
-                    right:[],
+                    right:[{
+                        id:"",
+                        label:'Deploy',
+                        action:this.onPagePopup
+                    }],
                     panels:[{
                         name:'Page',
                         comp:'page-panel'

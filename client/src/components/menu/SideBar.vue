@@ -3,7 +3,7 @@
         <div id="sidebar" ref="sidebar">
             <el-tabs type="border-card" class="custom-tabs" v-model="activePanel">
                 <el-tab-pane v-for="panel in panels" :key="panel.name" class="custom-tab-item" :label="panel.name" :name="panel.name">
-                    <component :is="panel.comp"/>
+                    <component ref="selected_panel" :is="panel.comp"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -32,13 +32,17 @@ export default {
         "description-panel":DescriptionPanel
     },
     methods: {
-
+        handleSelectedItem:function(node_info) {
+            this.activePanel = 'Property';
+            //this.$refs.selected_panel.
+        }
     },
     created() {
 
     },
     mounted() {
         var me = this;
+        me.custom_events.on('selected_item',me.handleSelectedItem);
         var sidebar =  {};
         $('#sidebar-separator').draggable({
             axis:"x",
@@ -74,7 +78,7 @@ export default {
         });
     },
     destroyed() {
-        
+        me.custom_events.off('selected_item',me.handleSelectedItem);
     }
 }
 </script>
