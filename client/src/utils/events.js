@@ -1,4 +1,4 @@
-custom_events = (function() {
+export default (function() {
     var handlers = {};
 
     function on(evt, func) {
@@ -35,4 +35,4 @@ custom_events = (function() {
         off:off,
         emit:emit
     }
-})()
+})();

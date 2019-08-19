@@ -7,6 +7,7 @@
 <script>
 
 import ECharts from 'vue-echarts' // refers to components/ECharts.vue in webpack
+import moment from 'moment';
 
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
@@ -16,7 +17,26 @@ export default {
     name:'line-chart-comp',
     props: ['props'],
     data () {
-        return {}
+        return {
+            init_options: {
+                title: {
+                    text:''
+                },
+                tooltip: {
+                    trigger:'axis'
+                },
+                xAxis: {
+                    type:'category'
+                },
+                yAxis: {
+                    type:'value'
+                },
+                series:[]
+            }
+        }
+    },
+    computed: {
+        
     },
     components : {
         'v-chart': ECharts

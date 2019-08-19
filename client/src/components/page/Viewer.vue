@@ -1,5 +1,5 @@
 <template>
-  <div style="position:absolute;height:100%;width:100%;" @dragover="dragover" @drop="drop">
+  <div class="viewer-area" @dragover="dragover" @drop="drop">
     <component v-for="item in instances" :key="item.id" :is="item.compName" :id="item.id" :props="item.props" :action="item.action"></component>
   </div>
 </template>
@@ -49,4 +49,9 @@ export default {
 </script>
 
 <style>
+    .viewer-area {
+        position:absolute;
+        height:calc(100% - 50px);
+        width:calc(100% - 50px);
+    }
 </style>

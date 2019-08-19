@@ -55,15 +55,14 @@ export default {
     },
     created() {
         var me = this;
-        custom_events.on('page', function() {
-            me.refreshPagePanel();
-        })
+        me.custom_events.on('page', me.refreshPagePanel);
     },
     mounted() {
         this.refreshPagePanel();
     },
     destroyed() {
-        
+        var me = this;
+        me.custom_events.off('page', me.refreshPagePanel);
     }
 }
 </script>

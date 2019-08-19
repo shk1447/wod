@@ -50,6 +50,9 @@ export default {
         },
         onLogout() {
             console.log('logout');
+            api.users.logout().then(function(res) {
+                location.href = "/";
+            })
         }
     },
     created() {
@@ -57,6 +60,9 @@ export default {
     },
     mounted() {
         console.log('mounted')
+    },
+    updated() {
+        console.log(this.tool);
     },
     destroyed() {
         console.log('destroyed')

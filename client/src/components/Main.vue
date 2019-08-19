@@ -10,6 +10,7 @@
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
 
         <page-modal ref="pageModal"></page-modal>
+        <context-menu ref="contextMenu"></context-menu>
     </div>
 </template>
 
@@ -18,6 +19,7 @@
 import NavMenu from './menu/NavMenu.vue';
 import Toolbar from './menu/Toolbar.vue';
 import Sidebar from './menu/Sidebar.vue';
+import ContextMenu from './menu/ContextMenu.vue'
 
 import Editor from './page/Editor.vue';
 import Viewer from './page/Viewer.vue';
@@ -26,13 +28,14 @@ import Analysis from './page/Analysis.vue';
 
 import PageModal from './modal/CreatePageModal.vue';
 
+
 export default {
     props: {
 
     },
     data() {
         return {
-            active_content:'editor',
+            active_content:'viewer',
             tool:{
                 editor: {
                     left:[],
@@ -41,25 +44,50 @@ export default {
                         icon: "fas fa-cloud-upload-alt",
                         label:'',
                         action:this.onPagePopup
+                    }],
+                    panels:[{
+                        name:'Page',
+                        comp:'page-panel'
                     }]
                 },
                 viewer: {
                     left:[],
-                    right:[]
+                    right:[{
+                        id:"",
+                        icon: "fas fa-cloud-upload-alt",
+                        label:'',
+                        action:this.onPagePopup
+                    }],
+                    panels:[{
+                        name:'Page',
+                        comp:'page-panel'
+                    }]
                 },
                 manager: {
                     left:[],
-                    right:[]
+                    right:[],
+                    panels:[{
+                        name:'Page',
+                        comp:'page-panel'
+                    },{
+                        name:'Property',
+                        comp:'property-panel'
+                    },{
+                        name:'Description',
+                        comp:'description-panel'
+                    }]
                 },
                 analysis: {
                     left:[],
-                    right:[]
+                    right:[],
+                    panels:[]
                 }
             }
         }
     },
     components: {
         "page-modal": PageModal,
+        "context-menu": ContextMenu,
         "nav-menu" : NavMenu,
         "tool-bar" : Toolbar,
         "side-bar" : Sidebar,
@@ -77,7 +105,10 @@ export default {
         },
         onItemClick(event, item) {
             // this.active_content = this.$route.name;
-            this.$refs.tool_bar.tool = this.tool[this.$route.name];
+            if(this.$route.name) {
+                this.$refs.tool_bar.tool = this.tool[this.$route.name];
+                this.$refs.side_bar.panels = this.tool[this.$route.name].panels;
+            }
             this.$refs.side_bar.content_area = this.$refs.content_area;
         }
     },
@@ -92,7 +123,10 @@ export default {
     },
     mounted() {
         // this.active_content = this.$route.name;
-        this.$refs.tool_bar.tool = this.tool[this.$route.name];
+        if(this.$route.name) {
+            this.$refs.tool_bar.tool = this.tool[this.$route.name];
+            this.$refs.side_bar.panels = this.tool[this.$route.name].panels;
+        }
         this.$refs.side_bar.content_area = this.$refs.content_area;
         console.log('mounted');
     },

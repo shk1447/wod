@@ -80,7 +80,7 @@ export default {
             console.log(this.form);
             api.pages.setPage({page_id:this.form.page_id, instances:this.form.instances}).then(function(res) {
                 console.log(res);
-                custom_events.emit('page', {});
+                me.custom_events.emit('page', {});
                 me.$modal.hide('create-page');
             }).catch(function(err) {
                 console.log(err);

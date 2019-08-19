@@ -1,7 +1,11 @@
 <template>
     <div>
         <div id="sidebar" ref="sidebar">
-            <page-panel></page-panel>
+            <el-tabs type="border-card" class="custom-tabs" v-model="activePanel">
+                <el-tab-pane v-for="panel in panels" :key="panel.name" class="custom-tab-item" :label="panel.name" :name="panel.name">
+                    <component :is="panel.comp"/>
+                </el-tab-pane>
+            </el-tabs>
         </div>
         <div id="sidebar-separator" class="ui-draggable"></div>
     </div>
@@ -9,13 +13,23 @@
 
 <script>
 import PagePanel from "../panel/PagePanel.vue";
+import FlowPanel from "../panel/FlowPanel.vue";
+import PropertyPanel from "../panel/PropertyPanel.vue";
+import DescriptionPanel from "../panel/DescriptionPanel.vue";
 
 export default {
     props:["content_area"],
     data() {
+        return {
+            activePanel:"Page",
+            panels:[]
+        }
     },
     components: {
-        "page-panel":PagePanel
+        "page-panel":PagePanel,
+        "flow-panel":FlowPanel,
+        "property-panel":PropertyPanel,
+        "description-panel":DescriptionPanel
     },
     methods: {
 
@@ -88,6 +102,15 @@ export default {
     background: #ffffff;
     z-index:11;
     box-sizing: border-box;
+}
+
+.custom-tabs {
+    height:100%;
+}
+
+.custom-tabs .el-tabs__content {
+    height: calc(100% - 70px);
+    overflow: auto;
 }
 </style>
 

@@ -6,12 +6,15 @@ import Editor from '../components/page/Editor.vue';
 import Viewer from '../components/page/Viewer.vue';
 import Manager from '../components/page/Manager.vue';
 import Analysis from '../components/page/Analysis.vue';
+
+// editor 잠시 쉬어라..
+// {
+//       path: '/editor',
+//       name: 'editor',
+//       component: Editor
+// }
 export default new Router({
       routes: [{
-            path: '/editor',
-            name: 'editor',
-            component: Editor
-      },{
             path: '/viewer',
             name: 'viewer',
             component: Viewer

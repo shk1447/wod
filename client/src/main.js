@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import Vue from 'vue';
 
-// event handler
-require('./utils/events');
+// context menu
+import * as VueMenu from '@hscmap/vue-menu' 
+Vue.use(VueMenu)
 
 // jquery ui
 import 'expose-loader?$!expose-loader?jQuery!jquery';
@@ -41,7 +42,26 @@ _.each(common, function(comp_list, type) {
 import App from './components/Main.vue';
 import router from './router';
 
-new Vue({
+// web socket
+import io from 'socket.io-client';
+
+Vue.prototype.web_socket = io.connect({
+    path:'/socket.io',
+    transports:['websocket'],
+    secure:true
+});
+Vue.prototype.web_socket.on('connected', function(data) {
+    console.log('Web Socket 연결 : ', data.id);
+})
+
+// event handler
+import custom_events from './utils/events';
+Vue.prototype.custom_events = custom_events;
+
+import core from './core';
+Vue.prototype.core = core;
+
+window.Vue = new Vue({
     el: '#app',
     router,
     components: { App },

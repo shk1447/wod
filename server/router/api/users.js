@@ -53,7 +53,8 @@ module.exports = {
     },
     get: {
         "logout": function(req,res,next) {
-
+            req.logout();
+            res.status(200).send();
         }
     }
 }
