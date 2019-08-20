@@ -1,4 +1,5 @@
 var d3 = require('d3');
+var _ = require('lodash');
 d3.rebind = function(target, source) {
     var i = 1, n = arguments.length, method;
     while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
@@ -136,7 +137,7 @@ d3.keybinding = function() {
 
 const randomColor = require('randomcolor') ;
 
-export default (function() {
+module.exports = (function() {
     var width, height, container_div;
     var outer, vis, outer_background, link_group, drag_group;
     var x, y, gX, gY, xAxis, yAxis, zoom;
@@ -234,10 +235,10 @@ export default (function() {
         var mouse_x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var mouse_y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k;
         if(start_point) {
-            var x1 = temp_link.source ? (start_point.x + node_size*8) : mouse_x;
-            var y1 = temp_link.source ? (start_point.y + node_size) : mouse_y;
-            var x2 = temp_link.source ? mouse_x : start_point.x;
-            var y2 = temp_link.source ? mouse_y : (start_point.y + node_size);
+            var x1 = temp_link.source ? (start_point.flow.x + node_size*8) : mouse_x;
+            var y1 = temp_link.source ? (start_point.flow.y + node_size) : mouse_y;
+            var x2 = temp_link.source ? mouse_x : start_point.flow.x;
+            var y2 = temp_link.source ? mouse_y : (start_point.flow.y + node_size);
             if(drag_line) {
                 drag_line.attr("d", lineGenerator([[x1, y1], [x2, y2]]))
             } else {
@@ -279,7 +280,7 @@ export default (function() {
     }
     
     function dragged(d) {
-        d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+        d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*4)).attr("cy", d.flow.y = (d3.event.y - node_size));
         redraw();
     }
     
@@ -359,7 +360,7 @@ export default (function() {
         nodeEnter.each(function(d,i) {
             var node = d3.select(this);
             node.attr("id",d.id)
-                .attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; })
+                .attr("transform", function(d) { return "translate(" + (d.flow.x) + "," + (d.flow.y) + ")"; })
                 .style("cursor", "pointer")
                 .on('click', (function() { var node = d; return function(d,i) { nodeClicked(d3.select(this),node) }})())
                 .on('contextmenu', function() {
@@ -452,32 +453,22 @@ export default (function() {
                 .text(d.id);
 
             d.update = function() {
-                if(d.detail) {
-                    var tspan = text_node.selectAll('tspan').data(Object.keys(d.detail), function(d) { return d; });
-                    tspan.exit().remove();
-                    var tspanEnter = tspan.enter().append('tspan');
-                    tspanEnter.each(function(a,i) {
-                        var node = d3.select(this);
-                        node.attr("x", 0).attr("dy", '1.5em')
-                        node.text(a + " :" + d.detail[a]);
-                    })
-                    tspan.each(function(a,i) {
-                        var node = d3.select(this);
-                        node.text(a + " :" + d.detail[a]);
-                    })
-
-                    //text_node.text(d.name + "\\n" + d.detail.Close + "원");
-                }
+                text_node.text(d.id)
             };
+            if(d.flow.wires && d.flow.wires.length > 0) {
+                _.each(d.flow.wires, function(target_id,i) {
+                    activeLinks.push({source:d, target:activeNodes.find(function(d) {return d.id === target_id})})
+                })
+            }
         });
 
         // 갱신
         node.each(function(d,i) {
             var thisNode = d3.select(this);
             
-            thisNode.attr("transform", function(d) { return "translate(" + (d.x) + "," + (d.y) + ")"; });
+            thisNode.attr("transform", function(d) { return "translate(" + (d.flow.x) + "," + (d.flow.y) + ")"; });
             // d.animate();
-            // d.update();
+            d.update();
             if(selected_id === d.id) {
                 d.node.classed('selected', true)
                 d.node.attr('filter', 'url(#' + activeDropShadow + ')' );
@@ -528,7 +519,8 @@ export default (function() {
         links.each(function(d,i) {
             var thisLink = d3.select(this);
             var id = d.sourceNode.id + ":" + d.targetNode.id;
-            var path_data = lineGenerator([[d.sourceNode.x + (node_size*8), d.sourceNode.y + node_size],[d.targetNode.x, d.targetNode.y + node_size]])
+            var path_data = lineGenerator([[d.sourceNode.flow.x + (node_size*8), d.sourceNode.flow.y + node_size],
+                                            [d.targetNode.flow.x, d.targetNode.flow.y + node_size]])
             thisLink.attr("d", path_data).attr("stroke-width", node_size/4).attr('stroke','#888');
             if(selected_id === id) {
                 thisLink.attr('stroke', '#ff7f0e');
@@ -599,6 +591,22 @@ export default (function() {
         return activeLinks;
     }
 
+    function addEventHandlers() {
+        Vue.custom_events.on("saveFlow", saveFlow);
+        Vue.custom_events.on("addNodes", addNodes);
+        Vue.custom_events.on("redrawFlow", redraw);
+    }
+
+    function removeEventHandlers() {
+        Vue.custom_events.off("saveFlow", saveFlow);
+        Vue.custom_events.off("addNodes", addNodes);
+        Vue.custom_events.off("redrawFlow", redraw);
+    }
+
+    function saveFlow() {
+
+    }
+
     return {
         getPosition: function(event) {
             var x = Math.round((event.offsetX - outer_transform.x) / outer_transform.k);
@@ -619,7 +627,7 @@ export default (function() {
             redraw();
         },
         focus_target: function(d) {
-            var focusing = d3.zoomIdentity.translate((container_div.clientWidth/2)-d.x, (container_div.clientHeight/2)-d.y).scale(1);
+            var focusing = d3.zoomIdentity.translate((container_div.clientWidth/2)-d.flow.x, (container_div.clientHeight/2)-d.flow.y).scale(1);
             outer.transition().duration(1200).call(zoom.transform, focusing);
         },
         reload:reload,
@@ -692,8 +700,9 @@ export default (function() {
                 .call(yAxis);
 
             addDrawDropShadow();
-
             redraw();
+
+            addEventHandlers();
         },
         redraw : redraw,
         addNodes : addNodes,
@@ -716,8 +725,9 @@ export default (function() {
             activeNodes = [];
             activeLinks = [];
             selected_id = "";
-
             redraw();
+
+            removeEventHandlers();
         }
     }
 })()

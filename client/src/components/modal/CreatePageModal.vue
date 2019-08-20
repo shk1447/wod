@@ -33,7 +33,7 @@
 </template>
 
 <script>
-
+import _ from 'lodash';
 import api from "../../api";
 
 export default {
@@ -78,7 +78,19 @@ export default {
         onSubmit() {
             var me = this;
             console.log(this.form);
-            api.pages.setPage({page_id:this.form.page_id, instances:this.form.instances}).then(function(res) {
+            var param_instances = [];
+            function recursive_instances(instances, parent_id) {
+                _.each(instances, function(v,i) {
+                    if(v.props.children && v.props.children.length > 0) {
+                        recursive_instances(v.props.children, v.id)
+                    }
+                    if(parent_id) v['parent_id'] = parent_id;
+                    param_instances.push(v);
+                })
+            }
+            recursive_instances(this.form.instances);
+            console.log(param_instances);
+            api.nodes.saveNodes({page_id:this.form.page_id, instances:param_instances}).then((res) => {
                 console.log(res);
                 me.custom_events.emit('page', {});
                 me.$modal.hide('create-page');
@@ -86,7 +98,14 @@ export default {
                 console.log(err);
                 me.$modal.hide('create-page');
             })
-            
+            // api.pages.setPage({page_id:this.form.page_id, instances:this.form.instances}).then(function(res) {
+            //     console.log(res);
+            //     me.custom_events.emit('page', {});
+            //     me.$modal.hide('create-page');
+            // }).catch(function(err) {
+            //     console.log(err);
+            //     me.$modal.hide('create-page');
+            // })
         }
     },
     beforeCreate(){

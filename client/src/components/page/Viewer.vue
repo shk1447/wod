@@ -1,6 +1,7 @@
 <template>
   <div class="viewer-area" @dragover="dragover" @drop="drop">
-    <component v-for="item in instances" :key="item.id" :is="item.compName" :id="item.id" :props="item.props" :action="item.action"></component>
+    <component v-for="item in instances" :key="item.id" :is="item.compName"
+        :id="item.id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
   </div>
 </template>
 
@@ -29,6 +30,9 @@ export default {
             setTimeout(function() {
                 me.$loading({})
                 me.instances = data.instances;
+                me.$nextTick(function() {
+                    this.core.flow.manager.executeFlow();
+                });
                 me.$loading({}).close();
             },0)
         }

@@ -20,26 +20,41 @@ export default {
             me.instances = [];
             var transfer_data = e.dataTransfer.getData("page");
             var data = JSON.parse(transfer_data);
+            var page_id = data.page_id;
             setTimeout(function() {
                 me.$loading({})
                 console.log(data.instances);
                 var offset = me.core.flow.layer.getPosition(e);
-                function getInstances(instances, row, column) {
+                function getInstances(instances, row, column, parent_id) {
                     _.each(instances, function(comp,i) {
                         if(comp.props.children && comp.props.children.length > 0) {
-                            getInstances(comp.props.children, row+i, column+1);
+                            getInstances(comp.props.children, row+i, column+1, comp.id);
                             me.core.flow.layer.addNodes({
                                 id:comp.id,
-                                x: offset.x + (column*16*8),
-                                y: offset.y + ((row+i)*16*2),
-                                input:true,output:false
+                                type:comp.type,
+                                parent_id:parent_id,
+                                page_id:page_id,
+                                compName:comp.compName,
+                                flow:{
+                                    x: offset.x + (column*16*8),
+                                    y: offset.y + ((row+i)*16*2)
+                                },
+                                input:true,output:false,
+                                props:comp.props
                             })
                         } else {
                             me.core.flow.layer.addNodes({
                                 id:comp.id,
-                                x: offset.x + ((column+i)*16*8),
-                                y: offset.y + (row*16*2),
-                                input:true,output:false
+                                type:comp.type,
+                                parent_id:parent_id,
+                                page_id:page_id,
+                                compName:comp.compName,
+                                flow:{
+                                    x: offset.x + ((column+i)*16*8),
+                                    y: offset.y + (row*16*2)
+                                },
+                                input:true,output:false,
+                                props:comp.props
                             })
                         }
                     })
@@ -53,7 +68,11 @@ export default {
         console.log('created')
     },
     mounted() {
-        this.core.flow.layer.init('data_manager');
+        var me = this;
+        this.$nextTick(function() {
+            me.core.flow.layer.init('data_manager');
+            me.core.flow.manager.loadFlow();
+        })
         //this.core.flow.layer.addNodes({id:'test', x:100,y:100})
         console.log('mounted')
     },

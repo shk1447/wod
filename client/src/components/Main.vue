@@ -67,8 +67,9 @@ export default {
                     left:[],
                     right:[{
                         id:"",
-                        label:'Deploy',
-                        action:this.onPagePopup
+                        label:' Deploy',
+                        icon:"fas fa-upload",
+                        action:this.onSaveFlow
                     }],
                     panels:[{
                         name:'Page',
@@ -101,6 +102,9 @@ export default {
         "analysis": Analysis
     },
     methods: {
+        onSaveFlow() {
+            this.core.flow.manager.saveFlow();
+        },
         onPagePopup() {
             this.$refs.pageModal.show();
         },

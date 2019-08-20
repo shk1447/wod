@@ -1,7 +1,9 @@
 
 
-import layer from './layer'
+const layer = require('./layer.js');
+const manager =  require('./manager.js')(layer);
 
-export default {
-    layer:layer
+module.exports = {
+    layer:layer,
+    manager:manager
 }

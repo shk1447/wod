@@ -3,13 +3,9 @@
 <hsc-menu-style-white>
     <hsc-menu-context-menu ref="context_menu">
         <template slot="contextmenu">
-            <hsc-menu-item label="Data">
-                <hsc-menu-item label="Push" />
-                <hsc-menu-item label="Polling" />
-            </hsc-menu-item>
-            <hsc-menu-item label="Reset">
-                <hsc-menu-item label="Flow" />
-                <hsc-menu-item label="Zoom" />
+            <hsc-menu-item v-for="menu in menu_items" :label="menu.label" :key="menu.id">
+                <hsc-menu-item v-for="sub_menu in menu.children" :label="sub_menu.label"
+                :key="sub_menu.id" v-on:click="sub_menu.action(sub_menu)"/>
             </hsc-menu-item>
         </template>
     </hsc-menu-context-menu>
@@ -26,6 +22,31 @@ export default {
     },
     data () {
         return {
+            menu_items : [{
+                id:"data",
+                label:"Data",
+                children:[{
+                    id:"push",
+                    label:"Push Node",
+                    action:this.AddDataHandler
+                },{
+                    id:"polling",
+                    label:"Polling Node",
+                    action:this.AddDataHandler
+                }]
+            },{
+                id:"reset",
+                label:"Reset",
+                children:[{
+                    id:"flow",
+                    label:"Data Flow",
+                    action:this.resetDataFlow
+                },{
+                    id:"zoom",
+                    label:"Zoom State",
+                    action:this.resetZoomState
+                }]    
+            }],
             params : {}
         }
     },
@@ -33,13 +54,80 @@ export default {
         
     },
     methods: {
-       handleContextMenu(d) {
+        resetDataFlow(menu) {
+            console.log('reset flow', menu)
+        },
+        resetZoomState(menu) {
+            console.log('reset zoom', menu)
+        },
+        AddDataHandler(menu) {
+            console.log('add node', menu)
+            switch(menu.id) {
+                case 'push' :
+                    console.log(this.params.event);
+                    this.custom_events.emit('addNodes', {
+                        id:'data_push',
+                        type:'push_node',
+                        flow : {
+                            x:this.params.event.offsetX,
+                            y: this.params.event.offsetY
+                        },
+                        input:false, output:true,
+                        props:{
+                            setter:{
+                                data_key:""
+                            },
+                            fields:[{
+                                "key":"id",
+                                "label":"노드 아이디",
+                                "type":"string",
+                                "description":""
+                            },{
+                                "key":"props.setter.data_key",
+                                "label":"데이터 기준 키",
+                                "type":"string",
+                                "description":""
+                            }]
+                        }
+                    })
+                break;
+                case 'polling' :
+                    this.custom_events.emit('addNodes', {
+                        id:'data_polling',
+                        type:'polling_node',
+                        flow: {
+                            x:this.params.event.offsetX,
+                            y: this.params.event.offsetY,
+                        },
+                        input:false, output:true,
+                        props:{
+                            setter:{
+                                url:""
+                            },
+                            fields:[{
+                                "key":"id",
+                                "label":"노드 아이디",
+                                "type":"string",
+                                "description":""
+                            },{
+                                "key":"props.setter.url",
+                                "label":"데이터 URL",
+                                "type":"string",
+                                "description":""
+                            }]
+                        }
+                    })
+                break;
+            }
+        },
+        handleContextMenu(d) {
             var me = this;
             if(d.active) {
                 me.$refs.context_menu.openMenu(d.params.event);
             } else {
                 me.$refs.context_menu.close();
             }
+            this.params = d.params;
         }
     },
     beforeCreate(){

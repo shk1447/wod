@@ -1,6 +1,6 @@
-import flow from './flow';
+const flow = require('./flow');
 
-export default {
+module.exports = {
     flow: flow
 }
 //require('./flow');

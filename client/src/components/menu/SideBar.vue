@@ -3,7 +3,7 @@
         <div id="sidebar" ref="sidebar">
             <el-tabs type="border-card" class="custom-tabs" v-model="activePanel">
                 <el-tab-pane v-for="panel in panels" :key="panel.name" class="custom-tab-item" :label="panel.name" :name="panel.name">
-                    <component ref="selected_panel" :is="panel.comp"/>
+                    <component :ref="panel.name" :is="panel.comp"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -34,7 +34,8 @@ export default {
     methods: {
         handleSelectedItem:function(node_info) {
             this.activePanel = 'Property';
-            //this.$refs.selected_panel.
+            this.$refs[this.activePanel][0].selected_item = node_info;
+            this.$refs.Property[0].$forceUpdate()
         }
     },
     created() {

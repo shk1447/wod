@@ -134,8 +134,8 @@ module.exports = function(config) {
     })
 
     app.use(session({
-        key: 'sid',
-        secret: 'khan',
+        key: 'rsid',
+        secret: 'research',
         cookie: {
             maxAge: 1000 * 60 * config.session_time
         },

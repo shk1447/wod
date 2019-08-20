@@ -48,9 +48,12 @@ export default {
         },
         refreshPagePanel(params) {
             var me = this;
-            api.pages.getPage().then(function(res) {
+            api.nodes.getNodes().then(function(res){
                 me.page_list = res;
             })
+            // api.pages.getPage().then(function(res) {
+            //     me.page_list = res;
+            // })
         }
     },
     created() {

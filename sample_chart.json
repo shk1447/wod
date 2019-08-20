@@ -1,7 +1,10 @@
 [
   {
     "id": "two_layer",
+    "input":true,
+    "output":false,
     "compName": "two-layer-comp",
+    "type":"two_comp",
     "props": {
       "style": {
         "overflow": "hidden",
@@ -15,6 +18,9 @@
         {
           "id": "test_line_chart",
           "compName": "line-chart-comp",
+          "type":"two_comp",
+          "input":true,
+          "output":false,
           "props": {
             "style": {
               "top": "0%",
@@ -22,13 +28,27 @@
               "width": "100%",
               "height": "100%"
             },
-            "option": {
-              
-            }
-          },
-          "provider":{
-            "id":"test",
-            "type":"polling"
+            "setter": {
+              "x_axis":"unixtime",
+              "y_axis":"test",
+              "data_amount":100
+            },
+            "fields": [{
+              "key":"props.setter.x_axis",
+              "label":"X 축",
+              "type":"string",
+              "description":"X 축 데이터 설정"
+            },{
+              "key":"props.setter.y_axis",
+              "label":"Y 축",
+              "type":"string",
+              "description":"Y 축 데이터 설정"
+            },{
+              "key":"props.setter.data_amount",
+              "label":"데이터 양",
+              "type":"string",
+              "description":"데이터 양 설정"
+            }]
           }
         }
       ]
