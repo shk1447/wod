@@ -21,7 +21,7 @@ export default {
     props:["content_area"],
     data() {
         return {
-            activePanel:"Page",
+            activePanel:"",
             panels:[]
         }
     },
@@ -77,6 +77,13 @@ export default {
                 $("#sidebar-separator").css("right",($("#sidebar").width())+"px");
             }
         });
+    },
+    updated() {
+        var me = this;
+        var selected_panel = me.panels.find(function(d) { return d.name === me.activePanel});
+        if(!selected_panel) {
+            me.activePanel = me.panels.length > 0 ? me.panels[0].name : "";
+        }
     },
     destroyed() {
         me.custom_events.off('selected_item',me.handleSelectedItem);

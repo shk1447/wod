@@ -85,6 +85,7 @@ export default {
                         recursive_instances(v.props.children, v.id)
                     }
                     if(parent_id) v['parent_id'] = parent_id;
+                    if(v.props.children) delete v.props.children;
                     param_instances.push(v);
                 })
             }

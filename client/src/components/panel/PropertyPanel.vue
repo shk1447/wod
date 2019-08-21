@@ -4,7 +4,7 @@
             <el-form-item v-for="field in selected_item.props.fields" :key="field.key" :label="field.label">
                 <el-input :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item v-if="selected_item.props.fields && selected_item.props.fields.length > 0">
                 <el-button type="primary" @click="onSubmit">Save</el-button>
             </el-form-item>
         </el-form>

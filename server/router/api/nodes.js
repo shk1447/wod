@@ -18,10 +18,10 @@ module.exports = {
                         if(node.parent_id) {
                             var parent_node = nodes.find((d) => {return d.id === node.parent_id});
                             if(parent_node) {
-                                if(parent_node.children) {
-                                    parent_node.children.push(node);
+                                if(parent_node.props.children) {
+                                    parent_node.props.children.push(node);
                                 } else {
-                                    parent_node.children = [node];
+                                    parent_node.props.children = [node];
                                 }
                             }
                         }
@@ -57,6 +57,13 @@ module.exports = {
             bulk.execute((err, bulkres) => {
                 if(err) res.status(500).send();
                 else res.status(200).send();
+            })
+        },
+        "remove" : function(req,res,next) {
+            nodes.remove({page_id:req.body.page_id}).then(() => {
+                res.status(200).send();
+            }).catch((err) => {
+                res.status(500).send(err);
             })
         }
     }

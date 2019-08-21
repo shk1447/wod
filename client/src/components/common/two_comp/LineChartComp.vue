@@ -43,6 +43,8 @@ export default {
     computed: {
         mergeOptions:function(){
             var me = this;
+            me.init_options.series[0].data = [];
+            me.init_options.xAxis.data = [];
             _.each(me.data, function(v, i) {
                 me.init_options.series[0].data.push(v[me.props.setter.y_axis]);
                 me.init_options.xAxis.data.push(v[me.props.setter.x_axis]);

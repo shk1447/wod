@@ -31,7 +31,7 @@ export default {
     methods: {
         onDeletePage(item) {
             var me = this;
-            api.pages.delPage(item).then(function(res) {
+            api.nodes.delNodes(item).then(function(res) {
                 me.refreshPagePanel();
             })
         },

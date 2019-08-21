@@ -65,7 +65,7 @@ export default {
             switch(menu.id) {
                 case 'push' :
                     console.log(this.params.event);
-                    this.custom_events.emit('addNodes', {
+                    this.custom_events.emit('addNodes', [{
                         id:'data_push',
                         type:'push_node',
                         flow : {
@@ -89,10 +89,10 @@ export default {
                                 "description":""
                             }]
                         }
-                    })
+                    }])
                 break;
                 case 'polling' :
-                    this.custom_events.emit('addNodes', {
+                    this.custom_events.emit('addNodes', [{
                         id:'data_polling',
                         type:'polling_node',
                         flow: {
@@ -116,7 +116,7 @@ export default {
                                 "description":""
                             }]
                         }
-                    })
+                    }])
                 break;
             }
         },

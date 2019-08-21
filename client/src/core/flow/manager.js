@@ -17,14 +17,8 @@ module.exports = function(layer) {
             console.log(map)
         },
         loadFlow:function() {
-            api.nodes.getFlow().then(function(res) {
-                _.each(res, function(node,i) {
-                    layer.addNodes(node);
-                    if(node.type === 'push_node') {
-                        var test = new PushNode(node);
-                        console.log(test);
-                    }
-                })
+            api.nodes.getFlow().then(function(nodes) {
+                layer.addNodes(nodes);
             });
         },
         saveFlow:function() {
@@ -38,6 +32,9 @@ module.exports = function(layer) {
                     return d.target.id
                 })
                 node.flow["wires"] = wires;
+                if(node.props.children) {
+                    delete node.props.children;
+                }
                 param_instances.push({
                     id:node.id,
                     input:node.input,

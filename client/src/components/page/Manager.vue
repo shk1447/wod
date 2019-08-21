@@ -29,7 +29,7 @@ export default {
                     _.each(instances, function(comp,i) {
                         if(comp.props.children && comp.props.children.length > 0) {
                             getInstances(comp.props.children, row+i, column+1, comp.id);
-                            me.core.flow.layer.addNodes({
+                            me.core.flow.layer.addNodes([{
                                 id:comp.id,
                                 type:comp.type,
                                 parent_id:parent_id,
@@ -41,9 +41,9 @@ export default {
                                 },
                                 input:true,output:false,
                                 props:comp.props
-                            })
+                            }])
                         } else {
-                            me.core.flow.layer.addNodes({
+                            me.core.flow.layer.addNodes([{
                                 id:comp.id,
                                 type:comp.type,
                                 parent_id:parent_id,
@@ -55,7 +55,7 @@ export default {
                                 },
                                 input:true,output:false,
                                 props:comp.props
-                            })
+                            }])
                         }
                     })
                 }

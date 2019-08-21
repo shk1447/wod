@@ -261,7 +261,7 @@ module.exports = (function() {
                 protocol:''
             }
         }
-        addNodes(node_info);
+        addNodes([node_info]);
     };
 
     function zoomed() {
@@ -289,8 +289,10 @@ module.exports = (function() {
         //redraw();
     }
 
-    function addNodes(node) {
-        activeNodes.push(node);
+    function addNodes(nodes) {
+        _.each(nodes, function(node, i) {
+            activeNodes.push(node);
+        });
         redraw();
     }
 
@@ -457,7 +459,10 @@ module.exports = (function() {
             };
             if(d.flow.wires && d.flow.wires.length > 0) {
                 _.each(d.flow.wires, function(target_id,i) {
-                    activeLinks.push({source:d, target:activeNodes.find(function(d) {return d.id === target_id})})
+                    var wired_obj = activeNodes.find(function(d) {return d.id === target_id});
+                    if(wired_obj) {
+                        activeLinks.push({source:d, target:wired_obj})
+                    }
                 })
             }
         });
