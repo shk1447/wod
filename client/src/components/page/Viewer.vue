@@ -47,7 +47,8 @@ export default {
         console.log('updated')
     },
     destroyed() {
-        console.log('destroyed')
+        console.log('destroyed');
+        this.core.flow.manager.destroyFlow();
     }
 }
 </script>

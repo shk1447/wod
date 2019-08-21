@@ -6,7 +6,7 @@ const PushNode = require('./module/PushNode');
 module.exports = function(layer) {
     var layer = layer;
     var map = {}
-    
+    var modules = [];
     return {
         addCompNode:function(instance) {
             map[instance.id] = instance;
@@ -59,9 +59,17 @@ module.exports = function(layer) {
                         test.flow.wires = test.flow.wires.map(function(d,i) {
                             return map[d];
                         })
+                        test.created();
+                        modules.push(test);
                     }
                 })
             });
+        },
+        destroyFlow: function() {
+            _.each(modules, function(module, i) {
+                module.destroyed();
+            })
+            modules = [];
         }
     }
 };
