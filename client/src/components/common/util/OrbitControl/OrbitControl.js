@@ -245,7 +245,7 @@ var OrbitControl = function ( object, domElement ) {
     this.zoomScale = function(){
         return Math.pow( 0.95, scope.zoomSpeed );
     }
-    this.zoomIn = function(){
+    this.zoomOut = function(){
         if ( scope.object.isPerspectiveCamera ) {
 
             scale /= this.zoomScale();
@@ -264,7 +264,7 @@ var OrbitControl = function ( object, domElement ) {
         }
         this.update();
     };
-    this.zoomOut = function(){
+    this.zoomIn = function(){
         if ( scope.object.isPerspectiveCamera ) {
 
             scale *= this.zoomScale();
