@@ -55,7 +55,7 @@ export default {
                 }
                 mesh.material.needsUpdate = true;
             })
-            this.$parent.renderer.render( this.$parent.scene, this.$parent.camera );
+            this.$parent.render();
         };
         this.output_data = function(){
 
