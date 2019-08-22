@@ -70,6 +70,11 @@ module.exports = function(layer) {
                 module.destroyed();
             })
             modules = [];
+        },
+        resetManager : function(){
+            //manager.js가 갖고있는 데이터 초기화
+            modules = [];
+            map = {};
         }
     }
 };
