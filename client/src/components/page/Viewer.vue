@@ -15,7 +15,7 @@ export default {
         }
     },
     components : {
-        
+
     },
     methods: {
         dragover(e) {
@@ -25,6 +25,9 @@ export default {
             e.preventDefault();
             var me = this;
             me.instances = [];
+
+            // drop하게 되면 manager가 관리하는 목록들(module, 컴포넌트 맵)을 비워줘야 한다.
+            this.core.flow.manager.resetManager();
             var transfer_data = e.dataTransfer.getData("page");
             var data = JSON.parse(transfer_data);
             setTimeout(function() {
