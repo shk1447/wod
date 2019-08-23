@@ -9,6 +9,7 @@ module.exports = function(layer) {
     var modules = [];
     return {
         addCompNode:function(instance) {
+            console.log(instance);
             map[instance.id] = instance;
             console.log(map)
         },
