@@ -11,7 +11,7 @@
         "top": "0%",
         "left": "0%",
         "width": "100%",
-        "height": "100%",
+        "height": "50%",
         "z-index": "0"
       },
       "children": [
@@ -113,5 +113,106 @@
       ]
     },
     "action": {}
+  },
+  {
+    "id" : "three_layer",
+    "input" : true,
+    "output" : false,
+    "compName" : "three-layer-comp",
+    "type" : "three_comp",
+    "props" : {
+      "style" : {
+        "position": "absolute",
+        "overflow": "hidden",
+        "top": "0px",
+        "left": "0px",
+        "width": "1092px",
+        "height": "1028px",
+        "border": "1px solid black"
+      },
+      "setter" : {
+        "camera" : {
+          "near" : 1,
+          "far" : 10000,
+          "fov" : 60,
+          "aspect" : 1.6,
+          "position" : {
+            "x" : 400,
+            "y" : 400,
+            "z" : 400
+          }
+        }
+      },
+      "children" : [
+        {
+          "id": "boiler_comp_1",
+          "compName": "boiler-comp",
+          "type":"three_comp",
+          "input":true,
+          "output":false,
+          "props": {
+            "style": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "setter": {
+              "parts" : {
+                "boiler" : "boiler",
+                "pipe_A" : "pipe_A",
+                "boiler02" : "boiler2"
+              }
+            },
+            "fields": [{
+              "key":"props.setter.parts.boiler",
+              "label":"boiler의 기계장치 boiler",
+              "type":"string",
+              "description":"boiler의 기계장치 boiler 설정"
+            },{
+              "key":"props.setter.parts.pipe_A",
+              "label":"boiler의 기계장치 pipe_A",
+              "type":"string",
+              "description":"boiler의 기계장치 pipe_A"
+            },{
+              "key":"props.setter.parts.boiler02",
+              "label":"boiler의 기계장치 boiler02",
+              "type":"string",
+              "description":"boiler의 기계장치 boiler02"
+            }]
+          }
+        },
+        {
+          "id": "turbine_comp_1",
+          "compName": "turbine-comp",
+          "type":"three_comp",
+          "input":true,
+          "output":false,
+          "props": {
+            "style": {
+              "x": 500,
+              "y": 500,
+              "z": 0
+            },
+            "setter": {
+              "parts" : {
+                "turbineGenerator002" : "turbineGenerator002",
+                "turbineGenerator001" : "turbineGenerator001"
+              }
+            },
+            "fields": [{
+              "key":"props.setter.parts.turbineGenerator001",
+              "label":"turbine의 파츠 1",
+              "type":"string",
+              "description":"turbine의 파츠 1 설정"
+            },{
+              "key":"props.setter.parts.turbineGenerator002",
+              "label":"turbine의 파츠 2",
+              "type":"string",
+              "description":"turbine의 파츠 2 설정"
+            }]
+          }
+        }
+      ]
+    }
   }
 ]

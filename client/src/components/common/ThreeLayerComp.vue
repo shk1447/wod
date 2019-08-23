@@ -17,12 +17,18 @@ import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 export default {
     name:'three-layer-comp',
     type:'two_comp',
-    props: ['props'],
+    props: ['props', 'id', 'input', 'output', 'page_id'],
     data () {
         return {
         }
     },
     methods: {
+        input_data:function(data){
+            console.log(data);
+        },
+        output_data: function() {
+
+        },
         zoomIn(){
             this.controls.zoomIn();
         },
@@ -34,7 +40,6 @@ export default {
         },
         init() {
             var me = this;
-
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -42,8 +47,8 @@ export default {
             this.container.appendChild( this.renderer.domElement );
 
 
-            this.camera = new THREE.PerspectiveCamera( this.props.camera.fov, this.props.camera.aspect, this.props.camera.near, this.props.camera.far);
-            this.camera.position.set(this.props.camera.position.x, this.props.camera.position.y, this.props.camera.position.z);
+            this.camera = new THREE.PerspectiveCamera( this.props.setter.camera.fov, this.props.setter.camera.aspect, this.props.setter.camera.near, this.props.setter.camera.far);
+            this.camera.position.set(this.props.setter.camera.position.x, this.props.setter.camera.position.y, this.props.setter.camera.position.z);
 
             // controls
             this.controls = new OrbitControl( this.camera, this.renderer.domElement );
@@ -78,14 +83,16 @@ export default {
         addChildren() {
             var me = this;
             if(this.props.children && this.props.children.length > 0) {
-                var mtlLoader = new MTLLoader();
-                var objLoader = new OBJLoader();
-
                 _.each(this.props.children, function(comp, i) {
+                    var mtlLoader = new MTLLoader();
+                    var objLoader = new OBJLoader();
                     var component = new me.three_component[comp.compName]();
                     component.created();
 
                     component.props = _.extend(component.props, comp.props);
+
+                    component.id = comp.id; //manager.js에서 add, remove할 때 id를 갖고 하기 때문에 3d component에 id를 부여
+                    component.$parent = me; //input_data 함수가 실행되면 렌더를 한번 다시 해줘야 화면이 바뀌기 때문에 자신의 parent를 갖고 있도록 한다.
                     component.updated();
 
                     mtlLoader.load(component.props.path.material, (materials)=>{
@@ -125,7 +132,8 @@ export default {
     },
     mounted() {
         console.log(this.components);
-        console.log('mounted')
+        console.log('three layer mounted')
+        this.core.flow.manager.addCompNode(this);
         this.init();
         this.addChildren();
     },
@@ -144,6 +152,7 @@ export default {
         this.renderer = undefined;
         this.components = [];
         console.log('destroyed')
+        this.core.flow.manager.removeCompNode(this);
     }
 }
 </script>

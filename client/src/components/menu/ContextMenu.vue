@@ -45,13 +45,13 @@ export default {
                     id:"zoom",
                     label:"Zoom State",
                     action:this.resetZoomState
-                }]    
+                }]
             }],
             params : {}
         }
     },
     components:{
-        
+
     },
     methods: {
         resetDataFlow(menu) {
@@ -66,6 +66,7 @@ export default {
                 case 'push' :
                     console.log(this.params.event);
                     this.custom_events.emit('addNodes', [{
+                        eventCallback: true,
                         id:'data_push',
                         type:'push_node',
                         flow : {
@@ -143,7 +144,7 @@ export default {
         var me = this;
         console.log('mounted');
         this.custom_events.on('contextmenu', me.handleContextMenu)
-        
+
     },
     beforeUpdate() {
 
