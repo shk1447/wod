@@ -16,7 +16,7 @@ module.exports = {
                 _.each(nodes, (node, i) => {
                     if(node.page_id) {
                         if(node.parent_id) {
-                            var parent_node = nodes.find((d) => {return d.id === node.parent_id});
+                            var parent_node = nodes.find((d) => {return d.id === node.parent_id && d.page_id === node.page_id});
                             if(parent_node) {
                                 if(parent_node.props.children) {
                                     parent_node.props.children.push(node);
@@ -51,7 +51,8 @@ module.exports = {
             _.each(instances, (instance, i) => {
                 var query = {};
                 query["id"] = instance["id"];
-                if(page_id) instance["page_id"] = page_id;
+                query["page_id"] = page_id;
+                if(page_id) { instance["page_id"] = page_id; }
                 bulk.find(query).upsert().updateOne( instance );
             });
             bulk.execute((err, bulkres) => {
