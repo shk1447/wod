@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const nodeSchema = new mongoose.Schema({
-    id: { type : String, required: true, unique: true},
+    id: { type : String, required: true},
     type: { type : String, required: true},
     page_id: { type : String, required: true},
     parent_id: { type : String, required: true},
@@ -12,6 +12,8 @@ const nodeSchema = new mongoose.Schema({
 },{
     timestamps:true
 })
+
+nodeSchema.index({id:1, page_id:1}, {unique: true});
 
 nodeSchema.statics.create = function(payload) {
     const node = new this(payload);

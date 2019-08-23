@@ -199,13 +199,16 @@ module.exports = (function() {
 
     function canvasContextMenu() {
         var selected_node = activeNodes.find(function(d) { return d.id === selected_id});
+        var position = getPosition(d3.event)
         Vue.custom_events.emit('contextmenu', {
             active:true,
             params : {
                 node_info:selected_node,
-                event:d3.event
+                event:d3.event,
+                position:position
             }
         });
+        console.log('location 재조정')
         d3.event.stopPropagation();
         d3.event.preventDefault();
     }
@@ -348,6 +351,15 @@ module.exports = (function() {
         Vue.custom_events.emit('selected_item', node_info);
         
         redraw();
+    }
+
+    function getPosition(event) {
+        var x = Math.round((event.offsetX - outer_transform.x) / outer_transform.k);
+        var y = Math.round((event.offsetY - outer_transform.y) / outer_transform.k);
+        return {
+            x: x,
+            y: y
+        }
     }
 
     function redraw() {
@@ -613,14 +625,7 @@ module.exports = (function() {
     }
 
     return {
-        getPosition: function(event) {
-            var x = Math.round((event.offsetX - outer_transform.x) / outer_transform.k);
-            var y = Math.round((event.offsetY - outer_transform.y) / outer_transform.k);
-            return {
-                x: x,
-                y: y
-            }
-        },
+        getPosition: getPosition,
         clear: function() {
             activeNodes = [];
             activeLinks = [];

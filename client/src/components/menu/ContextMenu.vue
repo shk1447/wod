@@ -69,8 +69,8 @@ export default {
                         id:'data_push',
                         type:'push_node',
                         flow : {
-                            x:this.params.event.offsetX,
-                            y: this.params.event.offsetY
+                            x:this.params.position.x,
+                            y: this.params.position.y
                         },
                         input:false, output:true,
                         props:{
@@ -96,10 +96,10 @@ export default {
                         id:'data_polling',
                         type:'polling_node',
                         flow: {
-                            x:this.params.event.offsetX,
-                            y: this.params.event.offsetY,
+                            x:this.params.position.x,
+                            y: this.params.position.y
                         },
-                        input:false, output:true,
+                        input:true, output:true,
                         props:{
                             setter:{
                                 url:""
