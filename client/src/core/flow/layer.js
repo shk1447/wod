@@ -5,7 +5,7 @@ d3.rebind = function(target, source) {
     while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
     return target;
 };
-  
+
 function d3_rebind(target, source, method) {
     return function() {
         var value = method.apply(source, arguments);
@@ -127,7 +127,7 @@ d3.keybinding = function() {
                 event["_"][d.key].forEach((e) => {
                     e.value(d3.event, modifiers);
                 })
-                
+
             });
         });
     }
@@ -150,7 +150,7 @@ module.exports = (function() {
 
     var drag_line;
     var temp_link = {source:null,target:null};
-    
+
     var lineGenerator;
 
     var activeNodes = [];
@@ -165,6 +165,8 @@ module.exports = (function() {
             "100G":"#008080"
         }
     }
+
+    var push_node_count = 0;
 
     function portMouseDown(port, node, type) {
         d3.event.stopPropagation();
@@ -272,7 +274,7 @@ module.exports = (function() {
         vis.attr("transform", d3.event.transform);
         gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
         gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
-        
+
         //redraw();
     }
 
@@ -281,20 +283,26 @@ module.exports = (function() {
         d3.select(this).classed("dragging", true);
         //redraw();
     }
-    
+
     function dragged(d) {
         d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*4)).attr("cy", d.flow.y = (d3.event.y - node_size));
         redraw();
     }
-    
+
     function dragended(d) {
         d3.select(this).classed("dragging", false);
         //redraw();
     }
 
     function addNodes(nodes) {
+        // push_node_count
         _.each(nodes, function(node, i) {
+            if(node.hasOwnProperty('eventCallback')){
+                node.id += '_' + (push_node_count + 1);
+            }
             activeNodes.push(node);
+            if(node.type === 'push_node')
+                push_node_count++;
         });
         redraw();
     }
@@ -318,25 +326,25 @@ module.exports = (function() {
         blur_filter.append('feGaussianBlur')
             .attr('in', 'SourceGraphic')
             .attr('stdDeviation', parseInt(dropShadow.stdDeviation))
-    
+
         var filter = defs.append('filter')
                 .attr('id', activeDropShadow)
                 .attr('filterUnits','userSpaceOnUse');
-    
+
         filter.append('feGaussianBlur')
             .attr('in', 'SourceAlpha')
             .attr('stdDeviation', parseInt(dropShadow.stdDeviation));
-    
+
         filter.append('feOffset')
             .attr('dx', parseInt(dropShadow.dx))
             .attr('dy', parseInt(dropShadow.dy));
-    
+
         var feComponentTransfer = filter.append('feComponentTransfer');
         feComponentTransfer
             .append('feFuncA')
                 .attr('type', dropShadow.type)
                 .attr('slope', parseFloat(dropShadow.slope));
-    
+
         var feMerge = filter.append('feMerge');
         feMerge.append('feMergeNode');
         feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
@@ -345,11 +353,11 @@ module.exports = (function() {
     function nodeClicked(node, node_info) {
         d3.event.stopPropagation();
         d3.event.preventDefault();
-        
+
         selected_id = node_info.id
 
         Vue.custom_events.emit('selected_item', node_info);
-        
+
         redraw();
     }
 
@@ -369,7 +377,7 @@ module.exports = (function() {
 
         var nodeEnter = node.enter().insert("svg:g")
             .attr("class", "node nodegroup");
-        
+
         // 신규
         nodeEnter.each(function(d,i) {
             var node = d3.select(this);
@@ -388,12 +396,12 @@ module.exports = (function() {
                     .on('end', dragended))
             node.w = node_size;
             node.h = node_size;
-            
+
             // var anim_alarm = node.append("circle")
             //                     .attr("r", node_size)
             //                     .attr("fill", "rgba(255,0,0,0)")
             //                     .style("stroke-width", 0)
-            
+
             // d.animate = function () {
             //     if(d.status === 0) {
             //         return;
@@ -407,7 +415,7 @@ module.exports = (function() {
             //             .on("end", d.animate)
             // }
 
-            
+
             d.node = node.append("rect")
                 .attr('rx', node_size/4)
                 .attr('x', 0)
@@ -450,10 +458,10 @@ module.exports = (function() {
                 .on('mouseover', (function() { var node = d; return function(d,i) { portMouseOver(d3.select(this),node,'input') }})() )
                 .on('mouseout', (function() { var node = d; return function(d,i) { portMouseOut(d3.select(this),node,'input') }})() )
             }
-            
+
             d.node.style("cursor", "pointer")
                 .attr("class", "node")
-                .attr("fill",function(d) { 
+                .attr("fill",function(d) {
                     var color = 'rgb(166, 187, 207)';
                     return color;
                 })
@@ -482,7 +490,7 @@ module.exports = (function() {
         // 갱신
         node.each(function(d,i) {
             var thisNode = d3.select(this);
-            
+
             thisNode.attr("transform", function(d) { return "translate(" + (d.flow.x) + "," + (d.flow.y) + ")"; });
             // d.animate();
             d.update();
@@ -496,7 +504,7 @@ module.exports = (function() {
             } else {
                 d.node.classed('selected', false)
                 d.node.attr('filter', null );
-                // d.node.transition().duration(250).attr('width', node_size*2*2 ).attr('height', node_size*2).attr("fill",function(d) { 
+                // d.node.transition().duration(250).attr('width', node_size*2*2 ).attr('height', node_size*2).attr("fill",function(d) {
                 //     var color = 'rgb(166, 187, 207)';
                 //     if(d.total_status === "상승") {
                 //         color = 'rgb(200, 150, 150, 1)';
@@ -657,7 +665,7 @@ module.exports = (function() {
                             .on('↑', test)
                             .on('→', test)
                             .on('↓', test);
-            
+
             d3.select('body').call(keyboard);
 
             outer = d3.select("#" + id)
@@ -674,7 +682,7 @@ module.exports = (function() {
                         .on('mousemove', canvasMouseMove)
                         .on('mouseup', canvasMouseUp)
                         .on('dblclick', canvasDblClick)
-            
+
 
             vis = outer.append("svg:g")
 
