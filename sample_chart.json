@@ -25,12 +25,14 @@
             "style": {
               "top": "0%",
               "left": "0%",
-              "width": "100%",
+              "width": "50%",
               "height": "50%"
             },
             "setter": {
               "x_axis":"unixtime",
               "y_axis":"test",
+              "input_series" : 1,
+              "legend" : false,
               "data_amount":100
             },
             "fields": [{
@@ -43,6 +45,16 @@
               "label":"Y 축",
               "type":"string",
               "description":"Y 축 데이터 설정"
+            },{
+              "key":"props.setter.input_series",
+              "label":"전달받는 개수",
+              "type":"string",
+              "description":"전달받는 개수"
+            },{
+              "key":"props.setter.legend",
+              "label":"LEGEND 사용",
+              "type":"string",
+              "description":"LEGEND 사용"
             },{
               "key":"props.setter.data_amount",
               "label":"데이터 양",
@@ -60,13 +72,15 @@
             "style": {
               "top": "50%",
               "left": "0%",
-              "width": "100%",
+              "width": "50%",
               "height": "50%"
             },
             "setter": {
               "x_axis":"unixtime",
               "y_axis":"test",
-              "data_amount":100
+              "input_series" : 1,
+              "legend" : false,
+              "data_amount" : 100
             },
             "fields": [{
               "key":"props.setter.x_axis",
@@ -78,6 +92,16 @@
               "label":"Y 축",
               "type":"string",
               "description":"Y 축 데이터 설정"
+            },{
+              "key":"props.setter.input_series",
+              "label":"전달받는 개수",
+              "type":"string",
+              "description":"전달받는 개수"
+            },{
+              "key":"props.setter.legend",
+              "label":"LEGEND 사용",
+              "type":"string",
+              "description":"LEGEND 사용"
             },{
               "key":"props.setter.data_amount",
               "label":"데이터 양",
