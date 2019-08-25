@@ -86,12 +86,13 @@ export default {
                     }
                     if(parent_id) v['parent_id'] = parent_id;
                     if(v.props.children) delete v.props.children;
+                    v["page_id"] = me.form.page_id
                     param_instances.push(v);
                 })
             }
             recursive_instances(this.form.instances);
             console.log(param_instances);
-            api.nodes.saveNodes({page_id:this.form.page_id, instances:param_instances}).then((res) => {
+            api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 console.log(res);
                 me.custom_events.emit('page', {});
                 me.$modal.hide('create-page');

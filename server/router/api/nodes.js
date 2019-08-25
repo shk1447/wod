@@ -45,14 +45,13 @@ module.exports = {
     },
     post: {
         "save" : function(req,res,next) {
-            var page_id = req.body.page_id;
             var instances = req.body.instances;
             var bulk = nodes.collection.initializeUnorderedBulkOp();
             _.each(instances, (instance, i) => {
                 var query = {};
                 query["id"] = instance["id"];
-                query["page_id"] = page_id;
-                if(page_id) { instance["page_id"] = page_id; }
+                query["page_id"] = instance["page_id"];
+                //if(page_id) { instance["page_id"] = page_id; }
                 bulk.find(query).upsert().updateOne( instance );
             });
             bulk.execute((err, bulkres) => {

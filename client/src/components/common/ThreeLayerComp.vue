@@ -1,9 +1,9 @@
 <template>
     <div ref="three_container" :style="props.style">
-        <CameraControlPanel
+        <!-- <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
-        ></CameraControlPanel>
+        ></CameraControlPanel> -->
     </div>
 </template>
 
