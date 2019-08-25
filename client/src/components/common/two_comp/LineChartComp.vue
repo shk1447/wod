@@ -12,6 +12,8 @@ import moment from 'moment';
 
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/title'
 
 export default {
     type:'two_comp',
@@ -26,6 +28,10 @@ export default {
                 tooltip: {
                     trigger:'axis'
                 },
+                legend: {
+                    show:false, 
+                    data:[]
+                },
                 xAxis: {
                     type:'category',
                     data:[]
@@ -34,6 +40,7 @@ export default {
                     type:'value'
                 },
                 series:[{
+                    name:'',
                     data:[],
                     type:'line'
                 }]
@@ -43,12 +50,37 @@ export default {
     computed: {
         mergeOptions:function(){
             var me = this;
-            me.init_options.series[0].data = [];
+            
+            // Legend 사용여부
+            var isLegend = me.props.setter.legend == 'true';
+            me.init_options.legend.show = isLegend;
+
+            // 다중 데이터 INPUT 처리 
+            var input_series = me.props.setter.y_axis.split(',');   // 구조 개선 예정
+
+            if(input_series.length !== me.init_options.series.length){  // 예외처리 개선 필요
+                me.init_options.legend.data = [];
+                me.init_options.series = [];
+                for(var i = 0; i < input_series.length; i++ ){
+                    if(isLegend){
+                        me.init_options.legend.data.push(input_series[i].trim());
+                    }
+                    me.init_options.series.push({name:input_series[i].trim(), data:[], type:'line'});        
+                }
+            }
+
+            for(var j = 0; j < input_series.length; j ++){
+                me.init_options.series[j].data = [];
+            }
+            
             me.init_options.xAxis.data = [];
             _.each(me.data, function(v, i) {
-                me.init_options.series[0].data.push(v[me.props.setter.y_axis]);
+                for(var j = 0; j < input_series.length; j ++){
+                    me.init_options.series[j].data.push(v[input_series[j].trim()]);
+                }
                 me.init_options.xAxis.data.push(v[me.props.setter.x_axis]);
             })
+
             return me.init_options;
         }
     },
@@ -72,14 +104,14 @@ export default {
         }
     },
     created() {
-        console.log('created')
+        console.log('line chart > created')
     },
     mounted() {
-        console.log('mounted');
+        console.log('line chart > mounted');
         this.core.flow.manager.addCompNode(this);
     },
     destroyed() {
-        console.log('destroyed')
+        console.log('line chart > destroyed')
         this.core.flow.manager.removeCompNode(this);
     }
 }
