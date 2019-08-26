@@ -10,37 +10,23 @@ import _ from 'lodash';
 import ECharts from 'vue-echarts' // refers to components/ECharts.vue in webpack
 import moment from 'moment';
 
-import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/polar'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
-import 'echarts/lib/component/tooltip'
 
 export default {
     type:'two_comp',
-    name:'line-chart-comp',
+    name:'bar-chart-comp',
     props: ['id','props','data', 'input', 'output'],
-    data () {
+     data () {
         return {
             init_options: {
                 title: {
                     text:''
                 },
-                toolbox: {
-                    left: 'center',
-                    feature : {
-                        magicType: {show: true, type: ['line', 'bar']}
-                    }
-                },
                 tooltip: {
-                    trigger:'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
-                        }
-                    }
+                    trigger:'axis'
                 },
                 legend: {
                     show:false, 
@@ -56,9 +42,7 @@ export default {
                 series:[{
                     name:'',
                     data:[],
-                    areaStyle: {},
-                    stack: '',
-                    type:'line'
+                    type:'bar'
                 }]
             }
         }
@@ -81,7 +65,7 @@ export default {
                     if(isLegend){
                         me.init_options.legend.data.push(input_series[i].trim());
                     }
-                    me.init_options.series.push({name:input_series[i].trim(), data:[], type:'line'});        
+                    me.init_options.series.push({name:input_series[i].trim(), data:[], type:'bar'});        
                 }
             }
 
