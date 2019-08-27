@@ -1,7 +1,7 @@
 <template>
     <div :style="props.style">
         <component v-for="item in props.children" :key="item.id" :is="item.compName"
-        :id="item.id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
     </div>
 </template>
 

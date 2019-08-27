@@ -12,7 +12,7 @@ import _ from 'lodash';
 export default {
     type:'two_comp',
     name:'table-comp',
-    props: ['id','props','data', 'input', 'output'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
     data () {
         return {
             data: [],

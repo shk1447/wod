@@ -92,6 +92,7 @@ export default {
                     component.props = _.extend(component.props, comp.props);
 
                     component.id = comp.id; //manager.js에서 add, remove할 때 id를 갖고 하기 때문에 3d component에 id를 부여
+                    component.page_id = comp.page_id;
                     component.$parent = me; //input_data 함수가 실행되면 렌더를 한번 다시 해줘야 화면이 바뀌기 때문에 자신의 parent를 갖고 있도록 한다.
                     component.updated();
 

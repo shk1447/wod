@@ -18,7 +18,7 @@ import 'echarts/lib/component/title'
 export default {
     type:'two_comp',
     name:'bar-chart-comp',
-    props: ['id','props','data', 'input', 'output'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
      data () {
         return {
             init_options: {

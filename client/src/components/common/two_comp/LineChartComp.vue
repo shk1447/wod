@@ -20,7 +20,7 @@ import 'echarts/lib/component/tooltip'
 export default {
     type:'two_comp',
     name:'line-chart-comp',
-    props: ['id','props','data', 'input', 'output'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
     data () {
         return {
             init_options: {

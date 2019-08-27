@@ -10,11 +10,11 @@ module.exports = function(layer) {
     return {
         addCompNode:function(instance) {
             console.log(instance);
-            map[instance.id] = instance;
+            map[instance.page_id+"/"+instance.id] = instance;
             console.log(map)
         },
         removeCompNode:function(instance) {
-            delete map[instance.id];
+            delete map[instance.page_id+"/"+instance.id];
             console.log(map)
         },
         loadFlow:function() {
@@ -28,9 +28,9 @@ module.exports = function(layer) {
             var links = layer.getLinks();
             _.each(nodes, function(node,i) {
                 var wires = links.filter(function(d) {
-                    return d.source.id === node.id
+                    return d.source.page_id+"/"+d.source.id === node.page_id+"/"+node.id
                 }).map(function(d) {
-                    return d.target.id
+                    return d.target.page_id+"/"+d.target.id
                 })
                 node.flow["wires"] = wires;
                 if(node.props.children) {

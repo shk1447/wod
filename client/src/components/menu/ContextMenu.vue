@@ -68,6 +68,7 @@ export default {
                     this.custom_events.emit('addNodes', [{
                         eventCallback: true,
                         id:'data_push',
+                        page_id:"flow",
                         type:'push_node',
                         flow : {
                             x:this.params.position.x,
@@ -95,6 +96,7 @@ export default {
                 case 'polling' :
                     this.custom_events.emit('addNodes', [{
                         id:'data_polling',
+                        page_id:"flow",
                         type:'polling_node',
                         flow: {
                             x:this.params.position.x,

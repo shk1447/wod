@@ -11,7 +11,7 @@ module.exports = {
             });
         },
         "all" : function(req,res,next) {
-            nodes.find({}).then((nodes) => {
+            nodes.find({page_id:{$ne :'flow'}}).then((nodes) => {
                 var page_list = [];
                 _.each(nodes, (node, i) => {
                     if(node.page_id) {
