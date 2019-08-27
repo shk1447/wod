@@ -354,7 +354,7 @@ module.exports = (function() {
         d3.event.stopPropagation();
         d3.event.preventDefault();
 
-        selected_id = node_info.id
+        selected_id = node_info.page_id + "/" + node_info.id
 
         Vue.custom_events.emit('selected_item', node_info);
 

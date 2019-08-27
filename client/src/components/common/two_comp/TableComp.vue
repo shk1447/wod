@@ -13,6 +13,15 @@ export default {
     type:'two_comp',
     name:'table-comp',
     props: ['id','props','data', 'input', 'output', 'page_id'],
+    fields:{
+        setter:[{
+            "key":"props.setter.columns",
+            "label":"컬럼명",
+            "type":"string",
+            "description":"컬럼명"
+        }],
+        style:[]
+    },
     data () {
         return {
             data: [],

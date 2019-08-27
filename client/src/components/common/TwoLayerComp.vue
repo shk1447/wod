@@ -11,6 +11,10 @@ export default {
     name:'two-layer-comp',
     type:'two_comp',
     props: ['id','props','data', 'input', 'output', 'page_id'],
+    fields:{
+        setter:[],
+        style:[]
+    },
     data () {
         return { }
     },

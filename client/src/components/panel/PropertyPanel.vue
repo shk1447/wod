@@ -1,7 +1,7 @@
 <template>
     <div style="height:100%; overflow:auto;">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item v-for="field in selected_item.props.fields" :key="field.key" :label="field.label">
+            <el-form-item v-for="field in fields.setter" :key="field.key" :label="field.label">
                 <el-input :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)"></el-input>
             </el-form-item>
             <el-form-item v-if="selected_item.props.fields && selected_item.props.fields.length > 0">
@@ -17,21 +17,14 @@ import api from "../../api";
 export default {
     data() {
         return {
-            form: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
             selected_item:{
                 props:{
-                    setter:{},
-                    fields:[]
+                    setter:{}
                 }
+            },
+            fields:{
+                setter:[],
+                style:[]
             }
       }
     },
@@ -76,6 +69,8 @@ export default {
     },
     updated() {
         console.log('updated!!', this.selected_item);
+        var comp_fields = this[this.selected_item.type][this.selected_item.compName].fields;
+        this.fields = comp_fields ? comp_fields : {setter : [], style : []};
     },
     mounted() {
         

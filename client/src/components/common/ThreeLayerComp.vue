@@ -18,6 +18,10 @@ export default {
     name:'three-layer-comp',
     type:'two_comp',
     props: ['props', 'id', 'input', 'output', 'page_id'],
+    fields:{
+        setter:[],
+        style:[]
+    },
     data () {
         return {
         }
@@ -86,7 +90,7 @@ export default {
                 _.each(this.props.children, function(comp, i) {
                     var mtlLoader = new MTLLoader();
                     var objLoader = new OBJLoader();
-                    var component = new me.three_component[comp.compName]();
+                    var component = new me.three_comp[comp.compName].component();
                     component.created();
 
                     component.props = _.extend(component.props, comp.props);
@@ -128,7 +132,7 @@ export default {
 
         this.components = [];
 
-        console.log(this.three_component);
+        console.log(this.three_comp);
         console.log('created')
     },
     mounted() {

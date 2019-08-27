@@ -19,6 +19,30 @@ export default {
     type:'two_comp',
     name:'bar-chart-comp',
     props: ['id','props','data', 'input', 'output', 'page_id'],
+    fields:{
+        setter:[{
+            "key":"props.setter.x_axis",
+            "label":"X 축",
+            "type":"string",
+            "description":"X 축 데이터 설정"
+        },{
+            "key":"props.setter.y_axis",
+            "label":"Y 축",
+            "type":"string",
+            "description":"Y 축 데이터 설정"
+        },{
+            "key":"props.setter.legend",
+            "label":"LEGEND 사용",
+            "type":"string",
+            "description":"LEGEND 사용"
+        },{
+            "key":"props.setter.data_amount",
+            "label":"데이터 양",
+            "type":"string",
+            "description":"데이터 양 설정"
+        }],
+        style:[]
+    },
      data () {
         return {
             init_options: {
