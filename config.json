@@ -8,7 +8,7 @@
         "wsUrl" : "ws://localhost:1448/diservice",
         "httpUrl" : "http://localhost:1447"
     },
-    "mongo_uri":"mongodb://localhost:27017/research",
+    "mongo_uri":"mongodb://test2:Wemb!400$$@211.254.214.165:27170/research",
     "database": {
       "type": "mysql",
       "mysql": {

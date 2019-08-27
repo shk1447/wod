@@ -35,28 +35,7 @@
               "y_axis":"test, test2, test3",
               "legend" : true,
               "data_amount":100
-            },
-            "fields": [{
-              "key":"props.setter.x_axis",
-              "label":"X 축",
-              "type":"string",
-              "description":"X 축 데이터 설정"
-            },{
-              "key":"props.setter.y_axis",
-              "label":"Y 축",
-              "type":"string",
-              "description":"Y 축 데이터 설정"
-            },{
-              "key":"props.setter.legend",
-              "label":"LEGEND 사용",
-              "type":"string",
-              "description":"LEGEND 사용"
-            },{
-              "key":"props.setter.data_amount",
-              "label":"데이터 양",
-              "type":"string",
-              "description":"데이터 양 설정"
-            }]
+            }
           }
         }
         ,{
@@ -78,28 +57,7 @@
               "y_axis":"test",
               "legend" : false,
               "data_amount" : 100
-            },
-            "fields": [{
-              "key":"props.setter.x_axis",
-              "label":"X 축",
-              "type":"string",
-              "description":"X 축 데이터 설정"
-            },{
-              "key":"props.setter.y_axis",
-              "label":"Y 축",
-              "type":"string",
-              "description":"Y 축 데이터 설정"
-            },{
-              "key":"props.setter.legend",
-              "label":"LEGEND 사용",
-              "type":"string",
-              "description":"LEGEND 사용"
-            },{
-              "key":"props.setter.data_amount",
-              "label":"데이터 양",
-              "type":"string",
-              "description":"데이터 양 설정"
-            }]
+            }
           }
         }
         ,{
@@ -121,28 +79,7 @@
               "y_axis":"test, test2, test3",
               "legend" : false,
               "data_amount":100
-            },
-            "fields": [{
-              "key":"props.setter.x_axis",
-              "label":"X 축",
-              "type":"string",
-              "description":"X 축 데이터 설정"
-            },{
-              "key":"props.setter.y_axis",
-              "label":"Y 축",
-              "type":"string",
-              "description":"Y 축 데이터 설정"
-            },{
-              "key":"props.setter.legend",
-              "label":"LEGEND 사용",
-              "type":"string",
-              "description":"LEGEND 사용"
-            },{
-              "key":"props.setter.data_amount",
-              "label":"데이터 양",
-              "type":"string",
-              "description":"데이터 양 설정"
-            }]
+            }
           }
         }
         ,{
@@ -161,13 +98,7 @@
             },
             "setter": {
               "columns":"test,test2,test3"
-            },
-            "fields": [{
-              "key":"props.setter.columns",
-              "label":"컬럼명",
-              "type":"string",
-              "description":"컬럼명"
-            }]
+            }
           }
         }
       ]
@@ -178,7 +109,7 @@
     "input" : true,
     "output" : false,
     "compName" : "three-layer-comp",
-    "type" : "three_comp",
+    "type" : "two_comp",
     "props" : {
       "style" : {
         "position": "absolute",
