@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <i class="fas fa-search-minus" style="font-size : 50px; float : right; cursor:pointer" @mousedown="zoomOut" @mouseup="mouseUpEventHandler"></i>
-        <i class="fas fa-search-plus" style="font-size : 50px; float : right; cursor:pointer" @mousedown="zoomIn" @mouseup="mouseUpEventHandler"></i>
+    <div style="position : absolute; top : 0px; left : 0px; z-index : 1">
+        <i class="fas fa-search-minus" style="font-size : 50px; cursor:pointer" @mousedown="zoomOut" @mouseup="mouseUpEventHandler"></i>
+        <i class="fas fa-search-plus" style="font-size : 50px; cursor:pointer" @mousedown="zoomIn" @mouseup="mouseUpEventHandler"></i>
     </div>
 </template>
 

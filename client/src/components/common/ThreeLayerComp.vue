@@ -1,19 +1,19 @@
 <template>
     <div ref="three_container" :style="props.style">
-        <!-- <CameraControlPanel
+        <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
-        ></CameraControlPanel> -->
+        ></CameraControlPanel>
     </div>
 </template>
 
 <script>
 import _ from 'lodash';
 import * as THREE from 'three'
+import domEvents from 'threex-domevents'
 import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
 import OrbitControl from './util/OrbitControl/OrbitControl';
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
-
 export default {
     name:'three-layer-comp',
     type:'two_comp',
@@ -44,9 +44,15 @@ export default {
         },
         init() {
             var me = this;
+            this.mouseoverComponent = null;
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+            console.log(this.renderer.domElement);
+            this.renderer.domElement.style.position = "absolute";
+            this.renderer.domElement.style.top = "0px";
+            this.renderer.domElement.style.left = "0px";
+            this.renderer.domElement.style.zIndex = "0";
             this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
             this.container.appendChild( this.renderer.domElement );
 
@@ -80,6 +86,43 @@ export default {
             this.scene.add( light );
             var light = new THREE.AmbientLight( 0x222222 );
             this.scene.add( light );
+
+            ///add custom events listener
+            var THREEx = {};
+            domEvents(THREE, THREEx);
+
+            this.domEvents = new THREEx.DomEvents(this.camera, this.renderer.domElement);
+            this.threeLayerCompEvents = {
+                "click" : this.id + "/click",
+                "mouseover" : this.id + "/mouseover",
+                "dblclick" : this.id + "/dblclick",
+                "mouseout" : this.id + "/mouseout"
+            };
+            Object.freeze(this.threeLayerCompEvents);
+
+            this.custom_events.on(this.threeLayerCompEvents.click, function(event){
+                alert('click component');
+            });
+            this.custom_events.on(this.threeLayerCompEvents.mouseover, function(event){
+                console.log(event.target);
+                if(event.target.$obj.children.length){
+                    event.target.$obj.children.forEach(function(child){
+                        child.material.emissive.setHex("0x64FE2E")
+                        child.material.needsUpdate = true;
+                        me.render();
+                    })
+                }
+            });
+            this.custom_events.on(this.threeLayerCompEvents.mouseout, function(event){
+                console.log(event.target);
+                if(event.target.$obj.children.length){
+                    event.target.$obj.children.forEach(function(child){
+                        child.material.emissive.setHex("0x000000")
+                        child.material.needsUpdate = true;
+                        me.render();
+                    })
+                }
+            });
         },
         loadedModel() {
             console.log('loaded model');
@@ -101,13 +144,46 @@ export default {
                     component.updated();
 
                     mtlLoader.load(component.props.path.material, (materials)=>{
+
                         materials.preload();
                         objLoader.setMaterials(materials);
                         objLoader.load(component.props.path.obj,(object)=>{
                             component.$obj = object;
+                            if(component.$obj.children.length){
+                                component.$obj.children.forEach(function(child){
+                                    child.compId = component.id
+                                })
+                            }else{
+                                component.$obj.compId = component.id;
+                            }
                             me.components.push(component);
                             me.scene.add(component.$obj);
-                            console.log(component.props.style);
+                            var that = me;
+
+                            me.domEvents.addEventListener(component.$obj, 'click', function(event){
+                               that.custom_events.emit(that.id + '/click', {target : component});
+                            }, false);
+
+                            if(component.$obj.children.length){
+                                component.$obj.children.forEach(function(child){
+                                    var that2 = me;
+                                    me.domEvents.addEventListener(child, 'mouseover', function(event){
+                                        that2.custom_events.emit(that2.id + '/mouseover', {target : component});
+                                        that2.mouseoverComponent = component.id;
+                                    });
+                                    me.domEvents.addEventListener(child, 'mouseout', function(event){
+                                        if(event.intersect === undefined){
+                                            that2.custom_events.emit(that2.id + '/mouseout', {target : component});
+                                            that2.mouseoverComponent = null;
+                                        }else{
+                                            if(event.target.compId === that2.mouseoverComponent)
+                                                return;
+                                            else{
+                                                that2.custom_events.emit(that2.id + '/mouseout', {target : component});                                            }
+                                        }
+                                    });
+                                })
+                            }
                             component.mounted();
 
                             //render once
