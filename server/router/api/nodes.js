@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const nodes = require('../../model/nodes');
+const mongoose = require('mongoose');
 
 module.exports = {
     get : {
@@ -49,8 +50,9 @@ module.exports = {
             var bulk = nodes.collection.initializeUnorderedBulkOp();
             _.each(instances, (instance, i) => {
                 var query = {};
-                query["id"] = instance["id"];
-                query["page_id"] = instance["page_id"];
+                // query["id"] = instance["id"];
+                // query["page_id"] = instance["page_id"];
+                query["_id"] = new mongoose.Types.ObjectId(instance["_id"]);
                 delete instance["_id"];
                 //if(page_id) { instance["page_id"] = page_id; }
                 bulk.find(query).upsert().updateOne( instance );

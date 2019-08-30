@@ -5,7 +5,7 @@
         <template slot="contextmenu">
             <hsc-menu-item v-for="menu in menu_items" :label="menu.label" :key="menu.id">
                 <hsc-menu-item v-for="sub_menu in menu.children" :label="sub_menu.label"
-                :key="sub_menu.id" v-on:click="sub_menu.action(sub_menu)"/>
+                :key="sub_menu.id" v-on:click="sub_menu.action(sub_menu, params)"/>
             </hsc-menu-item>
         </template>
     </hsc-menu-context-menu>
