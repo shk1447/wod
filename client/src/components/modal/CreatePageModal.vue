@@ -42,7 +42,24 @@ export default {
             node_types:[],
             form: {
                 page_id: '',
-                instances: {},
+                instances: [{
+                    id: "two_layer",
+                    input:true,
+                    output:false,
+                    compName: "two-layer-comp",
+                    type:"two_comp",
+                    props: {
+                        style:{
+                            position: "absolute",
+                            overflow: "hidden",
+                            top: "0%",
+                            left: "0%",
+                            width: "100%",
+                            height: "100%",
+                            zIndex: "0"
+                        }
+                    }
+                }],
                 instances_path:''
             },
             rules: {
@@ -96,9 +113,17 @@ export default {
                 console.log(res);
                 me.custom_events.emit('page', {});
                 me.$modal.hide('create-page');
+                me.$message({
+                    message:"페이지가 저장되었습니다.",
+                    type:"success"
+                });
             }).catch(function(err) {
                 console.log(err);
                 me.$modal.hide('create-page');
+                me.$message({
+                    message:"페이지 저장이 실패하였습니다.",
+                    type:"error"
+                });
             })
             // api.pages.setPage({page_id:this.form.page_id, instances:this.form.instances}).then(function(res) {
             //     console.log(res);

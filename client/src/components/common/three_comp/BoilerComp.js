@@ -1,6 +1,25 @@
 export default {
     type:"three_comp",
     name:"boiler-comp",
+    fields: {
+        style:[],
+        setter:[{
+            "key":"props.setter.parts.boiler",
+            "label":"boiler의 기계장치 boiler",
+            "type":"string",
+            "description":"boiler의 기계장치 boiler 설정"
+          },{
+            "key":"props.setter.parts.pipe_A",
+            "label":"boiler의 기계장치 pipe_A",
+            "type":"string",
+            "description":"boiler의 기계장치 pipe_A"
+          },{
+            "key":"props.setter.parts.boiler02",
+            "label":"boiler의 기계장치 boiler02",
+            "type":"string",
+            "description":"boiler의 기계장치 boiler02"
+        }]
+    },
     component: function() {
         this.$obj = undefined;
         this.$texture = undefined;

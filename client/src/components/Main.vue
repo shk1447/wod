@@ -48,6 +48,12 @@ export default {
                     panels:[{
                         name:'Page',
                         comp:'page-panel'
+                    },{
+                        name:'Component',
+                        comp:'component-panel'
+                    },{
+                        name:'Property',
+                        comp:'property-panel'
                     }]
                 },
                 viewer: {

@@ -1,6 +1,20 @@
 export default {
     type:"three_comp",
     name:"turbine-comp",
+    fields: {
+        style:[],
+        setter:[{
+            "key":"props.setter.parts.turbineGenerator001",
+            "label":"turbine의 파츠 1",
+            "type":"string",
+            "description":"turbine의 파츠 1 설정"
+          },{
+            "key":"props.setter.parts.turbineGenerator002",
+            "label":"turbine의 파츠 2",
+            "type":"string",
+            "description":"turbine의 파츠 2 설정"
+        }]
+    },
     component: function() {
         this.$obj = undefined;
         this.$texture = undefined;

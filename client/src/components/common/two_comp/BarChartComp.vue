@@ -1,5 +1,5 @@
 <template>
-    <div :style="props.style">
+    <div :style="style">
         <v-chart :options="mergeOptions"/>
     </div>
 </template>
@@ -18,7 +18,26 @@ import 'echarts/lib/component/title'
 export default {
     type:'two_comp',
     name:'bar-chart-comp',
-    props: ['id','props','data', 'input', 'output', 'page_id'],
+    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    input:true,
+    output:false,
+    init_props: {
+        style:{
+            position: "absolute",
+            overflow: "hidden",
+            zIndex: "0",
+            top:"",
+            left:"",
+            width:"500px",
+            height:"250px"
+        },
+        setter: {
+            x_axis:"unixtime",
+            y_axis:"test, test2, test3",
+            legend : false,
+            data_amount:100
+        }
+    },
     fields:{
         setter:[{
             "key":"props.setter.x_axis",
@@ -41,10 +60,37 @@ export default {
             "type":"string",
             "description":"데이터 양 설정"
         }],
-        style:[]
+        style:[{
+            "key":"_id",
+            "label":"ID",
+            "type":"string",
+            "description":"ID"
+        },{
+            "key":"props.style.top",
+            "label":"TOP",
+            "type":"string",
+            "description":"TOP"
+        },{
+            "key":"props.style.left",
+            "label":"LEFT",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.width",
+            "label":"WIDTH",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.height",
+            "label":"HEIGHT",
+            "type":"string",
+            "description":"LEFT"
+        }]
     },
      data () {
         return {
+            _id:this._id,
+            props:this.props,
             init_options: {
                 title: {
                     text:''

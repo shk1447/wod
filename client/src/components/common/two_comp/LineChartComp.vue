@@ -1,5 +1,5 @@
 <template>
-    <div :style="props.style">
+    <div :style="style">
         <v-chart :options="mergeOptions"/>
     </div>
 </template>
@@ -20,9 +20,53 @@ import 'echarts/lib/component/tooltip'
 export default {
     type:'two_comp',
     name:'line-chart-comp',
-    props: ['id','props','data', 'input', 'output', 'page_id'],
+    input:true,
+    output:false,
+    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    init_props: {
+        style : {
+            position: "absolute",
+            overflow: "hidden",
+            zIndex: "0",
+            top:"",
+            left:"",
+            width:"500px",
+            height:"250px"
+        },
+        setter :{
+            x_axis:"unixtime",
+            y_axis:"test",
+            legend : false,
+            data_amount : 100
+        }
+    },
     fields: {
-        style:[],
+        style:[{
+            "key":"_id",
+            "label":"ID",
+            "type":"string",
+            "description":"ID"
+        },{
+            "key":"props.style.top",
+            "label":"TOP",
+            "type":"string",
+            "description":"TOP"
+        },{
+            "key":"props.style.left",
+            "label":"LEFT",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.width",
+            "label":"WIDTH",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.height",
+            "label":"HEIGHT",
+            "type":"string",
+            "description":"LEFT"
+        }],
         setter:[{
             "key":"props.setter.x_axis",
             "label":"X 축",
@@ -47,6 +91,8 @@ export default {
     },
     data () {
         return {
+            _id:this._id,
+            props:this.props,
             init_options: {
                 title: {
                     text:''
@@ -149,6 +195,9 @@ export default {
     mounted() {
         console.log('mounted');
         this.core.flow.manager.addCompNode(this);
+    },
+    updated() {
+        console.log(this);
     },
     destroyed() {
         console.log('destroyed')

@@ -20,12 +20,12 @@ export default {
                     header: true,
                     title: 'VISUALIZATION'
                 },
-                // {
-                //     title: 'EDITOR',
-                //     type:'content',
-                //     icon: 'fa fa-edit',
-                //     href:'/editor'
-                // },
+                {
+                    title: 'EDITOR',
+                    type:'content',
+                    icon: 'fa fa-edit',
+                    href:'/editor'
+                },
                 {
                     title: 'VIEWER',
                     type:'content',

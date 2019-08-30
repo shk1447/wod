@@ -1,5 +1,5 @@
 <template>
-    <div ref="three_container" :style="props.style">
+    <div ref="three_container" :style="style" @dragover="dragover" @drop="drop">
         <!-- <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
@@ -17,16 +17,63 @@ import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 export default {
     name:'three-layer-comp',
     type:'two_comp',
-    props: ['props', 'id', 'input', 'output', 'page_id'],
+    props: ['_id', 'props', 'input', 'output', 'page_id'],
+    init_props: {
+        style: {
+            position: "absolute",
+            overflow: "hidden",
+            zIndex: "0",
+            top:"",
+            left:"",
+            width:"100%",
+            height:"100%"
+        }
+    },
     fields:{
         setter:[],
-        style:[]
+        style:[{
+            "key":"props.style.top",
+            "label":"TOP",
+            "type":"string",
+            "description":"TOP"
+        },{
+            "key":"props.style.left",
+            "label":"LEFT",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.width",
+            "label":"WIDTH",
+            "type":"string",
+            "description":"LEFT"
+        },{
+            "key":"props.style.height",
+            "label":"HEIGHT",
+            "type":"string",
+            "description":"LEFT"
+        }]
     },
     data () {
         return {
+            _id:this._id,
+            style:this.props.style
         }
     },
     methods: {
+        dragover(e) {
+            e.preventDefault();
+        },
+        drop(e) {
+            e.preventDefault();
+            var transfer_data = e.dataTransfer.getData("component");
+            if(transfer_data) {
+                var data = JSON.parse(transfer_data);
+                if(data.type === 'three_comp') {
+                    e.stopImmediatePropagation();
+                    console.log('drop comp', data);
+                }
+            }
+        },
         input_data:function(data){
             console.log(data);
         },

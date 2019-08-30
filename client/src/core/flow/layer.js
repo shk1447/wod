@@ -356,7 +356,7 @@ module.exports = (function() {
 
         selected_id = node_info.page_id + "/" + node_info.id
 
-        Vue.custom_events.emit('selected_item', node_info);
+        Vue.custom_events.emit('selected_item', {type:'setter',item:node_info});
 
         redraw();
     }

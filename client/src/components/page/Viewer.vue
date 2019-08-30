@@ -1,7 +1,7 @@
 <template>
   <div class="viewer-area" @dragover="dragover" @drop="drop">
-    <component v-for="item in instances" :key="item.id" :is="item.compName"
-        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+    <component v-for="item in instances" :key="item._id" :is="item.compName"
+        :_id="item._id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
   </div>
 </template>
 
@@ -60,6 +60,6 @@ export default {
     .viewer-area {
         position:absolute;
         height:calc(100% - 50px);
-        width:calc(100% - 50px);
+        width:100%;
     }
 </style>

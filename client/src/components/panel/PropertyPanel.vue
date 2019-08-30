@@ -1,11 +1,8 @@
 <template>
     <div style="height:100%; overflow:auto;">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item v-for="field in fields.setter" :key="field.key" :label="field.label">
+            <el-form-item v-for="field in fields[activeType]" :key="field.key" :label="field.label">
                 <el-input :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)"></el-input>
-            </el-form-item>
-            <el-form-item v-if="selected_item.props.fields && selected_item.props.fields.length > 0">
-                <el-button type="primary" @click="onSubmit">Save</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -17,6 +14,7 @@ import api from "../../api";
 export default {
     data() {
         return {
+            activeType:'setter',
             selected_item:{
                 props:{
                     setter:{}
@@ -56,12 +54,9 @@ export default {
         },
         handleChangeSetter(key, event){
             var setter = this.setValueByPath(this.selected_item, key, event);
-            //setter = event;
-            console.log('test', setter);
-        },
-        onSubmit() {
-            console.log('submit!');
-            this.custom_events.emit('redrawFlow');
+            if(this.activeType === 'setter') {
+                this.custom_events.emit('redrawFlow');
+            }
         }
     },
     created() {
