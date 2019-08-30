@@ -1,5 +1,5 @@
 <template>
-    <div :style="style">
+    <div :style="props.style">
         <v-chart :options="mergeOptions"/>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     name:'line-chart-comp',
     input:true,
     output:false,
-    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
     init_props: {
         style : {
             position: "absolute",
@@ -42,11 +42,6 @@ export default {
     },
     fields: {
         style:[{
-            "key":"_id",
-            "label":"ID",
-            "type":"string",
-            "description":"ID"
-        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -91,7 +86,6 @@ export default {
     },
     data () {
         return {
-            _id:this._id,
             props:this.props,
             init_options: {
                 title: {

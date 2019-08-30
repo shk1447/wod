@@ -1,5 +1,5 @@
 <template>
-    <div :style="props.style" :test="_id">
+    <div :style="props.style">
         <el-table :data="data" :height="props.style.height" style="width: 100%" :row-class-name="tableRowClassName">
             <el-table-column v-for="item in columns" :key="item" :prop="item" :label="item"> </el-table-column>
         </el-table>
@@ -13,7 +13,7 @@ import { setInterval } from 'timers';
 export default {
     type:'two_comp',
     name:'table-comp',
-    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
     input:true,
     output:false,
     init_props: {
@@ -38,11 +38,6 @@ export default {
             "description":"컬럼명"
         }],
         style:[{
-            "key":"_id",
-            "label":"ID",
-            "type":"string",
-            "description":"ID"
-        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -66,7 +61,6 @@ export default {
     },
     data () {
         return {
-            _id:this._id,
             props:this.props
         }
     },

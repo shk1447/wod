@@ -1,5 +1,5 @@
 <template>
-    <div :style="style">
+    <div :style="props.style">
         <v-chart :options="mergeOptions"/>
     </div>
 </template>
@@ -18,7 +18,7 @@ import 'echarts/lib/component/title'
 export default {
     type:'two_comp',
     name:'bar-chart-comp',
-    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    props: ['id','props','data', 'input', 'output', 'page_id'],
     input:true,
     output:false,
     init_props: {
@@ -61,11 +61,6 @@ export default {
             "description":"데이터 양 설정"
         }],
         style:[{
-            "key":"_id",
-            "label":"ID",
-            "type":"string",
-            "description":"ID"
-        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -89,7 +84,6 @@ export default {
     },
      data () {
         return {
-            _id:this._id,
             props:this.props,
             init_options: {
                 title: {

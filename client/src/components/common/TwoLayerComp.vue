@@ -1,7 +1,7 @@
 <template>
     <div :style="props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
         <component v-for="item in props.children" :key="item.id" :is="item.compName" v-on:click.native="onSelectedComp(item)"
-        :_id="item._id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
     </div>
 </template>
 
@@ -25,11 +25,6 @@ export default {
     fields:{
         setter:[],
         style:[{
-            "key":"id",
-            "label":"ID",
-            "type":"string",
-            "description":"ID"
-        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -53,7 +48,6 @@ export default {
     },
     data () {
         return {
-            _id:this._id,
             props:this.props
         }
     },
@@ -77,7 +71,6 @@ export default {
                     data.init_props.style.top = e.offsetY + 'px';
                     data.init_props.style.left = e.offsetX + 'px';
                     var instance = {
-                        _id:"test",
                         page_id:this.page_id,
                         compName:data.name,
                         type:data.type,
