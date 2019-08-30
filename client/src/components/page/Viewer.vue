@@ -10,6 +10,7 @@ import { setTimeout } from 'timers';
 export default {
     data () {
         return {
+            page_id:"",
             instances : []
         }
     },
@@ -31,6 +32,7 @@ export default {
             var data = JSON.parse(transfer_data);
             setTimeout(function() {
                 me.$loading({})
+                me.page_id = data.page_id;
                 me.instances = data.instances;
                 me.$nextTick(function() {
                     this.core.flow.manager.executeFlow();

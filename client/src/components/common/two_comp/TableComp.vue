@@ -21,6 +21,7 @@ export default {
             position: "absolute",
             overflow: "hidden",
             zIndex: "0",
+            border:"",
             top:"",
             left:"",
             width:"250px",
@@ -62,6 +63,16 @@ export default {
             "label":"HEIGHT",
             "type":"string",
             "description":"HEIGHT"
+        },{
+            "key":"props.style.border",
+            "label":"BORDER",
+            "type":"string",
+            "description":"BORDER"
+        },{
+            "key":"props.style.zIndex",
+            "label":"Z-INDEX",
+            "type":"string",
+            "description":"Z-INDEX"
         }]
     },
     data () {

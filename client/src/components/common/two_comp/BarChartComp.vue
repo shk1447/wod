@@ -25,11 +25,12 @@ export default {
         style:{
             position: "absolute",
             overflow: "hidden",
-            zIndex: "0",
             top:"",
             left:"",
             width:"500px",
-            height:"250px"
+            height:"250px",
+            zIndex: "0",
+            border:""
         },
         setter: {
             x_axis:"unixtime",
@@ -85,6 +86,16 @@ export default {
             "label":"HEIGHT",
             "type":"string",
             "description":"LEFT"
+        },{
+            "key":"props.style.border",
+            "label":"BORDER",
+            "type":"string",
+            "description":"BORDER"
+        },{
+            "key":"props.style.zIndex",
+            "label":"Z-INDEX",
+            "type":"string",
+            "description":"Z-INDEX"
         }]
     },
      data () {

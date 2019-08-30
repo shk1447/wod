@@ -5,7 +5,7 @@
     id="create-page"
     name="create-page"
     :width="260"
-    :height="220"
+    :height="180"
     :isAutoHeight="false"
     :reset="false"
     :clickToClose="true"
@@ -19,9 +19,6 @@
         <el-form ref="create_page_form" size="mini" label-position="left" :model="form" label-width="60px" :rules="rules">
             <el-form-item label="NAME" prop="page_id">
                 <el-input v-model="form.page_id"></el-input>
-            </el-form-item>
-            <el-form-item label="JSON" prop="instances_path">
-                <el-input ref="test" type="file" v-model="form.instances_path" @change="onfileChange"></el-input>
             </el-form-item>
         </el-form>
     </div>
@@ -57,14 +54,14 @@ export default {
                             width: "100%",
                             height: "100%",
                             zIndex: "0"
-                        }
+                        },
+                        children:[]
                     }
                 }],
                 instances_path:''
             },
             rules: {
-                page_id:[{required:true,message:'Please input name', trigger:'blur'}],
-                instances:[{required:true,message:'Please select json file', trigger:'blur'}]
+                page_id:[{required:true,message:'Please input name', trigger:'blur'}]
             },
             node_info:{}
         }

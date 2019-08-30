@@ -10,11 +10,11 @@ module.exports = function(layer) {
     return {
         addCompNode:function(instance) {
             console.log(instance);
-            map[instance.page_id+"/"+instance.id] = instance;
+            map[instance.meta.page_id+"/"+instance.meta.id] = instance;
             console.log(map)
         },
         removeCompNode:function(instance) {
-            delete map[instance.page_id+"/"+instance.id];
+            delete map[instance.meta.page_id+"/"+instance.meta.id];
             console.log(map)
         },
         loadFlow:function() {

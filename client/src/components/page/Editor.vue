@@ -5,13 +5,50 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import api from "../../api";
+
 export default {
     data () {
         return {
+            page_id:"",
             instances : []
         }
     },
     methods: {
+        save() {
+            var me = this;
+            var param_instances = [];
+            function recursive_instances(instances, parent_id) {
+                _.each(instances, function(v,i) {
+                    if(v.props.children && v.props.children.length > 0) {
+                        recursive_instances(v.props.children, v.id)
+                    }
+                    if(parent_id) v['parent_id'] = parent_id;
+                    if(v.props.children) delete v.props.children;
+                    v["page_id"] = me.page_id
+                    param_instances.push(v);
+                })
+            }
+            recursive_instances(this.instances);
+            console.log(param_instances);
+            api.nodes.saveNodes({instances:param_instances}).then((res) => {
+                console.log(res);
+                me.custom_events.emit('page', {});
+                me.$modal.hide('create-page');
+                me.$message({
+                    message:"페이지가 저장되었습니다.",
+                    type:"success"
+                });
+            }).catch(function(err) {
+                console.log(err);
+                me.$modal.hide('create-page');
+                me.$message({
+                    message:"페이지 저장이 실패하였습니다.",
+                    type:"error"
+                });
+            })
+        },
         dragover(e) {
             e.preventDefault();
         },
@@ -27,10 +64,11 @@ export default {
                 var data = JSON.parse(transfer_data);
                 setTimeout(function() {
                     me.$loading({})
+                    me.page_id = data.page_id;
                     me.instances = data.instances;
-                    me.$nextTick(function() {
-                        this.core.flow.manager.executeFlow();
-                    });
+                    // me.$nextTick(function() {
+                    //     this.core.flow.manager.executeFlow();
+                    // });
                     me.$loading({}).close();
                     me.$message({
                         message:"페이지가 로드되었습니다.",

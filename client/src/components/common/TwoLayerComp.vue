@@ -16,16 +16,23 @@ export default {
         style: {
             position: "absolute",
             overflow: "hidden",
-            zIndex: "0",
             top:"",
             left:"",
             width:"100%",
-            height:"100%"
-        }
+            height:"100%",
+            zIndex: "0",
+            border:"1px dashed black"
+        },
+        children:[]
     },
     fields:{
         setter:[],
         style:[{
+            "key":"id",
+            "label":"ID",
+            "type":"string",
+            "description":"ID"
+        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -41,10 +48,20 @@ export default {
             "type":"string",
             "description":"LEFT"
         },{
-            "key":"props.style.heigth",
+            "key":"props.style.height",
             "label":"HEIGHT",
             "type":"string",
             "description":"LEFT"
+        },{
+            "key":"props.style.border",
+            "label":"BORDER",
+            "type":"string",
+            "description":"BORDER"
+        },{
+            "key":"props.style.zIndex",
+            "label":"Z-INDEX",
+            "type":"string",
+            "description":"Z-INDEX"
         }]
     },
     data () {
@@ -92,7 +109,10 @@ export default {
             
         },
         addChildren: function(instance) {
-            if(!this.meta.props.children) this.meta.props.children = [];
+            if(!this.meta.props.children) {
+                console.log('!!!!!why!!!?')
+                this.meta.props.children = [];
+            }
             this.meta.props.children.push(instance);
             this.$forceUpdate();
         }

@@ -3,7 +3,7 @@
         <div class="content-wrapper" ref="content_area">
             <tool-bar ref="tool_bar"></tool-bar>
             <div class="content-area">
-                <router-view/>
+                <router-view ref="content_comp"/>
             </div>
             <side-bar ref="side_bar"></side-bar>
         </div>
@@ -40,10 +40,15 @@ export default {
                 editor: {
                     left:[],
                     right:[{
-                        id:"",
+                        id:"new",
                         icon: "fas fa-cloud-upload-alt",
                         label:'',
                         action:this.onPagePopup
+                    },{
+                        id:"save",
+                        icon: "fas fa-save",
+                        label:'',
+                        action:this.onSavePage
                     }],
                     panels:[{
                         name:'Page',
@@ -58,12 +63,7 @@ export default {
                 },
                 viewer: {
                     left:[],
-                    right:[{
-                        id:"",
-                        icon: "fas fa-cloud-upload-alt",
-                        label:'',
-                        action:this.onPagePopup
-                    }],
+                    right:[],
                     panels:[{
                         name:'Page',
                         comp:'page-panel'
@@ -108,6 +108,12 @@ export default {
         "analysis": Analysis
     },
     methods: {
+        onSavePage() {
+            console.log('save');
+            if(this.$refs.content_comp && this.$refs.content_comp.save) {
+                this.$refs.content_comp.save()
+            }
+        },
         onSaveFlow() {
             this.core.flow.manager.saveFlow();
         },

@@ -51,6 +51,7 @@ module.exports = {
                 var query = {};
                 query["id"] = instance["id"];
                 query["page_id"] = instance["page_id"];
+                delete instance["_id"];
                 //if(page_id) { instance["page_id"] = page_id; }
                 bulk.find(query).upsert().updateOne( instance );
             });
