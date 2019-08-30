@@ -22,31 +22,7 @@ export default {
     },
     data () {
         return {
-            menu_items : [{
-                id:"data",
-                label:"Data",
-                children:[{
-                    id:"push",
-                    label:"Push Node",
-                    action:this.AddDataHandler
-                },{
-                    id:"polling",
-                    label:"Polling Node",
-                    action:this.AddDataHandler
-                }]
-            },{
-                id:"reset",
-                label:"Reset",
-                children:[{
-                    id:"flow",
-                    label:"Data Flow",
-                    action:this.resetDataFlow
-                },{
-                    id:"zoom",
-                    label:"Zoom State",
-                    action:this.resetZoomState
-                }]
-            }],
+            menu_items : [],
             params : {}
         }
     },
@@ -54,80 +30,6 @@ export default {
 
     },
     methods: {
-        resetDataFlow(menu) {
-            console.log('reset flow', menu)
-        },
-        resetZoomState(menu) {
-            console.log('reset zoom', menu)
-        },
-        AddDataHandler(menu) {
-            console.log('add node', menu)
-            switch(menu.id) {
-                case 'push' :
-                    console.log(this.params.event);
-                    this.custom_events.emit('addNodes', [{
-                        eventCallback: true,
-                        id:'data_push',
-                        page_id:"flow",
-                        type:'push_node',
-                        flow : {
-                            x:this.params.position.x,
-                            y: this.params.position.y
-                        },
-                        input:false, output:true,
-                        props:{
-                            setter:{
-                                data_key:""
-                            },
-                            fields:{
-                                setter:[{
-                                    "key":"id",
-                                    "label":"노드 아이디",
-                                    "type":"string",
-                                    "description":""
-                                },{
-                                    "key":"props.setter.data_key",
-                                    "label":"데이터 기준 키",
-                                    "type":"string",
-                                    "description":""
-                                }],
-                                style:[]
-                            }
-                        }
-                    }])
-                break;
-                case 'polling' :
-                    this.custom_events.emit('addNodes', [{
-                        id:'data_polling',
-                        page_id:"flow",
-                        type:'polling_node',
-                        flow: {
-                            x:this.params.position.x,
-                            y: this.params.position.y
-                        },
-                        input:true, output:true,
-                        props:{
-                            setter:{
-                                url:""
-                            },
-                            fields:{
-                                setter:[{
-                                    "key":"id",
-                                    "label":"노드 아이디",
-                                    "type":"string",
-                                    "description":""
-                                },{
-                                    "key":"props.setter.url",
-                                    "label":"데이터 URL",
-                                    "type":"string",
-                                    "description":""
-                                }]
-                            }
-                        }
-                    }])
-                break;
-            }
-        },
         handleContextMenu(d) {
             var me = this;
             if(d.active) {
@@ -136,6 +38,7 @@ export default {
                 me.$refs.context_menu.close();
             }
             this.params = d.params;
+            this.menu_items = d.menu_items;
         }
     },
     beforeCreate(){

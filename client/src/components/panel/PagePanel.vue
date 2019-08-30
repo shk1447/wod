@@ -22,13 +22,25 @@ export default {
             defaultProps: {
                 children: 'children',
                 label: 'page_id'
-            }
+            },
+            menu_items:[{
+                id:"page",
+                label:"Page",
+                children:[{
+                    id:"new",
+                    label:"New",
+                    action:this.onAddPage
+                }]
+            }]
         }
     },
     components: {
 
     },
     methods: {
+        onAddPage() {
+
+        },
         onDeletePage(item) {
             var me = this;
             api.nodes.delNodes(item).then(function(res) {

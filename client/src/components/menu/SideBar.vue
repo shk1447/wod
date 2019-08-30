@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="sidebar" ref="sidebar">
+        <div id="sidebar" ref="sidebar" v-on:contextmenu="onContextMenu">
             <el-tabs type="border-card" class="custom-tabs" v-model="activePanel">
                 <el-tab-pane v-for="panel in panels" :key="panel.name" class="custom-tab-item" :label="panel.name" :name="panel.name">
                     <component :ref="panel.name" :is="panel.comp"/>
@@ -34,6 +34,19 @@ export default {
         "description-panel":DescriptionPanel
     },
     methods: {
+        onContextMenu(event) {
+            console.log(event);
+            var selected_panel = this.$refs[this.activePanel][0];
+            if(selected_panel.menu_items) {
+                Vue.custom_events.emit('contextmenu', {
+                    active:true,
+                    params : {
+                        event:event,
+                    },
+                    menu_items: selected_panel.menu_items
+                });
+            }
+        },
         handleSelectedItem:function(param) {
             this.activePanel = 'Property';
             this.$refs[this.activePanel][0].activeType = param.type;

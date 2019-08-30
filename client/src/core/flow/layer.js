@@ -200,19 +200,108 @@ module.exports = (function() {
     }
 
     function canvasContextMenu() {
-        var selected_node = activeNodes.find(function(d) { return d.id === selected_id});
-        var position = getPosition(d3.event)
+        this.context_position = getPosition(d3.event)
         Vue.custom_events.emit('contextmenu', {
             active:true,
             params : {
-                node_info:selected_node,
-                event:d3.event,
-                position:position
-            }
+                event:d3.event
+            },
+            menu_items: [{
+                id:"data",
+                label:"Data",
+                children:[{
+                    id:"push",
+                    label:"Push Node",
+                    action:addNode.bind(this)
+                },{
+                    id:"polling",
+                    label:"Polling Node",
+                    action:addNode.bind(this)
+                }]
+            },{
+                id:"reset",
+                label:"Reset",
+                children:[{
+                    id:"flow",
+                    label:"Data Flow",
+                    action:resetLayer.bind(this)
+                },{
+                    id:"zoom",
+                    label:"Zoom State",
+                    action:resetZoom.bind(this)
+                }]
+            }]
         });
         console.log('location 재조정')
         d3.event.stopPropagation();
         d3.event.preventDefault();
+    }
+
+    function addNode(menu) {
+        switch(menu.id) {
+            case 'push' :
+                addNodes([{
+                    eventCallback: true,
+                    id:'data_push',
+                    page_id:"flow",
+                    type:'push_node',
+                    flow : {
+                        x:this.context_position.x,
+                        y: this.context_position.y
+                    },
+                    input:false, output:true,
+                    props:{
+                        setter:{
+                            data_key:""
+                        },
+                        fields:{
+                            setter:[{
+                                "key":"id",
+                                "label":"노드 아이디",
+                                "type":"string",
+                                "description":""
+                            },{
+                                "key":"props.setter.data_key",
+                                "label":"데이터 기준 키",
+                                "type":"string",
+                                "description":""
+                            }],
+                            style:[]
+                        }
+                    }
+                }])
+            break;
+            case 'polling' :
+                addNodes([{
+                    id:'data_polling',
+                    page_id:"flow",
+                    type:'polling_node',
+                    flow: {
+                        x:this.context_position.x,
+                        y: this.context_position.y
+                    },
+                    input:true, output:true,
+                    props:{
+                        setter:{
+                            url:""
+                        },
+                        fields:{
+                            setter:[{
+                                "key":"id",
+                                "label":"노드 아이디",
+                                "type":"string",
+                                "description":""
+                            },{
+                                "key":"props.setter.url",
+                                "label":"데이터 URL",
+                                "type":"string",
+                                "description":""
+                            }]
+                        }
+                    }
+                }])
+            break;
+        }
     }
 
     function canvasMouseUp() {
@@ -634,18 +723,22 @@ module.exports = (function() {
 
     }
 
+    function resetZoom() {
+        outer_transform = d3.zoomIdentity;
+        outer.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+        redraw();
+    }
+
+    function resetLayer() {
+        activeNodes = [];
+        activeLinks = [];
+        redraw();
+    }
+
     return {
         getPosition: getPosition,
-        clear: function() {
-            activeNodes = [];
-            activeLinks = [];
-            redraw();
-        },
-        zoom_reset: function(evt) {
-            outer_transform = d3.zoomIdentity;
-            outer.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-            redraw();
-        },
+        clear: resetLayer,
+        zoom_reset: resetZoom,
         focus_target: function(d) {
             var focusing = d3.zoomIdentity.translate((container_div.clientWidth/2)-d.flow.x, (container_div.clientHeight/2)-d.flow.y).scale(1);
             outer.transition().duration(1200).call(zoom.transform, focusing);
