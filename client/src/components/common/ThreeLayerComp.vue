@@ -1,5 +1,5 @@
 <template>
-    <div ref="three_container" :style="style" @dragover="dragover" @drop="drop">
+    <div ref="three_container" :style="meta.props.style" @dragover="dragover" @drop="drop">
         <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
@@ -17,7 +17,7 @@ import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 export default {
     name:'three-layer-comp',
     type:'two_comp',
-    props: ['_id', 'props', 'input', 'output', 'page_id'],
+    props: ['meta'],
     init_props: {
         style: {
             position: "absolute",
@@ -55,8 +55,7 @@ export default {
     },
     data () {
         return {
-            _id:this._id,
-            style:this.props.style
+            meta:this.meta
         }
     },
     methods: {
@@ -104,8 +103,8 @@ export default {
             this.container.appendChild( this.renderer.domElement );
 
 
-            this.camera = new THREE.PerspectiveCamera( this.props.setter.camera.fov, this.props.setter.camera.aspect, this.props.setter.camera.near, this.props.setter.camera.far);
-            this.camera.position.set(this.props.setter.camera.position.x, this.props.setter.camera.position.y, this.props.setter.camera.position.z);
+            this.camera = new THREE.PerspectiveCamera( this.meta.props.setter.camera.fov, this.meta.props.setter.camera.aspect, this.meta.props.setter.camera.near, this.meta.props.setter.camera.far);
+            this.camera.position.set(this.meta.props.setter.camera.position.x, this.meta.props.setter.camera.position.y, this.meta.props.setter.camera.position.z);
 
             // controls
             this.controls = new OrbitControl( this.camera, this.renderer.domElement );
@@ -176,8 +175,8 @@ export default {
         },
         addChildren() {
             var me = this;
-            if(this.props.children && this.props.children.length > 0) {
-                _.each(this.props.children, function(comp, i) {
+            if(this.meta.props.children && this.meta.props.children.length > 0) {
+                _.each(this.meta.props.children, function(comp, i) {
                     var mtlLoader = new MTLLoader();
                     var objLoader = new OBJLoader();
                     var component = new me.three_comp[comp.compName].component();
@@ -243,7 +242,7 @@ export default {
     },
     components : {CameraControlPanel},
     created() {
-        console.log('three created props' , this.props);
+        console.log('three created props' , this.meta.props);
         this.container = undefined;
         this.camera = undefined;
         this.controls = undefined;

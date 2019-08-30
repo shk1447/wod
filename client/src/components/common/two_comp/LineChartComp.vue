@@ -1,6 +1,6 @@
 <template>
-    <div :style="props.style">
-        <v-chart :options="mergeOptions"/>
+    <div :style="meta.props.style">
+        <v-chart ref="chart" :options="mergeOptions"/>
     </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
     name:'line-chart-comp',
     input:true,
     output:false,
-    props: ['id','props','data', 'input', 'output', 'page_id'],
+    props: ['meta'],
     init_props: {
         style : {
             position: "absolute",
@@ -42,6 +42,11 @@ export default {
     },
     fields: {
         style:[{
+            "key":"id",
+            "label":"ID",
+            "type":"string",
+            "description":"ID"
+        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -86,7 +91,7 @@ export default {
     },
     data () {
         return {
-            props:this.props,
+            meta:this.meta,
             init_options: {
                 title: {
                     text:''
@@ -132,11 +137,11 @@ export default {
             var me = this;
             
             // Legend 사용여부
-            var isLegend = me.props.setter.legend == 'true';
+            var isLegend = me.meta.props.setter.legend == 'true';
             me.init_options.legend.show = isLegend;
 
             // 다중 데이터 INPUT 처리 
-            var input_series = me.props.setter.y_axis.split(',');   // 구조 개선 예정
+            var input_series = me.meta.props.setter.y_axis.split(',');   // 구조 개선 예정
 
             if(input_series.length !== me.init_options.series.length){  // 예외처리 개선 필요
                 me.init_options.legend.data = [];
@@ -158,7 +163,7 @@ export default {
                 for(var j = 0; j < input_series.length; j ++){
                     me.init_options.series[j].data.push(v[input_series[j].trim()]);
                 }
-                me.init_options.xAxis.data.push(v[me.props.setter.x_axis]);
+                me.init_options.xAxis.data.push(v[me.meta.props.setter.x_axis]);
             })
 
             return me.init_options;
@@ -171,7 +176,7 @@ export default {
         input_data:function(data){
             var me = this;
             if(me.data) {
-                if(me.data.length > parseInt(this.props.setter.data_amount)) {
+                if(me.data.length > parseInt(this.meta.props.setter.data_amount)) {
                     me.data.shift()
                 }
                 me.data.push(data);
@@ -191,7 +196,7 @@ export default {
         this.core.flow.manager.addCompNode(this);
     },
     updated() {
-        console.log(this);
+        this.$refs.chart.refresh()
     },
     destroyed() {
         console.log('destroyed')

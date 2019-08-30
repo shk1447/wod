@@ -79,17 +79,20 @@ export default {
                             setter:{
                                 data_key:""
                             },
-                            fields:[{
-                                "key":"id",
-                                "label":"노드 아이디",
-                                "type":"string",
-                                "description":""
-                            },{
-                                "key":"props.setter.data_key",
-                                "label":"데이터 기준 키",
-                                "type":"string",
-                                "description":""
-                            }]
+                            fields:{
+                                setter:[{
+                                    "key":"id",
+                                    "label":"노드 아이디",
+                                    "type":"string",
+                                    "description":""
+                                },{
+                                    "key":"props.setter.data_key",
+                                    "label":"데이터 기준 키",
+                                    "type":"string",
+                                    "description":""
+                                }],
+                                style:[]
+                            }
                         }
                     }])
                 break;
@@ -107,17 +110,19 @@ export default {
                             setter:{
                                 url:""
                             },
-                            fields:[{
-                                "key":"id",
-                                "label":"노드 아이디",
-                                "type":"string",
-                                "description":""
-                            },{
-                                "key":"props.setter.url",
-                                "label":"데이터 URL",
-                                "type":"string",
-                                "description":""
-                            }]
+                            fields:{
+                                setter:[{
+                                    "key":"id",
+                                    "label":"노드 아이디",
+                                    "type":"string",
+                                    "description":""
+                                },{
+                                    "key":"props.setter.url",
+                                    "label":"데이터 URL",
+                                    "type":"string",
+                                    "description":""
+                                }]
+                            }
                         }
                     }])
                 break;

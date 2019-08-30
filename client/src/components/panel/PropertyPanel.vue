@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%; overflow:auto;">
-        <el-form ref="form" :model="form" label-width="120px">
+        <el-form ref="form" :model="form" label-width="120px" size="mini" :inline="true">
             <el-form-item v-for="field in fields[activeType]" :key="field.key" :label="field.label">
                 <el-input :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)"></el-input>
             </el-form-item>

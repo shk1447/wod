@@ -30,6 +30,7 @@
     "three-obj-mtl-loader": "^1.0.3",
     "three-orbitcontrols": "^2.102.2",
     "threex-domevents": "^1.0.0",
+    "uuid": "^3.3.3",
     "vue": "^2.5.2",
     "vue-axios": "^2.0.2",
     "vue-echarts": "^4.0.3",

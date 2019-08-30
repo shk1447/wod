@@ -1,16 +1,17 @@
 <template>
-    <div :style="props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
-        <component v-for="item in props.children" :key="item.id" :is="item.compName" v-on:click.native="onSelectedComp(item)"
-        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+    <div :style="meta.props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
+        <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-on:click.native="onSelectedComp(item)"
+        :meta="item"></component>
     </div>
 </template>
 
 <script>
+import uuid from 'uuid/v4';
 
 export default {
     name:'two-layer-comp',
     type:'two_comp',
-    props: ['_id','props','data', 'input', 'output', 'page_id'],
+    props: ['meta'],
     init_props: {
         style: {
             position: "absolute",
@@ -48,7 +49,7 @@ export default {
     },
     data () {
         return {
-            props:this.props
+            meta:this.meta
         }
     },
     components : {
@@ -71,6 +72,7 @@ export default {
                     data.init_props.style.top = e.offsetY + 'px';
                     data.init_props.style.left = e.offsetX + 'px';
                     var instance = {
+                        id:uuid(),
                         page_id:this.page_id,
                         compName:data.name,
                         type:data.type,
@@ -90,8 +92,8 @@ export default {
             
         },
         addChildren: function(instance) {
-            if(!this.props.children) this.props.children = [];
-            this.props.children.push(instance);
+            if(!this.meta.props.children) this.meta.props.children = [];
+            this.meta.props.children.push(instance);
             this.$forceUpdate();
         }
     },
@@ -100,7 +102,6 @@ export default {
     },
     mounted() {
         console.log('mounted')
-        console.log(this.props.style);
         this.core.flow.manager.addCompNode(this);
     },
     destroyed() {

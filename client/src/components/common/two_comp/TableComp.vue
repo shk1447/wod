@@ -1,6 +1,6 @@
 <template>
-    <div :style="props.style">
-        <el-table :data="data" :height="props.style.height" style="width: 100%" :row-class-name="tableRowClassName">
+    <div :style="meta.props.style">
+        <el-table :data="meta.data" :height="meta.props.style.height" style="width: 100%" :row-class-name="tableRowClassName">
             <el-table-column v-for="item in columns" :key="item" :prop="item" :label="item"> </el-table-column>
         </el-table>
     </div>
@@ -13,7 +13,7 @@ import { setInterval } from 'timers';
 export default {
     type:'two_comp',
     name:'table-comp',
-    props: ['id','props','data', 'input', 'output', 'page_id'],
+    props: ['meta'],
     input:true,
     output:false,
     init_props: {
@@ -38,6 +38,11 @@ export default {
             "description":"컬럼명"
         }],
         style:[{
+            "key":"id",
+            "label":"ID",
+            "type":"string",
+            "description":"ID"
+        },{
             "key":"props.style.top",
             "label":"TOP",
             "type":"string",
@@ -61,7 +66,7 @@ export default {
     },
     data () {
         return {
-            props:this.props
+            meta:this.meta
         }
     },
     components : {
@@ -101,7 +106,7 @@ export default {
     },
     created() {
         var me = this;
-        this.columns = this.props.setter.columns.split(',');
+        this.columns = this.meta.props.setter.columns.split(',');
         _.each(this.columns, function(v, i) {
             // closure this접근이 안되므로 위에 me로 define하거나, this를 bind하여야합니다.
             me.columns[i] = v.trim();
@@ -121,7 +126,7 @@ export default {
         // },1000)
     },
     updated() {
-        console.log(this.id);
+        console.log(this.$data);
         console.log('table updated!!!')
     },
     destroyed() {
