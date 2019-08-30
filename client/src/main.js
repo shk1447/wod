@@ -27,19 +27,25 @@ Vue.use(ElementUI, { locale });
 
 Vue.prototype.two_comp = {};
 Vue.prototype.three_comp = {};
+Vue.prototype.flow_comp = {};
 
 // Custom Components
 import common from './components/common';
 _.each(common, function(comp_list, type) {
     _.each(comp_list, function(comp, i) {
         if(comp.type === "two_comp") {
-            Vue.component(comp.name, comp);
-            Vue.prototype.two_comp[comp.name] = comp;
+            Vue.component(comp.compName, comp);
+            Vue.prototype.two_comp[comp.compName] = comp;
         } else if(comp.type === "three_comp") {
-            Vue.prototype.three_comp[comp.name] = comp;
+            Vue.prototype.three_comp[comp.compName] = comp;
         }
     })
 });
+
+import flow_modules from './core/flow/module';
+_.each(flow_modules, function(flow_module, k) {
+    Vue.prototype[flow_module.type][flow_module.compName] = flow_module;
+})
 
 import App from './components/Main.vue';
 import router from './router';

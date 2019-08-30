@@ -40,11 +40,6 @@ export default {
                 editor: {
                     left:[],
                     right:[{
-                        id:"new",
-                        icon: "fas fa-cloud-upload-alt",
-                        label:'',
-                        action:this.onPagePopup
-                    },{
                         id:"save",
                         icon: "fas fa-save",
                         label:'',

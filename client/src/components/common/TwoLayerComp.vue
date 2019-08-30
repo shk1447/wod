@@ -9,7 +9,7 @@
 import uuid from 'uuid/v4';
 
 export default {
-    name:'two-layer-comp',
+    compName:'two-layer-comp',
     type:'two_comp',
     props: ['meta'],
     init_props: {
@@ -91,7 +91,7 @@ export default {
                     var instance = {
                         id:uuid(),
                         page_id:this.page_id,
-                        compName:data.name,
+                        compName:data.compName,
                         type:data.type,
                         input:data.input,
                         output:data.output,

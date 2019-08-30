@@ -30,7 +30,7 @@ export default {
                     param_instances.push(v);
                 })
             }
-            recursive_instances(this.instances);
+            recursive_instances(JSON.parse(JSON.stringify(this.instances)));
             console.log(param_instances);
             api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 console.log(res);

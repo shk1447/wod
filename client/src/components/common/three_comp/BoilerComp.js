@@ -1,6 +1,6 @@
 export default {
     type:"three_comp",
-    name:"boiler-comp",
+    compName:"boiler-comp",
     fields: {
         style:[],
         setter:[{

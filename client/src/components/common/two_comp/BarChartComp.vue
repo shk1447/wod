@@ -17,7 +17,7 @@ import 'echarts/lib/component/title'
 
 export default {
     type:'two_comp',
-    name:'bar-chart-comp',
+    compName:'bar-chart-comp',
     props: ['meta'],
     input:true,
     output:false,
@@ -154,7 +154,7 @@ export default {
             }
             
             me.init_options.xAxis.data = [];
-            _.each(me.data, function(v, i) {
+            _.each(me.meta.data, function(v, i) {
                 for(var j = 0; j < input_series.length; j ++){
                     me.init_options.series[j].data.push(v[input_series[j].trim()]);
                 }
@@ -170,14 +170,15 @@ export default {
     methods: {
         input_data:function(data){
             var me = this;
-            if(me.data) {
-                if(me.data.length > parseInt(this.meta.props.setter.data_amount)) {
-                    me.data.shift()
+            if(me.meta.data) {
+                if(me.meta.data.length > parseInt(this.meta.props.setter.data_amount)) {
+                    me.meta.data.shift()
                 }
-                me.data.push(data);
+                me.meta.data.push(data);
             } else {
-                me.data = [data];
+                me.meta.data = [data];
             }
+            this.$forceUpdate();
         },
         output_data: function() {
 

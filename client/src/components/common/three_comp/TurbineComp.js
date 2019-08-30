@@ -1,6 +1,6 @@
 export default {
     type:"three_comp",
-    name:"turbine-comp",
+    compName:"turbine-comp",
     fields: {
         style:[],
         setter:[{

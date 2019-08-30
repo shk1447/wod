@@ -1,7 +1,5 @@
 const _ = require('lodash');
 const api = require('../../api').default;
-const PollingNode = require('./module/PollingNode');
-const PushNode = require('./module/PushNode');
 
 module.exports = function(layer) {
     var layer = layer;
@@ -22,6 +20,15 @@ module.exports = function(layer) {
                 layer.addNodes(nodes);
             });
         },
+        addNode: function(node) {
+
+        },
+        removeNode: function(node) {
+            // type에 따라 다른 명령
+        },
+        addLink: function(node) {
+
+        },
         saveFlow:function() {
             var param_instances = [];
             var nodes = layer.getNodes();
@@ -37,6 +44,7 @@ module.exports = function(layer) {
                     delete node.props.children;
                 }
                 param_instances.push({
+                    _id:node._id,
                     id:node.id,
                     input:node.input,
                     output:node.output,
@@ -55,8 +63,8 @@ module.exports = function(layer) {
         executeFlow:function() {
             api.nodes.getFlow().then(function(res) {
                 _.each(res, function(node,i) {
-                    if(node.type === 'push_node') {
-                        var test = new PushNode(node);
+                    if(node.compName === 'push-comp') {
+                        var test = new Vue[node.type][node.compName].class(node);
                         test.flow.wires = test.flow.wires.map(function(d,i) {
                             return map[d];
                         })

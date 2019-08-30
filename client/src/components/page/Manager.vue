@@ -30,6 +30,7 @@ export default {
                         if(comp.props.children && comp.props.children.length > 0) {
                             getInstances(comp.props.children, row+i, column+1, comp.id);
                             me.core.flow.layer.addNodes([{
+                                _id:comp._id,
                                 id:comp.id,
                                 type:comp.type,
                                 parent_id:parent_id,
@@ -44,6 +45,7 @@ export default {
                             }])
                         } else {
                             me.core.flow.layer.addNodes([{
+                                _id:comp._id,
                                 id:comp.id,
                                 type:comp.type,
                                 parent_id:parent_id,

@@ -12,7 +12,7 @@ import { setInterval } from 'timers';
 
 export default {
     type:'two_comp',
-    name:'table-comp',
+    compName:'table-comp',
     props: ['meta'],
     input:true,
     output:false,
@@ -90,11 +90,12 @@ export default {
     methods: {
         input_data:function(data){
             var me = this;
-            if(me.data) {
-                me.data.splice(0, 0, data);
+            if(me.meta.data) {
+                me.meta.data.splice(0, 0, data);
             } else {
-                me.data = [data];
+                me.meta.data = [data];
             }
+            this.$forceUpdate();
         },
         output_data: function() {
 

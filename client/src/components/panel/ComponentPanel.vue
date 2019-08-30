@@ -1,9 +1,9 @@
 <template>
     <div style="height:100%; overflow:auto;">
-        <el-tree class="page-tree" draggable :data="comp_list" :props="defaultProps" node-key="name" :allow-drag="allowDrag" :allow-drop="allowDrop"
+        <el-tree class="page-tree" draggable :data="comp_list" :props="defaultProps" node-key="compName" :allow-drag="allowDrag" :allow-drop="allowDrop"
         @node-drag-start="onDragStart" default-expand-all>
             <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span><i :class="data.type === 'category' ? 'far fa-folder' : 'far fa-file-alt'"></i>   {{ data.name }}</span>
+                <span><i :class="data.type === 'category' ? 'far fa-folder' : 'far fa-file-alt'"></i>   {{ data.compName }}</span>
             </span>
         </el-tree>
     </div>
@@ -26,17 +26,17 @@ export default {
         
         return {
             comp_list: [{
-                name:'two_comp',
+                compName:'two_comp',
                 type:'category',
                 children:two_comp_list
             },{
-                name:'three_comp',
+                compName:'three_comp',
                 type:'category',
                 children:three_comp_list
             }],
             defaultProps: {
                 children: 'children',
-                label: 'name'
+                label: 'compName'
             }
         }
     },

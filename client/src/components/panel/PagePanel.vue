@@ -51,6 +51,7 @@ export default {
     },
     methods: {
         savePage(page_info) {
+            var me = this;
             var param_instances = [];
             function recursive_instances(instances, parent_id) {
                 _.each(instances, function(v,i) {

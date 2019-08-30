@@ -45,6 +45,18 @@ module.exports = {
         }
     },
     post: {
+        "add" : function(req,res,next) {
+
+            res.status(200).send();
+        },
+        "update" : function(req,res,next) {
+
+            res.status(200).send();
+        },
+        "removeById" : function(req,res,next) {
+
+            res.status(200).send();
+        },
         "save" : function(req,res,next) {
             var instances = req.body.instances;
             var bulk = nodes.collection.initializeUnorderedBulkOp();

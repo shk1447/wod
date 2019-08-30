@@ -15,7 +15,7 @@ import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
 import OrbitControl from './util/OrbitControl/OrbitControl';
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 export default {
-    name:'three-layer-comp',
+    compName:'three-layer-comp',
     type:'two_comp',
     props: ['meta'],
     init_props: {

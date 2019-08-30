@@ -136,6 +136,7 @@ d3.keybinding = function() {
 };
 
 const randomColor = require('randomcolor') ;
+const flow_modules = require('./module');
 
 module.exports = (function() {
     var width, height, container_div;
@@ -168,6 +169,46 @@ module.exports = (function() {
 
     var push_node_count = 0;
 
+    function addNodes(nodes) {
+        // push_node_count
+        _.each(nodes, function(node, i) {
+            if(node.hasOwnProperty('eventCallback')){
+                node.id += '_' + (push_node_count + 1);
+            }
+
+            // server node 추가 성공시 화면 그리기
+            activeNodes.push(node);
+            if(node.type === 'push_node')
+                push_node_count++;
+        });
+        redraw();
+    }
+
+    function deleteItem() {
+        var node_index = activeNodes.findIndex(function(d) {return selected_id === d.page_id+"/"+d.id});
+        if(node_index >= 0) {
+            var remove_index = [];
+            var link_length = activeLinks.length;
+            for(var i = 0; i < link_length; i++) {
+                var d = activeLinks[i];
+                if((selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id)) {
+                    remove_index.push(i);
+                }
+            }
+
+            // node의 type이 two_comp/three_comp일 경우에는 flow만 삭제
+            // node의 type이 flow_comp일 경우 완전 삭제
+            // 성공시 activeNodes 삭제 시 아래 동작 시작
+            activeNodes.splice(node_index, 1);
+
+            remove_index.sort(function(a,b){return b-a});
+            remove_index.forEach(function(link_index) {
+                activeLinks.splice(link_index, 1);
+            })
+            redraw();
+        }
+    }
+
     function portMouseDown(port, node, type) {
         d3.event.stopPropagation();
         d3.event.preventDefault();
@@ -185,6 +226,7 @@ module.exports = (function() {
             temp_link.source = node;
         }
         if(temp_link.source && temp_link.target) {
+            // 링크 정보 업데이트 후 아래 시작;
             activeLinks.push(temp_link);
             redraw();
         }
@@ -243,8 +285,9 @@ module.exports = (function() {
                 addNodes([{
                     eventCallback: true,
                     id:'data_push',
+                    compName:"push-comp",
                     page_id:"flow",
-                    type:'push_node',
+                    type:'flow_comp',
                     flow : {
                         x:this.context_position.x,
                         y: this.context_position.y
@@ -274,8 +317,9 @@ module.exports = (function() {
             case 'polling' :
                 addNodes([{
                     id:'data_polling',
+                    compName:"polling-comp",
                     page_id:"flow",
-                    type:'polling_node',
+                    type:'flow_comp',
                     flow: {
                         x:this.context_position.x,
                         y: this.context_position.y
@@ -381,19 +425,6 @@ module.exports = (function() {
     function dragended(d) {
         d3.select(this).classed("dragging", false);
         //redraw();
-    }
-
-    function addNodes(nodes) {
-        // push_node_count
-        _.each(nodes, function(node, i) {
-            if(node.hasOwnProperty('eventCallback')){
-                node.id += '_' + (push_node_count + 1);
-            }
-            activeNodes.push(node);
-            if(node.type === 'push_node')
-                push_node_count++;
-        });
-        redraw();
     }
 
     var activeDropShadow, activeBlur;
@@ -666,27 +697,6 @@ module.exports = (function() {
         //     }
         //     repeat();
         // })
-    }
-
-    function deleteItem() {
-        var node_index = activeNodes.findIndex(function(d) {return selected_id === d.page_id+"/"+d.id});
-        if(node_index >= 0) {
-            var remove_index = [];
-            var link_length = activeLinks.length;
-            for(var i = 0; i < link_length; i++) {
-                var d = activeLinks[i];
-                if((selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id)) {
-                    remove_index.push(i);
-                }
-            }
-            activeNodes.splice(node_index, 1);
-
-            remove_index.sort(function(a,b){return b-a});
-            remove_index.forEach(function(link_index) {
-                activeLinks.splice(link_index, 1);
-            })
-            redraw();
-        }
     }
 
     function reload(data) {
