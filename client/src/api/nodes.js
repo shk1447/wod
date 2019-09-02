@@ -36,5 +36,11 @@ export default {
         return http.get(url).then(function(res) {
             return res;
         })
+    },
+    getComp: function() {
+        var url = "/nodes/comp";
+        return http.get(url).then(function(res) {
+            return res;
+        })
     }
 }

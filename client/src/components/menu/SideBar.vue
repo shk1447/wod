@@ -13,7 +13,7 @@
 
 <script>
 import PagePanel from "../panel/PagePanel.vue";
-import FlowPanel from "../panel/FlowPanel.vue";
+import OutlinePanel from "../panel/OutlinePanel.vue";
 import PropertyPanel from "../panel/PropertyPanel.vue";
 import ComponentPanel from "../panel/ComponentPanel.vue";
 import DescriptionPanel from "../panel/DescriptionPanel.vue";
@@ -28,7 +28,7 @@ export default {
     },
     components: {
         "page-panel":PagePanel,
-        "flow-panel":FlowPanel,
+        "outline-panel":OutlinePanel,
         "component-panel":ComponentPanel,
         "property-panel":PropertyPanel,
         "description-panel":DescriptionPanel

@@ -4,6 +4,13 @@ const mongoose = require('mongoose');
 
 module.exports = {
     get : {
+        "comp":function(req,res,next) {
+            nodes.find({page_id:{$ne:'flow'}}).then((nodes) => {
+                res.status(200).send(nodes);
+            }).catch((err) => {
+                res.status(500).send(err);
+            });
+        },
         "flow":function(req,res,next) {
             nodes.find({"flow":{$exists:true}}).then((nodes) => {
                 res.status(200).send(nodes);

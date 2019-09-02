@@ -73,8 +73,8 @@ export default {
                         action:this.onSaveFlow
                     }],
                     panels:[{
-                        name:'Page',
-                        comp:'page-panel'
+                        name:'Outline',
+                        comp:'outline-panel'
                     },{
                         name:'Property',
                         comp:'property-panel'
