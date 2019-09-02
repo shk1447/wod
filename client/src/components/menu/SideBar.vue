@@ -35,10 +35,12 @@ export default {
     },
     methods: {
         handleSelectedItem:function(param) {
-            this.activePanel = 'Property';
-            this.$refs[this.activePanel][0].activeType = param.type;
-            this.$refs[this.activePanel][0].selected_item = param.item;
-            this.$refs.Property[0].$forceUpdate()
+            if(this.$refs[param.panel] && this.$refs[param.panel].length > 0) {
+                this.activePanel = param.panel;
+                this.$refs[this.activePanel][0].activeType = param.type;
+                this.$refs[this.activePanel][0].selected_item = param.item;
+                this.$refs[this.activePanel][0].$forceUpdate()
+            }
         }
     },
     created() {

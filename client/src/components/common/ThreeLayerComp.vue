@@ -29,6 +29,19 @@ export default {
             zIndex: "0",
             border: '1px dashed black'
         },
+        setter: {
+            camera : {
+                near : 1,
+                far : 10000,
+                fov : 60,
+                aspect : 1.6,
+                position : {
+                    x : 400,
+                    y : 400,
+                    z : 400
+                }
+            }
+        },
         children:[]
     },
     fields:{

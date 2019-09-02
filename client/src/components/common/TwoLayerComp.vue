@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         onSelectedComp(item) {
-            Vue.custom_events.emit('selected_item', {type:'style',item:item});
+            Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
         },
         dragover(e) {
             e.preventDefault();
