@@ -5,6 +5,7 @@ module.exports = function(layer) {
     var layer = layer;
     var map = {}
     var modules = [];
+    var delete_items = [];
     return {
         addCompNode:function(instance) {
             console.log(instance);
@@ -25,6 +26,19 @@ module.exports = function(layer) {
         },
         removeNode: function(node) {
             // type에 따라 다른 명령
+            var instance = {
+                _id:node._id,
+                id:node.id,
+                input:node.input,
+                output:node.output,
+                page_id:node.page_id,
+                parent_id:node.parent_id,
+                compName:node.compName,
+                type:node.type,
+                props:node.props,
+                flow:node.flow
+            }
+            delete_items.push(instance);
         },
         addLink: function(node) {
 
@@ -33,31 +47,39 @@ module.exports = function(layer) {
             var param_instances = [];
             var nodes = layer.getNodes();
             var links = layer.getLinks();
-            _.each(nodes, function(node,i) {
-                var wires = links.filter(function(d) {
-                    return d.source.page_id+"/"+d.source.id === node.page_id+"/"+node.id
-                }).map(function(d) {
-                    return d.target.page_id+"/"+d.target.id
+
+            api.nodes.delNodeById({instances:delete_items}).then(function() {
+                _.each(nodes, function(node,i) {
+                    var wires = links.filter(function(d) {
+                        return d.source.page_id+"/"+d.source.id === node.page_id+"/"+node.id
+                    }).map(function(d) {
+                        return d.target.page_id+"/"+d.target.id
+                    })
+                    node.flow["wires"] = wires;
+                    if(node.props.children) {
+                        delete node.props.children;
+                    }
+                    param_instances.push({
+                        _id:node._id,
+                        id:node.id,
+                        input:node.input,
+                        output:node.output,
+                        page_id:node.page_id,
+                        parent_id:node.parent_id,
+                        compName:node.compName,
+                        type:node.type,
+                        props:node.props,
+                        flow:node.flow
+                    })
                 })
-                node.flow["wires"] = wires;
-                if(node.props.children) {
-                    delete node.props.children;
-                }
-                param_instances.push({
-                    _id:node._id,
-                    id:node.id,
-                    input:node.input,
-                    output:node.output,
-                    page_id:node.page_id,
-                    parent_id:node.parent_id,
-                    compName:node.compName,
-                    type:node.type,
-                    props:node.props,
-                    flow:node.flow
+                api.nodes.saveNodes({instances:param_instances}).then(function(res) {
+                    Vue.$message({
+                        type:'success',
+                        message:'Success Deploy'
+                    })
                 })
-            })
-            api.nodes.saveNodes({instances:param_instances}).then(function(res) {
-                console.log(res);
+            }).catch(function(err) {
+
             })
         },
         executeFlow:function() {

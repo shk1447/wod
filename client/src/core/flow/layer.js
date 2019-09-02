@@ -196,16 +196,22 @@ module.exports = (function() {
                 }
             }
 
+            var applyFlow = function() {
+                activeNodes.splice(node_index, 1);
+
+                remove_index.sort(function(a,b){return b-a});
+                remove_index.forEach(function(link_index) {
+                    activeLinks.splice(link_index, 1);
+                })
+                redraw();
+            }
+
             // node의 type이 two_comp/three_comp일 경우에는 flow만 삭제
             // node의 type이 flow_comp일 경우 완전 삭제
             // 성공시 activeNodes 삭제 시 아래 동작 시작
-            activeNodes.splice(node_index, 1);
-
-            remove_index.sort(function(a,b){return b-a});
-            remove_index.forEach(function(link_index) {
-                activeLinks.splice(link_index, 1);
-            })
-            redraw();
+            
+            Vue.core.flow.manager.removeNode(activeNodes[node_index]);
+            applyFlow();
         }
     }
 

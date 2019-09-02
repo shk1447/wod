@@ -1,6 +1,6 @@
 <template>
     <div :style="meta.props.style">
-        <v-chart ref="chart" :options="mergeOptions"/>
+        <v-chart ref="chart" :options="init_options"/>
     </div>
 </template>
 
@@ -102,6 +102,7 @@ export default {
         return {
             meta:this.meta,
             init_options: {
+                animation: false,
                 title: {
                     text:''
                 },
@@ -128,6 +129,12 @@ export default {
         }
     },
     computed: {
+        
+    },
+    components : {
+        'v-chart': ECharts
+    },
+    methods: {
         mergeOptions:function(){
             var me = this;
             
@@ -162,12 +169,7 @@ export default {
             })
 
             return me.init_options;
-        }
-    },
-    components : {
-        'v-chart': ECharts
-    },
-    methods: {
+        },
         input_data:function(data){
             var me = this;
             if(me.meta.data) {
@@ -192,6 +194,7 @@ export default {
         this.core.flow.manager.addCompNode(this);
     },
     updated() {
+        this.init_options = this.mergeOptions();
         this.$refs.chart.refresh();
     },
     destroyed() {

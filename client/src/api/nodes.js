@@ -2,7 +2,19 @@ import http from "../utils/http.js";
 
 export default {
     delNodes:function(params) {
-        var url = "/nodes/remove";
+        var url = "/nodes/removeByPage";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    delNodeById:function(params) {
+        var url = "/nodes/removeById";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    addNode: function(params) {
+        var url = "/nodes/add";
         return http.post(url, params).then(function(res) {
             return res;
         });
