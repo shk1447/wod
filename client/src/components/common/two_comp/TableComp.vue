@@ -28,7 +28,8 @@ export default {
             height:"500px"
         },
         setter: {
-            columns:"test,test2,test3"
+            columns:"test,test2,test3",
+            data_amount:100
         }
     },
     fields:{
@@ -37,6 +38,11 @@ export default {
             "label":"컬럼명",
             "type":"string",
             "description":"컬럼명"
+        },{
+            "key":"props.setter.data_amount",
+            "label":"데이터 양",
+            "type":"string",
+            "description":"데이터 양 설정"
         }],
         style:[{
             "key":"id",
@@ -91,10 +97,14 @@ export default {
         input_data:function(data){
             var me = this;
             if(me.meta.data) {
+                if(me.meta.data.length > parseInt(this.meta.props.setter.data_amount)) {
+                    me.meta.data.pop();
+                }
                 me.meta.data.splice(0, 0, data);
             } else {
                 me.meta.data = [data];
             }
+            
             this.$forceUpdate();
         },
         output_data: function() {

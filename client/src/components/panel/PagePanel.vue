@@ -133,7 +133,7 @@ export default {
         },
         onDeletePage(item) {
             var me = this;
-            api.nodes.delNodes(item).then(function(res) {
+            api.nodes.removePage(item).then(function(res) {
                 me.refreshPagePanel();
             })
         },

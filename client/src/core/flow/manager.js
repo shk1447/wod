@@ -48,7 +48,7 @@ module.exports = function(layer) {
             var nodes = layer.getNodes();
             var links = layer.getLinks();
 
-            api.nodes.delNodeById({instances:delete_items}).then(function() {
+            api.nodes.removeFlow({instances:delete_items}).then(function() {
                 _.each(nodes, function(node,i) {
                     var wires = links.filter(function(d) {
                         return d.source.page_id+"/"+d.source.id === node.page_id+"/"+node.id

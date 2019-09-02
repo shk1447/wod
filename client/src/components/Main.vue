@@ -52,6 +52,9 @@ export default {
                         name:'Component',
                         comp:'component-panel'
                     },{
+                        name:'Outline',
+                        comp:'outline-panel'
+                    },{
                         name:'Property',
                         comp:'property-panel'
                     }]

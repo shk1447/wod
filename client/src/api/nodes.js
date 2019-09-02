@@ -1,13 +1,19 @@
 import http from "../utils/http.js";
 
 export default {
-    delNodes:function(params) {
-        var url = "/nodes/removeByPage";
+    removePage:function(params) {
+        var url = "/nodes/removePage";
         return http.post(url, params).then(function(res) {
             return res;
         });
     },
-    delNodeById:function(params) {
+    removeFlow:function(params) {
+        var url = "/nodes/removeFlow";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    removeById:function(params) {
         var url = "/nodes/removeById";
         return http.post(url, params).then(function(res) {
             return res;

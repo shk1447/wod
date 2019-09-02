@@ -60,7 +60,24 @@ module.exports = {
                 return res.status(200).send();
             })
         },
-        "removeById" : function(req,res,next) {
+        "save" : function(req,res,next) {
+            var instances = req.body.instances;
+            var bulk = nodes.collection.initializeUnorderedBulkOp();
+            _.each(instances, (instance, i) => {
+                var query = {};
+                // query["id"] = instance["id"];
+                // query["page_id"] = instance["page_id"];
+                query["_id"] = new mongoose.Types.ObjectId(instance["_id"]);
+                delete instance["_id"];
+                //if(page_id) { instance["page_id"] = page_id; }
+                bulk.find(query).upsert().updateOne( instance );
+            });
+            bulk.execute((err, bulkres) => {
+                if(err) res.status(500).send();
+                else res.status(200).send();
+            })
+        },
+        "removeFlow" : function(req,res,next) {
             var instances = req.body.instances;
             if(instances.length > 0) {
                 var bulk = nodes.collection.initializeUnorderedBulkOp();
@@ -80,25 +97,15 @@ module.exports = {
                 res.status(200).send();
             }
         },
-        "save" : function(req,res,next) {
-            var instances = req.body.instances;
-            var bulk = nodes.collection.initializeUnorderedBulkOp();
-            _.each(instances, (instance, i) => {
-                var query = {};
-                // query["id"] = instance["id"];
-                // query["page_id"] = instance["page_id"];
-                query["_id"] = new mongoose.Types.ObjectId(instance["_id"]);
-                delete instance["_id"];
-                //if(page_id) { instance["page_id"] = page_id; }
-                bulk.find(query).upsert().updateOne( instance );
-            });
-            bulk.execute((err, bulkres) => {
-                if(err) res.status(500).send();
-                else res.status(200).send();
+        "removePage" : function(req,res,next) {
+            nodes.remove({page_id:req.body.page_id}).then(() => {
+                res.status(200).send();
+            }).catch((err) => {
+                res.status(500).send(err);
             })
         },
-        "removeByPage" : function(req,res,next) {
-            nodes.remove({page_id:req.body.page_id}).then(() => {
+        "removeById" : function(req,res,next) {
+            nodes.remove({_id:new mongoose.Types.ObjectId(req.body._id)}).then(() => {
                 res.status(200).send();
             }).catch((err) => {
                 res.status(500).send(err);

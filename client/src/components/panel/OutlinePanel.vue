@@ -7,6 +7,9 @@
                     <i :class="'far fa-file-alt'"></i>
                     <span>{{data.page_id + '/' + data.id}}</span>
                 </span>
+                <sapn>
+                    <i class="el-icon-delete tree-delete" @click="() => {onDeleteNode(data)}"></i>
+                </sapn>
             </span>
         </el-tree>
     </div>
@@ -31,6 +34,12 @@ export default {
 
     },
     methods: {
+        onDeleteNode(item) {
+            var me = this;
+            api.nodes.removeById(item).then(function(res) {
+                me.refreshOutlinePanel();
+            })
+        },
         onContextMenu() {
 
         },
@@ -45,7 +54,7 @@ export default {
             console.log(transfer_page);
             e.dataTransfer.setData("node", JSON.stringify(transfer_page));
         },
-        refreshPagePanel(params) {
+        refreshOutlinePanel(params) {
             var me = this;
             api.nodes.getComp().then(function(res){
                 me.comp_list = res;
@@ -56,10 +65,11 @@ export default {
         
     },
     mounted() {
-        this.refreshPagePanel();
+        console.log('mounted');
+        this.refreshOutlinePanel();
     },
     updated() {
-        
+        console.log('updated');
     },
     destroyed() {
         
