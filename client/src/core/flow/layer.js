@@ -135,6 +135,7 @@ d3.keybinding = function() {
     return d3.rebind(keys, event, 'on');
 };
 
+const uuid = require('uuid/v4');
 const randomColor = require('randomcolor') ;
 const flow_modules = require('./module');
 
@@ -248,24 +249,17 @@ module.exports = (function() {
     }
 
     function canvasContextMenu() {
+        console.log(flow_modules);
         this.context_position = getPosition(d3.event)
-        Vue.custom_events.emit('contextmenu', {
+        var menu_params = {
             active:true,
             params : {
                 event:d3.event
             },
             menu_items: [{
-                id:"data",
-                label:"Data",
-                children:[{
-                    id:"push",
-                    label:"Push Node",
-                    action:addNode.bind(this)
-                },{
-                    id:"polling",
-                    label:"Polling Node",
-                    action:addNode.bind(this)
-                }]
+                id:"node",
+                label:"Node",
+                children:flow_modules.map(function(d) {return {id:d.compName, label:d.compName, action:addNode.bind(this),instance:d}}.bind(this))
             },{
                 id:"reset",
                 label:"Reset",
@@ -279,79 +273,22 @@ module.exports = (function() {
                     action:resetZoom.bind(this)
                 }]
             }]
-        });
+        };
+        Vue.custom_events.emit('contextmenu', menu_params);
         console.log('location 재조정')
         d3.event.stopPropagation();
         d3.event.preventDefault();
     }
 
     function addNode(menu) {
-        switch(menu.id) {
-            case 'push' :
-                addNodes([{
-                    eventCallback: true,
-                    id:'data_push',
-                    compName:"push-comp",
-                    page_id:"flow",
-                    type:'flow_comp',
-                    flow : {
-                        x:this.context_position.x,
-                        y: this.context_position.y
-                    },
-                    input:false, output:true,
-                    props:{
-                        setter:{
-                            data_key:""
-                        },
-                        fields:{
-                            setter:[{
-                                "key":"id",
-                                "label":"노드 아이디",
-                                "type":"string",
-                                "description":""
-                            },{
-                                "key":"props.setter.data_key",
-                                "label":"데이터 기준 키",
-                                "type":"string",
-                                "description":""
-                            }],
-                            style:[]
-                        }
-                    }
-                }])
-            break;
-            case 'polling' :
-                addNodes([{
-                    id:'data_polling',
-                    compName:"polling-comp",
-                    page_id:"flow",
-                    type:'flow_comp',
-                    flow: {
-                        x:this.context_position.x,
-                        y: this.context_position.y
-                    },
-                    input:true, output:true,
-                    props:{
-                        setter:{
-                            url:""
-                        },
-                        fields:{
-                            setter:[{
-                                "key":"id",
-                                "label":"노드 아이디",
-                                "type":"string",
-                                "description":""
-                            },{
-                                "key":"props.setter.url",
-                                "label":"데이터 URL",
-                                "type":"string",
-                                "description":""
-                            }]
-                        }
-                    }
-                }])
-            break;
+        console.log(menu.instance);
+        menu.instance.id = uuid();
+        menu.instance.page_id = 'flow';
+        menu.instance.flow = {
+            x:this.context_position.x,
+            y: this.context_position.y
         }
+        addNodes([menu.instance])
     }
 
     function canvasMouseUp() {

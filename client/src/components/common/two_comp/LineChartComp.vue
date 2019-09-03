@@ -45,58 +45,58 @@ export default {
         style:[{
             "key":"id",
             "label":"ID",
-            "type":"string",
+            "type":"el-input",
             "description":"ID"
         },{
             "key":"props.style.top",
             "label":"TOP",
-            "type":"string",
+            "type":"el-input",
             "description":"TOP"
         },{
             "key":"props.style.left",
             "label":"LEFT",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.width",
             "label":"WIDTH",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.height",
             "label":"HEIGHT",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.border",
             "label":"BORDER",
-            "type":"string",
+            "type":"el-input",
             "description":"BORDER"
         },{
             "key":"props.style.zIndex",
             "label":"Z-INDEX",
-            "type":"string",
+            "type":"el-input",
             "description":"Z-INDEX"
         }],
         setter:[{
             "key":"props.setter.x_axis",
             "label":"X 축",
-            "type":"string",
+            "type":"el-input",
             "description":"X 축 데이터 설정"
         },{
             "key":"props.setter.y_axis",
             "label":"Y 축",
-            "type":"string",
+            "type":"el-input",
             "description":"Y 축 데이터 설정"
         },{
             "key":"props.setter.legend",
             "label":"LEGEND 사용",
-            "type":"string",
+            "type":"el-input",
             "description":"LEGEND 사용"
         },{
             "key":"props.setter.data_amount",
             "label":"데이터 양",
-            "type":"string",
+            "type":"el-input",
             "description":"데이터 양 설정"
         }]
     },

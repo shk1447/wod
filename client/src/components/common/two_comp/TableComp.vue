@@ -36,48 +36,48 @@ export default {
         setter:[{
             "key":"props.setter.columns",
             "label":"컬럼명",
-            "type":"string",
+            "type":"el-input",
             "description":"컬럼명"
         },{
             "key":"props.setter.data_amount",
             "label":"데이터 양",
-            "type":"string",
+            "type":"el-input",
             "description":"데이터 양 설정"
         }],
         style:[{
             "key":"id",
             "label":"ID",
-            "type":"string",
+            "type":"el-input",
             "description":"ID"
         },{
             "key":"props.style.top",
             "label":"TOP",
-            "type":"string",
+            "type":"el-input",
             "description":"TOP"
         },{
             "key":"props.style.left",
             "label":"LEFT",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.width",
             "label":"WIDTH",
-            "type":"string",
+            "type":"el-input",
             "description":"WIDTH"
         },{
             "key":"props.style.height",
             "label":"HEIGHT",
-            "type":"string",
+            "type":"el-input",
             "description":"HEIGHT"
         },{
             "key":"props.style.border",
             "label":"BORDER",
-            "type":"string",
+            "type":"el-input",
             "description":"BORDER"
         },{
             "key":"props.style.zIndex",
             "label":"Z-INDEX",
-            "type":"string",
+            "type":"el-input",
             "description":"Z-INDEX"
         }]
     },

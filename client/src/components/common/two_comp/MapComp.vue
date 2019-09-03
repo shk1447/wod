@@ -1,15 +1,20 @@
 <template>
-    <div :style="meta.props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
-        <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-on:click.native="onSelectedComp(item)"
-        :meta="item"></component>
+    <div :id="meta.id" :style="meta.props.style">
+        <l-map :zoom="meta.props.setter.zoom" :center="meta.props.setter.center">
+            <l-tile-layer :url="meta.props.setter.url"></l-tile-layer>
+        </l-map>
     </div>
 </template>
 
 <script>
+
+import L from 'leaflet';
+import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
 import uuid from 'uuid/v4';
+import 'leaflet/dist/leaflet.css';
 
 export default {
-    compName:'two-layer-comp',
+    compName:'map-comp',
     type:'two_comp',
     props: ['meta'],
     init_props: {
@@ -18,15 +23,30 @@ export default {
             overflow: "hidden",
             top:"",
             left:"",
-            width:"100%",
-            height:"100%",
+            width:"500px",
+            height:"500px",
             zIndex: "0",
             border:"1px dashed black"
+        },
+        setter: {
+            zoom:13,
+            center: {"lat":40.41322,"lng":-1.219482},
+            url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         },
         children:[]
     },
     fields:{
-        setter:[],
+        setter:[{
+            "key":"props.setter.center.lat",
+            "label":"위도",
+            "type":"el-input",
+            "description":"위도"
+        },{
+            "key":"props.setter.center.lng",
+            "label":"경도",
+            "type":"el-input",
+            "description":"경도"
+        }],
         style:[{
             "key":"id",
             "label":"ID",
@@ -70,59 +90,25 @@ export default {
         }
     },
     components : {
-        
+        LMap, LTileLayer, LMarker
     },
     methods: {
-        onSelectedComp(item) {
-            Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
-        },
-        dragover(e) {
-            e.preventDefault();
-        },
-        drop(e) {
-            e.preventDefault();
-            var transfer_data = e.dataTransfer.getData("component");
-            if(transfer_data) {
-                var data = JSON.parse(transfer_data);
-                if(data.type === 'two_comp') {
-                    console.log('drop comp', data);
-                    data.init_props.style.top = e.offsetY + 'px';
-                    data.init_props.style.left = e.offsetX + 'px';
-                    var instance = {
-                        id:uuid(),
-                        page_id:this.page_id,
-                        compName:data.compName,
-                        type:data.type,
-                        input:data.input,
-                        output:data.output,
-                        props:data.init_props
-                    }
-                    this.addChildren(instance);
-                    e.stopImmediatePropagation();
-                }
-            }
-        },
         input_data:function(data){
             console.log(data);
         },
         output_data: function() {
             
-        },
-        addChildren: function(instance) {
-            if(!this.meta.props.children) {
-                console.log('!!!!!why!!!?')
-                this.meta.props.children = [];
-            }
-            this.meta.props.children.push(instance);
-            this.$forceUpdate();
         }
     },
     created() {
         console.log('created')
     },
     mounted() {
-        console.log('mounted')
+        console.log('mounted');
         this.core.flow.manager.addCompNode(this);
+    },
+    updated() {
+        console.log('map updated');
     },
     destroyed() {
         console.log('destroyed')

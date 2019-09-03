@@ -49,37 +49,37 @@ export default {
         style:[{
             "key":"id",
             "label":"ID",
-            "type":"string",
+            "type":"el-input",
             "description":"ID"
         },{
             "key":"props.style.top",
             "label":"TOP",
-            "type":"string",
+            "type":"el-input",
             "description":"TOP"
         },{
             "key":"props.style.left",
             "label":"LEFT",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.width",
             "label":"WIDTH",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.height",
             "label":"HEIGHT",
-            "type":"string",
+            "type":"el-input",
             "description":"LEFT"
         },{
             "key":"props.style.border",
             "label":"BORDER",
-            "type":"string",
+            "type":"el-input",
             "description":"BORDER"
         },{
             "key":"props.style.zIndex",
             "label":"Z-INDEX",
-            "type":"string",
+            "type":"el-input",
             "description":"Z-INDEX"
         }]
     },
