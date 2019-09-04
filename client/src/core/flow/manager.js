@@ -99,6 +99,7 @@ module.exports = function(layer) {
                         v.meta.flow.wires = v.meta.flow.wires.map(function(d,i) {
                             return map[d];
                         })
+                        if(v.type === 'flow_comp') v.mounted();
                     }
                 })
             });

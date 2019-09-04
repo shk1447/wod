@@ -1,5 +1,6 @@
 <template>
     <div style="height:100%; overflow:auto; font-size: 12px;">
+        <h3 v-if="selected_item.compName" style="margin-left:66px;">{{selected_item.compName.toUpperCase()}}</h3>
         <div class="form-row" v-for="(row_fields, row_i) in fields[activeType]" :key="row_i">
             <div class="form-column" v-for="(field, col_i) in row_fields" :key="row_i + '_' + col_i" :style="field.style">
                 <span class="form-label">{{field.label}}</span>
@@ -93,7 +94,7 @@ export default {
 .form-row {
     display: flex;
     width:100%;
-    height:40px;
+    height:28px;
     margin: 6px 0;
 }
 .form-column {

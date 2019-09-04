@@ -23,6 +23,9 @@ module.exports = function PushNode(properties) {
         Vue.web_socket.on(this.props.setter.data_key, this.input_data);
     }
 
+    this.mounted = function() {
+    }
+
     this.destroyed = function() {
         Vue.web_socket.off(this.props.setter.data_key, this.input_data);
         this.id = null;

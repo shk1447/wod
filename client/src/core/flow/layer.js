@@ -533,8 +533,18 @@ module.exports = (function() {
                 .style('stroke', 'none').style('dominant-baseline', 'central').style("text-anchor", "middle").style('fill', 'rgb(53, 53, 53)')
                 .text(d.page_id +"/"+ d.id);
 
+            
+            var ellipsis = function(words) {
+                text_node.text(words);
+                if(node_size * 10 < text_node.node().getBoundingClientRect().width + node_size) {
+                    words = words.substr(0, words.length - 1);
+                    ellipsis(words);
+                }
+            }
+            ellipsis(d.page_id +"/"+ d.id);
+
             d.update = function() {
-                text_node.text(d.page_id +"/"+ d.id)
+                ellipsis(d.page_id +"/"+ d.id);
             };
             if(d.flow.wires && d.flow.wires.length > 0) {
                 _.each(d.flow.wires, function(target_id,i) {

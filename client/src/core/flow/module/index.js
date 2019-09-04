@@ -19,9 +19,9 @@ module.exports = [{
             "label":" 아이디",
             "type":"el-input",
             "description":""
-        },{
+        }],[{
             "key":"props.setter.data_key",
-            "label":"데이터 기준 키",
+            "label":"기준 키",
             "type":"el-input",
             "description":""
         }]]
@@ -43,9 +43,9 @@ module.exports = [{
             "label":"아이디",
             "type":"el-input",
             "description":""
-        },{
+        }],[{
             "key":"props.setter.url",
-            "label":"데이터 URL",
+            "label":"URL",
             "type":"el-input",
             "description":""
         }]]

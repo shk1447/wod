@@ -186,7 +186,7 @@ export default {
 
             return me.init_options;
         },
-        input_data:function(data){
+        pushData: function(data) {
             var me = this;
             if(me.meta.data) {
                 if(me.meta.data.length > parseInt(this.meta.props.setter.data_amount)) {
@@ -195,6 +195,16 @@ export default {
                 me.meta.data.push(data);
             } else {
                 me.meta.data = [data];
+            }
+        },
+        input_data:function(data){
+            var me = this;
+            if(Array.isArray(data)) {
+                _.each(data, function(d,i) {
+                    me.pushData(d);
+                })
+            } else {
+                this.pushData(data);
             }
             this.$forceUpdate();
         },

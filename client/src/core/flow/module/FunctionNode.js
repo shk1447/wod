@@ -24,6 +24,10 @@ module.exports = function FunctionNode(properties) {
 
     }
 
+    this.mounted = function() {
+
+    }
+
     this.destroyed = function() {
         this.id = null;
         this.input = null;
