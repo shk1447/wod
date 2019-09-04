@@ -168,19 +168,9 @@ module.exports = (function() {
         }
     }
 
-    var push_node_count = 0;
-
     function addNodes(nodes) {
-        // push_node_count
         _.each(nodes, function(node, i) {
-            if(node.hasOwnProperty('eventCallback')){
-                node.id += '_' + (push_node_count + 1);
-            }
-
-            // server node 추가 성공시 화면 그리기
             activeNodes.push(node);
-            if(node.type === 'push_node')
-                push_node_count++;
         });
         redraw();
     }
@@ -213,6 +203,14 @@ module.exports = (function() {
             
             Vue.core.flow.manager.removeNode(activeNodes[node_index]);
             applyFlow();
+        }
+
+        var link_index = activeLinks.findIndex(function(d) {
+            return selected_id ===  d.sourceNode.page_id+"/"+d.sourceNode.id +':'+ d.targetNode.page_id+"/"+d.targetNode.id
+        });
+        if(link_index >= 0) {
+            activeLinks.splice(link_index, 1);
+            redraw();
         }
     }
 
@@ -316,7 +314,7 @@ module.exports = (function() {
         var mouse_x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var mouse_y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k;
         if(start_point) {
-            var x1 = temp_link.source ? (start_point.flow.x + node_size*8) : mouse_x;
+            var x1 = temp_link.source ? (start_point.flow.x + node_size*10) : mouse_x;
             var y1 = temp_link.source ? (start_point.flow.y + node_size) : mouse_y;
             var x2 = temp_link.source ? mouse_x : start_point.flow.x;
             var y2 = temp_link.source ? mouse_y : (start_point.flow.y + node_size);
@@ -329,20 +327,9 @@ module.exports = (function() {
     }
 
     function canvasDblClick() {
-        console.log('dbl click!!!');
         var x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k
-        var node_info = {
-            id:'receiver' + (activeNodes.length + 1),
-            name:'receiver' + (activeNodes.length + 1),
-            x:x,
-            y:y,
-            input:false,output:true,
-            props:{
-                protocol:''
-            }
-        }
-        addNodes([node_info]);
+        console.log('dbl click!!!', x, ':', y);
     };
 
     function zoomed() {
@@ -361,7 +348,7 @@ module.exports = (function() {
     }
 
     function dragged(d) {
-        d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*4)).attr("cy", d.flow.y = (d3.event.y - node_size));
+        d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*5)).attr("cy", d.flow.y = (d3.event.y - node_size));
         redraw();
     }
 
@@ -420,6 +407,15 @@ module.exports = (function() {
         selected_id = node_info.page_id + "/" + node_info.id
 
         Vue.custom_events.emit('selected_item', {panel:'Property',type:'setter',item:node_info});
+
+        redraw();
+    }
+
+    function linkClicked(node, d) {
+        d3.event.stopPropagation();
+        d3.event.preventDefault();
+        
+        selected_id = d.sourceNode.page_id+"/"+d.sourceNode.id+":"+d.targetNode.page_id+"/"+d.targetNode.id
 
         redraw();
     }
@@ -483,13 +479,13 @@ module.exports = (function() {
                 .attr('rx', node_size/4)
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr("width", node_size*8)
+                .attr("width", node_size*10)
                 .attr("height", node_size*2)
 
             if(d.output) {
                 node.append("circle")
                 .attr("class", "port")
-                .attr("cx", node_size*8)
+                .attr("cx", node_size*10)
                 .attr("cy", node_size)
                 .attr("r", node_size/3)
                 .attr("fill", function(d) { return '#ddd' })
@@ -533,7 +529,7 @@ module.exports = (function() {
                     return color;
                 })
 
-            var text_node = node.append('svg:text').attr('x', node_size*4).attr('y', node_size)
+            var text_node = node.append('svg:text').attr('x', node_size*5).attr('y', node_size)
                 .style('stroke', 'none').style('dominant-baseline', 'central').style("text-anchor", "middle").style('fill', 'rgb(53, 53, 53)')
                 .text(d.page_id +"/"+ d.id);
 
@@ -587,10 +583,15 @@ module.exports = (function() {
             .attr("class", "link");
 
         linkEnter.each(function(d,i) {
-            var l = d3.select(this);
+            var l = d3.select(this)
+            l.on('click', function() {
+                console.log('linkClicked!!!')
+                linkClicked(l, d);
+            });
             l.append("svg:path").attr("class", "link_background link_path");
             l.append("svg:path").attr('class', 'link_line link_path')
-            l.append("svg:path").attr('class', 'link_anim')
+            
+            
             if(!d.sourceNode) d.sourceNode = activeNodes.find(function(a) { return a.page_id+"/"+a.id === d.source.page_id+"/"+d.source.id});
             if(!d.targetNode) d.targetNode = activeNodes.find(function(a) { return a.page_id+"/"+a.id === d.target.page_id+"/"+d.target.id});
         })
@@ -609,19 +610,21 @@ module.exports = (function() {
         links.each(function(d,i) {
             var thisLink = d3.select(this);
             var id = d.sourceNode.page_id+"/"+d.sourceNode.id+":"+d.targetNode.page_id+"/"+d.targetNode.id
-            var path_data = lineGenerator([[d.sourceNode.flow.x + (node_size*8), d.sourceNode.flow.y + node_size],
+            var path_data = lineGenerator([[d.sourceNode.flow.x + (node_size*10), d.sourceNode.flow.y + node_size],
                                             [d.targetNode.flow.x, d.targetNode.flow.y + node_size]])
-            thisLink.attr("d", path_data).attr("stroke-width", node_size/4).attr('stroke','#888');
+            thisLink.attr("d", path_data).attr("stroke-width", node_size/4)
             if(selected_id === id) {
-                thisLink.attr('stroke', '#ff7f0e');
-            }
-            if(selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id) {
-                var result = activeNodes.filter(function(a) {return a.page_id+"/"+a.id === d.sourceNode.page_id+"/"+d.sourceNode.id || a.page_id+"/"+a.id === d.targetNode.page_id+"/"+d.targetNode.id});
-                result.forEach(function(v,i) {
-                    v.node.attr('filter', 'url(#' + activeDropShadow + ')' );
-                })
                 thisLink.attr('stroke', color_define.speed[d.speed] ? color_define.speed[d.speed] : '#ff7f0e');
+            } else {
+                thisLink.attr('stroke','#888');
             }
+            // if(selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id) {
+            //     var result = activeNodes.filter(function(a) {return a.page_id+"/"+a.id === d.sourceNode.page_id+"/"+d.sourceNode.id || a.page_id+"/"+a.id === d.targetNode.page_id+"/"+d.targetNode.id});
+            //     result.forEach(function(v,i) {
+            //         v.node.attr('filter', 'url(#' + activeDropShadow + ')' );
+            //     })
+            //     thisLink.attr('stroke', color_define.speed[d.speed] ? color_define.speed[d.speed] : '#ff7f0e');
+            // }
         })
         // var anim_links = link_group.selectAll('.link_anim');
         // anim_links.each(function(d,i) {

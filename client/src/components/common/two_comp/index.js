@@ -4,6 +4,9 @@ import BarChartComp from "./BarChartComp.vue";
 
 import MapComp from "./MapComp.vue";
 
+import ButtonComp from "./ButtonComp.vue"
+import FrameComp from "./FrameComp.vue"
+
 export default [
-    TableComp, LineChartComp, BarChartComp, MapComp
+    TableComp, LineChartComp, BarChartComp, MapComp, ButtonComp, FrameComp
 ];

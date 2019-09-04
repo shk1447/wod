@@ -1,9 +1,8 @@
 <template>
     <div style="height:100%; overflow:auto;" v-on:contextmenu="onContextMenu">
-        <el-tree class="page-tree" draggable :data="comp_list" :props="defaultProps" node-key="_id" :allow-drag="allowDrag" :allow-drop="allowDrop"
-        @node-drag-start="onDragStart" @node-contextmenu="onContextMenu">
+        <el-tree class="page-tree" draggable :data="comp_list" :props="defaultProps" node-key="_id" :allow-drag="allowDrag" :allow-drop="allowDrop" @node-drag-start="onDragStart" @node-contextmenu="onContextMenu">
             <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>
+                <span v-on:dblclick="onSelectComp(data)">
                     <i :class="'far fa-file-alt'"></i>
                     <span>{{data.page_id + '/' + data.id}}</span>
                 </span>
@@ -34,6 +33,13 @@ export default {
 
     },
     methods: {
+        onSelectComp(node) {
+            console.log(node);
+            var comp = this.core.flow.manager.getCompMap(node);
+            if(comp) {
+                Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:comp.meta});
+            }
+        },
         onDeleteNode(item) {
             var me = this;
             api.nodes.removeById(item).then(function(res) {

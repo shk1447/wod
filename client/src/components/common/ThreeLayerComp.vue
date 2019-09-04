@@ -46,12 +46,12 @@ export default {
     },
     fields:{
         setter:[],
-        style:[{
+        style:[[{
             "key":"id",
             "label":"ID",
             "type":"el-input",
             "description":"ID"
-        },{
+        }],[{
             "key":"props.style.top",
             "label":"TOP",
             "type":"el-input",
@@ -61,7 +61,7 @@ export default {
             "label":"LEFT",
             "type":"el-input",
             "description":"LEFT"
-        },{
+        }],[{
             "key":"props.style.width",
             "label":"WIDTH",
             "type":"el-input",
@@ -71,7 +71,7 @@ export default {
             "label":"HEIGHT",
             "type":"el-input",
             "description":"LEFT"
-        },{
+        }],[{
             "key":"props.style.border",
             "label":"BORDER",
             "type":"el-input",
@@ -81,7 +81,7 @@ export default {
             "label":"Z-INDEX",
             "type":"el-input",
             "description":"Z-INDEX"
-        }]
+        }]]
     },
     data () {
         return {

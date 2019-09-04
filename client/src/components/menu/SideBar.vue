@@ -129,6 +129,9 @@ export default {
     height: calc(100% - 70px);
     overflow: auto;
 }
+.custom-tab-item {
+    height: 100%;
+}
 </style>
 
 

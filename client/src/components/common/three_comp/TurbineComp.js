@@ -3,7 +3,7 @@ export default {
     compName:"turbine-comp",
     fields: {
         style:[],
-        setter:[{
+        setter:[[{
             "key":"props.setter.parts.turbineGenerator001",
             "label":"turbine의 파츠 1",
             "type":"string",
@@ -13,7 +13,7 @@ export default {
             "label":"turbine의 파츠 2",
             "type":"string",
             "description":"turbine의 파츠 2 설정"
-        }]
+        }]]
     },
     component: function() {
         this.$obj = undefined;

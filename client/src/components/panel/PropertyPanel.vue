@@ -1,10 +1,12 @@
 <template>
-    <div style="height:100%; overflow:auto; display:flex;">
-        <div class="form-row" v-for="field in fields[activeType]" :key="field.key">
-            <label class="form-label">{{field.label}}</label>
-            <component :is="field.type" :height="500" @init="editorInit" lang="javascript"
-                        :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)">
-            </component>
+    <div style="height:100%; overflow:auto; font-size: 12px;">
+        <div class="form-row" v-for="(row_fields, row_i) in fields[activeType]" :key="row_i">
+            <div class="form-column" v-for="(field, col_i) in row_fields" :key="row_i + '_' + col_i" :style="field.style">
+                <span class="form-label">{{field.label}}</span>
+                <component class="form-comp" :is="field.type" @init="editorInit" lang="javascript" size="mini"
+                            :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)">
+                </component>
+            </div>
         </div>
     </div>
 </template>
@@ -67,6 +69,7 @@ export default {
             if(this.activeType === 'setter') {
                 this.custom_events.emit('redrawFlow');
             }
+            this.$forceUpdate();
         }
     },
     created() {
@@ -89,8 +92,25 @@ export default {
 <style>
 .form-row {
     display: flex;
+    width:100%;
+    height:40px;
+    margin: 6px 0;
+}
+.form-column {
+    display: flex;
+    flex:auto;
 }
 .form-label {
-    flex:0.2
+    display: flex;
+    text-align: right;
+    margin-right: 6px;
+    width:60px;
+    line-height:12px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.form-comp {
+    display: inline-block;
+    flex: 1;
 }
 </style>

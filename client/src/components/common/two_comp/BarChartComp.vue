@@ -40,7 +40,7 @@ export default {
         }
     },
     fields:{
-        setter:[{
+        setter:[[{
             "key":"props.setter.x_axis",
             "label":"X 축",
             "type":"el-input",
@@ -50,7 +50,7 @@ export default {
             "label":"Y 축",
             "type":"el-input",
             "description":"Y 축 데이터 설정"
-        },{
+        }],[{
             "key":"props.setter.legend",
             "label":"LEGEND 사용",
             "type":"el-input",
@@ -60,13 +60,13 @@ export default {
             "label":"데이터 양",
             "type":"el-input",
             "description":"데이터 양 설정"
-        }],
-        style:[{
+        }]],
+        style:[[{
             "key":"id",
             "label":"ID",
             "type":"el-input",
             "description":"ID"
-        },{
+        }],[{
             "key":"props.style.top",
             "label":"TOP",
             "type":"el-input",
@@ -76,7 +76,7 @@ export default {
             "label":"LEFT",
             "type":"el-input",
             "description":"LEFT"
-        },{
+        }],[{
             "key":"props.style.width",
             "label":"WIDTH",
             "type":"el-input",
@@ -86,7 +86,7 @@ export default {
             "label":"HEIGHT",
             "type":"el-input",
             "description":"LEFT"
-        },{
+        }],[{
             "key":"props.style.border",
             "label":"BORDER",
             "type":"el-input",
@@ -96,7 +96,7 @@ export default {
             "label":"Z-INDEX",
             "type":"el-input",
             "description":"Z-INDEX"
-        }]
+        }]]
     },
      data () {
         return {

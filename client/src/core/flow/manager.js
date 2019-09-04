@@ -4,9 +4,11 @@ const api = require('../../api').default;
 module.exports = function(layer) {
     var layer = layer;
     var map = {}
-    var modules = [];
     var delete_items = [];
     return {
+        getCompMap:function(instance) {
+            return map[instance.page_id + '/' +instance.id];
+        },
         addCompNode:function(instance) {
             console.log(instance);
             map[instance.meta.page_id+"/"+instance.meta.id] = instance;
@@ -85,26 +87,31 @@ module.exports = function(layer) {
         executeFlow:function() {
             api.nodes.getFlow().then(function(res) {
                 _.each(res, function(node,i) {
-                    if(node.compName === 'push-comp') {
-                        var test = new Vue[node.type][node.compName].class(node);
-                        test.flow.wires = test.flow.wires.map(function(d,i) {
+                    if(node.type === 'flow_comp') {
+                        var flow_module = new Vue[node.type][node.compName].class(node);
+                        flow_module.meta = node;
+                        flow_module.created();
+                        map[node.page_id + '/' + node.id] = flow_module;
+                    }
+                })
+                _.each(map, function(v,k) {
+                    if(v.meta.flow && v.meta.flow.wires && v.meta.flow.wires.length > 0) {
+                        v.meta.flow.wires = v.meta.flow.wires.map(function(d,i) {
                             return map[d];
                         })
-                        test.created();
-                        modules.push(test);
                     }
                 })
             });
         },
         destroyFlow: function() {
-            _.each(modules, function(module, i) {
-                module.destroyed();
+            _.each(map, function(comp, i) {
+                if(comp.type === 'flow_comp') {
+                    comp.destroyed();
+                }
             })
-            modules = [];
         },
         resetManager : function(){
             //manager.js가 갖고있는 데이터 초기화
-            modules = [];
             map = {};
         }
     }

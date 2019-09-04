@@ -14,9 +14,9 @@ module.exports = [{
         }
     },
     fields:{
-        setter:[{
+        setter:[[{
             "key":"id",
-            "label":"노드 아이디",
+            "label":" 아이디",
             "type":"el-input",
             "description":""
         },{
@@ -24,7 +24,7 @@ module.exports = [{
             "label":"데이터 기준 키",
             "type":"el-input",
             "description":""
-        }]
+        }]]
     }
 },{
     compName:"polling-comp",
@@ -38,9 +38,9 @@ module.exports = [{
         }
     },
     fields:{
-        setter:[{
+        setter:[[{
             "key":"id",
-            "label":"노드 아이디",
+            "label":"아이디",
             "type":"el-input",
             "description":""
         },{
@@ -48,7 +48,7 @@ module.exports = [{
             "label":"데이터 URL",
             "type":"el-input",
             "description":""
-        }]
+        }]]
     }
 },{
     compName:"function-comp",
@@ -62,16 +62,19 @@ module.exports = [{
         }
     },
     fields:{
-        setter:[{
+        setter:[[{
             "key":"id",
-            "label":"노드 아이디",
+            "label":"아이디",
             "type":"el-input",
             "description":""
-        },{
+        }],[{
             "key":"props.setter.script",
             "label":"SCRIPT",
             "type":"ace-editor",
-            "description":""
-        }]
+            "description":"",
+            "style": {
+                "height":'400px'
+            }
+        }]]
     }
 }]

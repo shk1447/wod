@@ -3,7 +3,7 @@ export default {
     compName:"boiler-comp",
     fields: {
         style:[],
-        setter:[{
+        setter:[[{
             "key":"props.setter.parts.boiler",
             "label":"boiler의 기계장치 boiler",
             "type":"string",
@@ -18,7 +18,7 @@ export default {
             "label":"boiler의 기계장치 boiler02",
             "type":"string",
             "description":"boiler의 기계장치 boiler02"
-        }]
+        }]]
     },
     component: function() {
         this.$obj = undefined;

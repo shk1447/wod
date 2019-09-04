@@ -1,6 +1,6 @@
 <template>
     <div :style="meta.props.style">
-        <el-table :data="meta.data" :height="meta.props.style.height" style="width: 100%" :row-class-name="tableRowClassName">
+        <el-table :data="meta.data" style="width: 100%; height:100%; overflow:auto;" :row-class-name="tableRowClassName">
             <el-table-column v-for="item in columns" :key="item" :prop="item" :label="item"> </el-table-column>
         </el-table>
     </div>
@@ -33,7 +33,7 @@ export default {
         }
     },
     fields:{
-        setter:[{
+        setter:[[{
             "key":"props.setter.columns",
             "label":"컬럼명",
             "type":"el-input",
@@ -43,13 +43,13 @@ export default {
             "label":"데이터 양",
             "type":"el-input",
             "description":"데이터 양 설정"
-        }],
-        style:[{
+        }]],
+        style:[[{
             "key":"id",
             "label":"ID",
             "type":"el-input",
             "description":"ID"
-        },{
+        }],[{
             "key":"props.style.top",
             "label":"TOP",
             "type":"el-input",
@@ -59,17 +59,17 @@ export default {
             "label":"LEFT",
             "type":"el-input",
             "description":"LEFT"
-        },{
+        }],[{
             "key":"props.style.width",
             "label":"WIDTH",
             "type":"el-input",
-            "description":"WIDTH"
+            "description":"LEFT"
         },{
             "key":"props.style.height",
             "label":"HEIGHT",
             "type":"el-input",
-            "description":"HEIGHT"
-        },{
+            "description":"LEFT"
+        }],[{
             "key":"props.style.border",
             "label":"BORDER",
             "type":"el-input",
@@ -79,7 +79,7 @@ export default {
             "label":"Z-INDEX",
             "type":"el-input",
             "description":"Z-INDEX"
-        }]
+        }]]
     },
     data () {
         return {
