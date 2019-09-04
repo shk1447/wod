@@ -50,7 +50,7 @@ module.exports = function(layer) {
             var nodes = layer.getNodes();
             var links = layer.getLinks();
 
-            api.nodes.removeFlow({instances:delete_items}).then(function() {
+            return api.nodes.removeFlow({instances:delete_items}).then(function() {
                 _.each(nodes, function(node,i) {
                     var wires = links.filter(function(d) {
                         return d.source.page_id+"/"+d.source.id === node.page_id+"/"+node.id
@@ -74,14 +74,12 @@ module.exports = function(layer) {
                         flow:node.flow
                     })
                 })
-                api.nodes.saveNodes({instances:param_instances}).then(function(res) {
+                return api.nodes.saveNodes({instances:param_instances}).then(function(res) {
                     Vue.$message({
                         type:'success',
                         message:'Success Deploy'
                     })
                 })
-            }).catch(function(err) {
-
             })
         },
         executeFlow:function() {

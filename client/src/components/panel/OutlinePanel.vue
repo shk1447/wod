@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%; overflow:auto;" v-on:contextmenu="onContextMenu">
-        <el-tree class="page-tree" draggable :data="comp_list" :props="defaultProps" node-key="_id" :allow-drag="allowDrag" :allow-drop="allowDrop" @node-drag-start="onDragStart" @node-contextmenu="onContextMenu">
+        <el-tree class="page-tree" draggable :data="batch_list" :props="defaultProps" node-key="_id" :allow-drag="allowDrag" :allow-drop="allowDrop" @node-drag-start="onDragStart" @node-contextmenu="onContextMenu">
             <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span v-on:dblclick="onSelectComp(data)">
                     <i :class="'far fa-file-alt'"></i>
@@ -20,6 +20,7 @@ import api from "../../api";
 export default {
     data() {
         return {
+            active_page:"",
             comp_list:[],
             defaultProps: {
                 children: 'children',
@@ -27,6 +28,16 @@ export default {
                     return data.page_id + '/' + data.id
                 }
             }
+        }
+    },
+    computed: {
+        batch_list: function() {
+            var me = this;
+            var ret_list = [];
+            if(me.active_page !== 'all') {
+                ret_list = me.comp_list.filter(function(d) { return d.page_id === me.active_page});
+            }
+            return ret_list;
         }
     },
     components: {
@@ -60,25 +71,33 @@ export default {
             console.log(transfer_page);
             e.dataTransfer.setData("node", JSON.stringify(transfer_page));
         },
-        refreshOutlinePanel(params) {
+        refresh(params) {
             var me = this;
             api.nodes.getComp().then(function(res){
                 me.comp_list = res;
             })
+        },
+        setActive(params) {
+            this.active_page = params;
         }
     },
     created() {
         
     },
     mounted() {
+        var me = this;
         console.log('mounted');
-        this.refreshOutlinePanel();
+        this.refresh();
+        me.custom_events.on('outline', me.refresh);
+        me.custom_events.on('outline_active', me.setActive);
     },
     updated() {
         console.log('updated');
     },
     destroyed() {
-        
+        var me = this;
+        me.custom_events.off('outline', me.refresh);
+        me.custom_events.on('outline_active', me.setActive);
     }
 }
 </script>

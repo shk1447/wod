@@ -109,6 +109,7 @@ export default {
             api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 console.log(res);
                 me.custom_events.emit('page', {});
+                me.custom_events.emit('outline', {});
                 me.$modal.hide('create-page');
                 me.$message({
                     message:"페이지가 저장되었습니다.",

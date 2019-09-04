@@ -69,15 +69,13 @@ export default {
             api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 console.log(res);
                 me.custom_events.emit('page', {});
-                me.$modal.hide('create-page');
+                me.custom_events.emit('outline', {});
                 me.$message({
                     message:"페이지가 저장되었습니다.",
                     type:"success"
                 });
-                me.refreshPagePanel();
             }).catch(function(err) {
                 console.log(err);
-                me.$modal.hide('create-page');
                 me.$message({
                     message:"페이지 저장이 실패하였습니다.",
                     type:"error"
@@ -148,7 +146,7 @@ export default {
         allowDrag(node) {
             return true;
         },
-        refreshPagePanel(params) {
+        refresh(params) {
             var me = this;
             api.nodes.getNodes().then(function(res){
                 me.page_list = res;
@@ -160,14 +158,14 @@ export default {
     },
     created() {
         var me = this;
-        me.custom_events.on('page', me.refreshPagePanel);
+        me.custom_events.on('page', me.refresh);
     },
     mounted() {
-        this.refreshPagePanel();
+        this.refresh();
     },
     destroyed() {
         var me = this;
-        me.custom_events.off('page', me.refreshPagePanel);
+        me.custom_events.off('page', me.refresh);
     }
 }
 </script>

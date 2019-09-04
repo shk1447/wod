@@ -108,12 +108,20 @@ export default {
     methods: {
         onSavePage() {
             console.log('save');
+            var me = this;
             if(this.$refs.content_comp && this.$refs.content_comp.save) {
-                this.$refs.content_comp.save()
+                this.$refs.content_comp.save().then(function() {
+                    me.custom_events.emit('page', {});
+                    me.custom_events.emit('outline', {});
+                })
             }
         },
         onSaveFlow() {
-            this.core.flow.manager.saveFlow();
+            var me = this;
+            this.core.flow.manager.saveFlow().then(function() {
+                me.custom_events.emit('page', {});
+                me.custom_events.emit('outline', {});
+            });
         },
         onPagePopup() {
             this.$refs.pageModal.show();

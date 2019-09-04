@@ -32,17 +32,13 @@ export default {
             }
             recursive_instances(JSON.parse(JSON.stringify(this.instances)));
             console.log(param_instances);
-            api.nodes.saveNodes({instances:param_instances}).then((res) => {
-                console.log(res);
-                me.custom_events.emit('page', {});
-                me.$modal.hide('create-page');
+            return api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 me.$message({
                     message:"페이지가 저장되었습니다.",
                     type:"success"
                 });
             }).catch(function(err) {
                 console.log(err);
-                me.$modal.hide('create-page');
                 me.$message({
                     message:"페이지 저장이 실패하였습니다.",
                     type:"error"
@@ -74,6 +70,7 @@ export default {
                         message:"페이지가 로드되었습니다.",
                         type:"success"
                     });
+                    me.custom_events.emit('outline_active', data.page_id)
                 },0)
             }
         }
