@@ -17,6 +17,7 @@ import 'echarts/lib/component/title'
 
 export default {
     type:'two_comp',
+    category:'Chart',
     compName:'bar-chart-comp',
     props: ['meta'],
     input:true,

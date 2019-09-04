@@ -1,5 +1,6 @@
 export default {
     type:"three_comp",
+    category:'KEPCO',
     compName:"turbine-comp",
     fields: {
         style:[],

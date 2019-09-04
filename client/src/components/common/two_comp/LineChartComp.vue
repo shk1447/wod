@@ -19,6 +19,7 @@ import 'echarts/lib/component/tooltip'
 
 export default {
     type:'two_comp',
+    category:'Chart',
     compName:'line-chart-comp',
     input:true,
     output:false,

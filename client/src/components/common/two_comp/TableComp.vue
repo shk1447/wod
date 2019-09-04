@@ -12,6 +12,7 @@ import { setInterval } from 'timers';
 
 export default {
     type:'two_comp',
+    category:'Basic',
     compName:'table-comp',
     props: ['meta'],
     input:true,

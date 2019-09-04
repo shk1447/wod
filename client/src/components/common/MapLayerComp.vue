@@ -14,7 +14,8 @@ import uuid from 'uuid/v4';
 import 'leaflet/dist/leaflet.css';
 
 export default {
-    compName:'map-comp',
+    compName:'map-layer-comp',
+    category:'Layer',
     type:'two_comp',
     props: ['meta'],
     init_props: {

@@ -16,6 +16,7 @@ import OrbitControl from './util/OrbitControl/OrbitControl';
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
 export default {
     compName:'three-layer-comp',
+    category:'Layer',
     type:'two_comp',
     props: ['meta'],
     init_props: {

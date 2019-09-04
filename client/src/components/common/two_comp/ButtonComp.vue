@@ -6,6 +6,7 @@
 
 export default {
     type:'two_comp',
+    category:'Form',
     compName:'button-comp',
     input:false,
     output:true,

@@ -6,6 +6,7 @@
 
 export default {
     type:'two_comp',
+    category:'Basic',
     compName:'frame-comp',
     input:true,
     output:false,

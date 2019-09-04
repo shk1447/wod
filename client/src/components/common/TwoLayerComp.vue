@@ -10,6 +10,7 @@ import uuid from 'uuid/v4';
 
 export default {
     compName:'two-layer-comp',
+    category:'Layer',
     type:'two_comp',
     props: ['meta'],
     init_props: {
