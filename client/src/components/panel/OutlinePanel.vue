@@ -54,7 +54,7 @@ export default {
         onDeleteNode(item) {
             var me = this;
             api.nodes.removeById(item).then(function(res) {
-                me.refreshOutlinePanel();
+                me.refresh();
             })
         },
         onContextMenu() {
