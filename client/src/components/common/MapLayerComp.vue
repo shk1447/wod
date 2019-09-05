@@ -83,6 +83,16 @@ export default {
             "label":"Z-INDEX",
             "type":"el-input",
             "description":"Z-INDEX"
+        }],[{
+            "key":"props.setter.center.lat",
+            "label":"위도",
+            "type":"el-input",
+            "description":"위도"
+        },{
+            "key":"props.setter.center.lng",
+            "label":"경도",
+            "type":"el-input",
+            "description":"경도"
         }]]
     },
     data () {

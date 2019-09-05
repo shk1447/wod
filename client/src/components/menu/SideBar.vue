@@ -44,11 +44,11 @@ export default {
         }
     },
     created() {
-
+        var me = this;
+        me.custom_events.on('selected_item',me.handleSelectedItem);
     },
     mounted() {
         var me = this;
-        me.custom_events.on('selected_item',me.handleSelectedItem);
         var sidebar =  {};
         $('#sidebar-separator').draggable({
             axis:"x",
