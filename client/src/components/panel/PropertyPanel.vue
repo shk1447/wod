@@ -31,10 +31,18 @@ export default {
             }
       }
     },
+    watch: {
+        selected_item: {
+            handler: function(val, oldVal) {
+                var comp_fields = this[val.type][val.compName].fields;
+                this.fields = comp_fields ? comp_fields : {setter : [], style : []};
+            },
+            deep : true
+        }
+    },
     computed: {
         getModel: function() {
             return function(key) {
-                console.log(key);
                 var me = this;
                 var res = new Function('return this.selected_item.' + key ).bind(this);
                 return res();
@@ -71,15 +79,16 @@ export default {
                 this.custom_events.emit('redrawFlow');
             }
             this.$forceUpdate();
+        },
+        refresh() {
+            
         }
     },
     created() {
 
     },
     updated() {
-        console.log('updated!!', this.selected_item);
-        var comp_fields = this[this.selected_item.type][this.selected_item.compName].fields;
-        this.fields = comp_fields ? comp_fields : {setter : [], style : []};
+        
     },
     mounted() {
 

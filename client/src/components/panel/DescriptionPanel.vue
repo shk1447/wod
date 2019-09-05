@@ -37,6 +37,9 @@ export default {
     methods: {
         handleChange(val) {
             console.log(val);
+        },
+        refresh() {
+            
         }
     },
     created() {

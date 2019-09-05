@@ -34,10 +34,10 @@ export default {
         batch_list: function() {
             var me = this;
             var ret_list = [];
-            if(me.active_page !== 'all') {
-                ret_list = me.comp_list.filter(function(d) { return d.page_id === me.active_page});
-            } else {
+            if(me.active_page === '') {
                 ret_list = me.comp_list;
+            } else {
+                ret_list = me.comp_list.filter(function(d) { return d.page_id === me.active_page});
             }
             return ret_list;
         }
@@ -84,14 +84,14 @@ export default {
         }
     },
     created() {
-        
+        var me = this;
+        me.custom_events.on('outline', me.refresh);
+        me.custom_events.on('outline_active', me.setActive);
     },
     mounted() {
         var me = this;
         console.log('mounted');
         this.refresh();
-        me.custom_events.on('outline', me.refresh);
-        me.custom_events.on('outline_active', me.setActive);
     },
     updated() {
         console.log('updated');
@@ -99,7 +99,7 @@ export default {
     destroyed() {
         var me = this;
         me.custom_events.off('outline', me.refresh);
-        me.custom_events.on('outline_active', me.setActive);
+        me.custom_events.off('outline_active', me.setActive);
     }
 }
 </script>

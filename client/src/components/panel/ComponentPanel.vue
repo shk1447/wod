@@ -76,6 +76,9 @@ export default {
         },
         allowDrag(node) {
             return node.data.type !== 'category';
+        },
+        refresh() {
+            
         }
     },
     created() {

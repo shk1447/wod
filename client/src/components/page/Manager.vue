@@ -49,7 +49,6 @@ export default {
         this.$nextTick(function() {
             me.core.flow.layer.init('data_manager');
             me.core.flow.manager.loadFlow();
-            me.custom_events.emit('outline_active', 'all')
         })
         //this.core.flow.layer.addNodes({id:'test', x:100,y:100})
         console.log('mounted')
