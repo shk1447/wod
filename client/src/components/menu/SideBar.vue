@@ -13,8 +13,9 @@
 
 <script>
 import PagePanel from "../panel/PagePanel.vue";
-import FlowPanel from "../panel/FlowPanel.vue";
+import OutlinePanel from "../panel/OutlinePanel.vue";
 import PropertyPanel from "../panel/PropertyPanel.vue";
+import ComponentPanel from "../panel/ComponentPanel.vue";
 import DescriptionPanel from "../panel/DescriptionPanel.vue";
 
 export default {
@@ -27,15 +28,19 @@ export default {
     },
     components: {
         "page-panel":PagePanel,
-        "flow-panel":FlowPanel,
+        "outline-panel":OutlinePanel,
+        "component-panel":ComponentPanel,
         "property-panel":PropertyPanel,
         "description-panel":DescriptionPanel
     },
     methods: {
-        handleSelectedItem:function(node_info) {
-            this.activePanel = 'Property';
-            this.$refs[this.activePanel][0].selected_item = node_info;
-            this.$refs.Property[0].$forceUpdate()
+        handleSelectedItem:function(param) {
+            if(this.$refs[param.panel] && this.$refs[param.panel].length > 0) {
+                this.activePanel = param.panel;
+                this.$refs[this.activePanel][0].activeType = param.type;
+                this.$refs[this.activePanel][0].selected_item = param.item;
+                this.$refs[this.activePanel][0].$forceUpdate()
+            }
         }
     },
     created() {
@@ -123,6 +128,9 @@ export default {
 .custom-tabs .el-tabs__content {
     height: calc(100% - 70px);
     overflow: auto;
+}
+.custom-tab-item {
+    height: 100%;
 }
 </style>
 

@@ -135,7 +135,9 @@ d3.keybinding = function() {
     return d3.rebind(keys, event, 'on');
 };
 
+const uuid = require('uuid/v4');
 const randomColor = require('randomcolor') ;
+const flow_modules = require('./module');
 
 module.exports = (function() {
     var width, height, container_div;
@@ -166,7 +168,51 @@ module.exports = (function() {
         }
     }
 
-    var push_node_count = 0;
+    function addNodes(nodes) {
+        _.each(nodes, function(node, i) {
+            activeNodes.push(node);
+        });
+        redraw();
+    }
+
+    function deleteItem() {
+        var node_index = activeNodes.findIndex(function(d) {return selected_id === d.page_id+"/"+d.id});
+        if(node_index >= 0) {
+            var remove_index = [];
+            var link_length = activeLinks.length;
+            for(var i = 0; i < link_length; i++) {
+                var d = activeLinks[i];
+                if((selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id)) {
+                    remove_index.push(i);
+                }
+            }
+
+            var applyFlow = function() {
+                activeNodes.splice(node_index, 1);
+
+                remove_index.sort(function(a,b){return b-a});
+                remove_index.forEach(function(link_index) {
+                    activeLinks.splice(link_index, 1);
+                })
+                redraw();
+            }
+
+            // node의 type이 two_comp/three_comp일 경우에는 flow만 삭제
+            // node의 type이 flow_comp일 경우 완전 삭제
+            // 성공시 activeNodes 삭제 시 아래 동작 시작
+            
+            Vue.core.flow.manager.removeNode(activeNodes[node_index]);
+            applyFlow();
+        }
+
+        var link_index = activeLinks.findIndex(function(d) {
+            return selected_id ===  d.sourceNode.page_id+"/"+d.sourceNode.id +':'+ d.targetNode.page_id+"/"+d.targetNode.id
+        });
+        if(link_index >= 0) {
+            activeLinks.splice(link_index, 1);
+            redraw();
+        }
+    }
 
     function portMouseDown(port, node, type) {
         d3.event.stopPropagation();
@@ -185,6 +231,7 @@ module.exports = (function() {
             temp_link.source = node;
         }
         if(temp_link.source && temp_link.target) {
+            // 링크 정보 업데이트 후 아래 시작;
             activeLinks.push(temp_link);
             redraw();
         }
@@ -200,19 +247,46 @@ module.exports = (function() {
     }
 
     function canvasContextMenu() {
-        var selected_node = activeNodes.find(function(d) { return d.id === selected_id});
-        var position = getPosition(d3.event)
-        Vue.custom_events.emit('contextmenu', {
+        console.log(flow_modules);
+        this.context_position = getPosition(d3.event)
+        var menu_params = {
             active:true,
             params : {
-                node_info:selected_node,
-                event:d3.event,
-                position:position
-            }
-        });
+                event:d3.event
+            },
+            menu_items: [{
+                id:"node",
+                label:"Node",
+                children:flow_modules.map(function(d) {return {id:d.compName, label:d.compName, action:addNode.bind(this),instance:d}}.bind(this))
+            },{
+                id:"reset",
+                label:"Reset",
+                children:[{
+                    id:"flow",
+                    label:"Data Flow",
+                    action:resetLayer.bind(this)
+                },{
+                    id:"zoom",
+                    label:"Zoom State",
+                    action:resetZoom.bind(this)
+                }]
+            }]
+        };
+        Vue.custom_events.emit('contextmenu', menu_params);
         console.log('location 재조정')
         d3.event.stopPropagation();
         d3.event.preventDefault();
+    }
+
+    function addNode(menu) {
+        console.log(menu.instance);
+        menu.instance.id = uuid();
+        menu.instance.page_id = 'flow';
+        menu.instance.flow = {
+            x:this.context_position.x,
+            y: this.context_position.y
+        }
+        addNodes([menu.instance])
     }
 
     function canvasMouseUp() {
@@ -240,7 +314,7 @@ module.exports = (function() {
         var mouse_x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var mouse_y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k;
         if(start_point) {
-            var x1 = temp_link.source ? (start_point.flow.x + node_size*8) : mouse_x;
+            var x1 = temp_link.source ? (start_point.flow.x + node_size*10) : mouse_x;
             var y1 = temp_link.source ? (start_point.flow.y + node_size) : mouse_y;
             var x2 = temp_link.source ? mouse_x : start_point.flow.x;
             var y2 = temp_link.source ? mouse_y : (start_point.flow.y + node_size);
@@ -253,20 +327,9 @@ module.exports = (function() {
     }
 
     function canvasDblClick() {
-        console.log('dbl click!!!');
         var x = (d3.event.offsetX - outer_transform.x ) / outer_transform.k;
         var y = (d3.event.offsetY - outer_transform.y ) / outer_transform.k
-        var node_info = {
-            id:'receiver' + (activeNodes.length + 1),
-            name:'receiver' + (activeNodes.length + 1),
-            x:x,
-            y:y,
-            input:false,output:true,
-            props:{
-                protocol:''
-            }
-        }
-        addNodes([node_info]);
+        console.log('dbl click!!!', x, ':', y);
     };
 
     function zoomed() {
@@ -285,26 +348,13 @@ module.exports = (function() {
     }
 
     function dragged(d) {
-        d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*4)).attr("cy", d.flow.y = (d3.event.y - node_size));
+        d3.select(this).attr("cx", d.flow.x = (d3.event.x - node_size*5)).attr("cy", d.flow.y = (d3.event.y - node_size));
         redraw();
     }
 
     function dragended(d) {
         d3.select(this).classed("dragging", false);
         //redraw();
-    }
-
-    function addNodes(nodes) {
-        // push_node_count
-        _.each(nodes, function(node, i) {
-            if(node.hasOwnProperty('eventCallback')){
-                node.id += '_' + (push_node_count + 1);
-            }
-            activeNodes.push(node);
-            if(node.type === 'push_node')
-                push_node_count++;
-        });
-        redraw();
     }
 
     var activeDropShadow, activeBlur;
@@ -356,7 +406,16 @@ module.exports = (function() {
 
         selected_id = node_info.page_id + "/" + node_info.id
 
-        Vue.custom_events.emit('selected_item', node_info);
+        Vue.custom_events.emit('selected_item', {panel:'Property',type:'setter',item:node_info});
+
+        redraw();
+    }
+
+    function linkClicked(node, d) {
+        d3.event.stopPropagation();
+        d3.event.preventDefault();
+        
+        selected_id = d.sourceNode.page_id+"/"+d.sourceNode.id+":"+d.targetNode.page_id+"/"+d.targetNode.id
 
         redraw();
     }
@@ -420,13 +479,13 @@ module.exports = (function() {
                 .attr('rx', node_size/4)
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr("width", node_size*8)
+                .attr("width", node_size*10)
                 .attr("height", node_size*2)
 
             if(d.output) {
                 node.append("circle")
                 .attr("class", "port")
-                .attr("cx", node_size*8)
+                .attr("cx", node_size*10)
                 .attr("cy", node_size)
                 .attr("r", node_size/3)
                 .attr("fill", function(d) { return '#ddd' })
@@ -470,12 +529,22 @@ module.exports = (function() {
                     return color;
                 })
 
-            var text_node = node.append('svg:text').attr('x', node_size*4).attr('y', node_size)
+            var text_node = node.append('svg:text').attr('x', node_size*5).attr('y', node_size)
                 .style('stroke', 'none').style('dominant-baseline', 'central').style("text-anchor", "middle").style('fill', 'rgb(53, 53, 53)')
                 .text(d.page_id +"/"+ d.id);
 
+            
+            var ellipsis = function(words) {
+                text_node.text(words);
+                if(node_size * 10 < text_node.node().getBoundingClientRect().width + node_size) {
+                    words = words.substr(0, words.length - 1);
+                    ellipsis(words);
+                }
+            }
+            ellipsis(d.page_id +"/"+ d.id);
+
             d.update = function() {
-                text_node.text(d.page_id +"/"+ d.id)
+                ellipsis(d.page_id +"/"+ d.id);
             };
             if(d.flow.wires && d.flow.wires.length > 0) {
                 _.each(d.flow.wires, function(target_id,i) {
@@ -524,10 +593,15 @@ module.exports = (function() {
             .attr("class", "link");
 
         linkEnter.each(function(d,i) {
-            var l = d3.select(this);
+            var l = d3.select(this)
+            l.on('click', function() {
+                console.log('linkClicked!!!')
+                linkClicked(l, d);
+            });
             l.append("svg:path").attr("class", "link_background link_path");
             l.append("svg:path").attr('class', 'link_line link_path')
-            l.append("svg:path").attr('class', 'link_anim')
+            
+            
             if(!d.sourceNode) d.sourceNode = activeNodes.find(function(a) { return a.page_id+"/"+a.id === d.source.page_id+"/"+d.source.id});
             if(!d.targetNode) d.targetNode = activeNodes.find(function(a) { return a.page_id+"/"+a.id === d.target.page_id+"/"+d.target.id});
         })
@@ -546,19 +620,21 @@ module.exports = (function() {
         links.each(function(d,i) {
             var thisLink = d3.select(this);
             var id = d.sourceNode.page_id+"/"+d.sourceNode.id+":"+d.targetNode.page_id+"/"+d.targetNode.id
-            var path_data = lineGenerator([[d.sourceNode.flow.x + (node_size*8), d.sourceNode.flow.y + node_size],
+            var path_data = lineGenerator([[d.sourceNode.flow.x + (node_size*10), d.sourceNode.flow.y + node_size],
                                             [d.targetNode.flow.x, d.targetNode.flow.y + node_size]])
-            thisLink.attr("d", path_data).attr("stroke-width", node_size/4).attr('stroke','#888');
+            thisLink.attr("d", path_data).attr("stroke-width", node_size/4)
             if(selected_id === id) {
-                thisLink.attr('stroke', '#ff7f0e');
-            }
-            if(selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id) {
-                var result = activeNodes.filter(function(a) {return a.page_id+"/"+a.id === d.sourceNode.page_id+"/"+d.sourceNode.id || a.page_id+"/"+a.id === d.targetNode.page_id+"/"+d.targetNode.id});
-                result.forEach(function(v,i) {
-                    v.node.attr('filter', 'url(#' + activeDropShadow + ')' );
-                })
                 thisLink.attr('stroke', color_define.speed[d.speed] ? color_define.speed[d.speed] : '#ff7f0e');
+            } else {
+                thisLink.attr('stroke','#888');
             }
+            // if(selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id) {
+            //     var result = activeNodes.filter(function(a) {return a.page_id+"/"+a.id === d.sourceNode.page_id+"/"+d.sourceNode.id || a.page_id+"/"+a.id === d.targetNode.page_id+"/"+d.targetNode.id});
+            //     result.forEach(function(v,i) {
+            //         v.node.attr('filter', 'url(#' + activeDropShadow + ')' );
+            //     })
+            //     thisLink.attr('stroke', color_define.speed[d.speed] ? color_define.speed[d.speed] : '#ff7f0e');
+            // }
         })
         // var anim_links = link_group.selectAll('.link_anim');
         // anim_links.each(function(d,i) {
@@ -577,27 +653,6 @@ module.exports = (function() {
         //     }
         //     repeat();
         // })
-    }
-
-    function deleteItem() {
-        var node_index = activeNodes.findIndex(function(d) {return selected_id === d.page_id+"/"+d.id});
-        if(node_index >= 0) {
-            var remove_index = [];
-            var link_length = activeLinks.length;
-            for(var i = 0; i < link_length; i++) {
-                var d = activeLinks[i];
-                if((selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id)) {
-                    remove_index.push(i);
-                }
-            }
-            activeNodes.splice(node_index, 1);
-
-            remove_index.sort(function(a,b){return b-a});
-            remove_index.forEach(function(link_index) {
-                activeLinks.splice(link_index, 1);
-            })
-            redraw();
-        }
     }
 
     function reload(data) {
@@ -634,18 +689,22 @@ module.exports = (function() {
 
     }
 
+    function resetZoom() {
+        outer_transform = d3.zoomIdentity;
+        outer.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+        redraw();
+    }
+
+    function resetLayer() {
+        activeNodes = [];
+        activeLinks = [];
+        redraw();
+    }
+
     return {
         getPosition: getPosition,
-        clear: function() {
-            activeNodes = [];
-            activeLinks = [];
-            redraw();
-        },
-        zoom_reset: function(evt) {
-            outer_transform = d3.zoomIdentity;
-            outer.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-            redraw();
-        },
+        clear: resetLayer,
+        zoom_reset: resetZoom,
         focus_target: function(d) {
             var focusing = d3.zoomIdentity.translate((container_div.clientWidth/2)-d.flow.x, (container_div.clientHeight/2)-d.flow.y).scale(1);
             outer.transition().duration(1200).call(zoom.transform, focusing);

@@ -1,8 +1,26 @@
 import http from "../utils/http.js";
 
 export default {
-    delNodes:function(params) {
-        var url = "/nodes/remove";
+    removePage:function(params) {
+        var url = "/nodes/removePage";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    removeFlow:function(params) {
+        var url = "/nodes/removeFlow";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    removeById:function(params) {
+        var url = "/nodes/removeById";
+        return http.post(url, params).then(function(res) {
+            return res;
+        });
+    },
+    addNode: function(params) {
+        var url = "/nodes/add";
         return http.post(url, params).then(function(res) {
             return res;
         });
@@ -21,6 +39,12 @@ export default {
     },
     getFlow: function() {
         var url = "/nodes/flow";
+        return http.get(url).then(function(res) {
+            return res;
+        })
+    },
+    getComp: function() {
+        var url = "/nodes/comp";
         return http.get(url).then(function(res) {
             return res;
         })

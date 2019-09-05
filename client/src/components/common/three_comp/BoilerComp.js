@@ -1,19 +1,34 @@
-import ThreeComponentOutline from '../util/ThreeComponentOutline/ThreeComponentOutline'
 export default {
     type:"three_comp",
-    name:"boiler-comp",
-    mixins : [ThreeComponentOutline],
+    category:'KEPCO',
+    compName:"boiler-comp",
+    fields: {
+        style:[],
+        setter:[[{
+            "key":"props.setter.parts.boiler",
+            "label":"boiler의 기계장치 boiler",
+            "type":"string",
+            "description":"boiler의 기계장치 boiler 설정"
+          },{
+            "key":"props.setter.parts.pipe_A",
+            "label":"boiler의 기계장치 pipe_A",
+            "type":"string",
+            "description":"boiler의 기계장치 pipe_A"
+          },{
+            "key":"props.setter.parts.boiler02",
+            "label":"boiler의 기계장치 boiler02",
+            "type":"string",
+            "description":"boiler의 기계장치 boiler02"
+        }]]
+    },
     component: function() {
-        console.log("####################COMPONENT ####################")
-        var that = this;
-        console.log(this);
-
         this.$obj = undefined;
         this.$texture = undefined;
         this.$parent = null;
         this.props = {
             path : {
                 obj:'/assets/models/boiler/boiler_ET.obj',
+                texture:'/assets/models/boiler/maps/{childName}.png',
                 material : '/assets/models/boiler/boiler_ET.mtl'
             },
             style:{
@@ -24,14 +39,14 @@ export default {
         };
         this.created = function() {
             console.log('boiler created')
-
         };
         this.mounted = function() {
             console.log('boiler mounted')
-            this.$obj.position.x = this.props.style.position.x;
-            this.$obj.position.y = this.props.style.position.y;
-            this.$obj.position.z = this.props.style.position.z;
+            this.$obj.position.x = this.props.style.x;
+            this.$obj.position.y = this.props.style.y;
+            this.$obj.position.z = this.props.style.z;
             console.log(this);
+
         };
         this.updated = function() {
             // three layer comp에서 mount 라이프사이클에 3D 컴포넌트를 비동기 메쉬, 매테리얼을 로드 하고

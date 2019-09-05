@@ -15,6 +15,10 @@ import Analysis from '../components/page/Analysis.vue';
 // }
 export default new Router({
       routes: [{
+            path: '/editor',
+            name: 'editor',
+            component: Editor
+      },{
             path: '/viewer',
             name: 'viewer',
             component: Viewer

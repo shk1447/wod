@@ -1,22 +1,25 @@
 <template>
-    <div style="height:100%; overflow:auto;">
-        <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item v-for="field in fields.setter" :key="field.key" :label="field.label">
-                <el-input :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)"></el-input>
-            </el-form-item>
-            <el-form-item v-if="selected_item.props.fields && selected_item.props.fields.length > 0">
-                <el-button type="primary" @click="onSubmit">Save</el-button>
-            </el-form-item>
-        </el-form>
+    <div style="height:100%; overflow:auto; font-size: 12px;">
+        <h3 v-if="selected_item.compName" style="margin-left:66px;">{{selected_item.compName.toUpperCase()}}</h3>
+        <div class="form-row" v-for="(row_fields, row_i) in fields[activeType]" :key="row_i">
+            <div class="form-column" v-for="(field, col_i) in row_fields" :key="row_i + '_' + col_i" :style="field.style">
+                <span class="form-label">{{field.label}}</span>
+                <component class="form-comp" :is="field.type" @init="editorInit" lang="javascript" size="mini"
+                            :value="getModel(field.key)" @input="handleChangeSetter(field.key, $event)">
+                </component>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import api from "../../api";
+import aceEditor from 'vue2-ace-editor';
 
 export default {
     data() {
         return {
+            activeType:'setter',
             selected_item:{
                 props:{
                     setter:{}
@@ -39,9 +42,17 @@ export default {
         }
     },
     components: {
-        
+        'ace-editor':aceEditor
     },
     methods: {
+        editorInit: function () {
+            require('brace/ext/language_tools') //language extension prerequsite...
+            require('brace/mode/html')                
+            require('brace/mode/javascript')    //language
+            require('brace/mode/less')
+            require('brace/theme/chrome')
+            require('brace/snippets/javascript') //snippet
+        },
         setValueByPath(object, path, value) {
             var count = 0;
             var path_arr = path.split('.')
@@ -56,12 +67,10 @@ export default {
         },
         handleChangeSetter(key, event){
             var setter = this.setValueByPath(this.selected_item, key, event);
-            //setter = event;
-            console.log('test', setter);
-        },
-        onSubmit() {
-            console.log('submit!');
-            this.custom_events.emit('redrawFlow');
+            if(this.activeType === 'setter') {
+                this.custom_events.emit('redrawFlow');
+            }
+            this.$forceUpdate();
         }
     },
     created() {
@@ -82,5 +91,27 @@ export default {
 </script>
 
 <style>
-
+.form-row {
+    display: flex;
+    width:100%;
+    height:28px;
+    margin: 6px 0;
+}
+.form-column {
+    display: flex;
+    flex:auto;
+}
+.form-label {
+    display: flex;
+    text-align: right;
+    margin-right: 6px;
+    width:60px;
+    line-height:12px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.form-comp {
+    display: inline-block;
+    flex: 1;
+}
 </style>

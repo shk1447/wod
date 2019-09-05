@@ -3,7 +3,7 @@
         <div class="content-wrapper" ref="content_area">
             <tool-bar ref="tool_bar"></tool-bar>
             <div class="content-area">
-                <router-view/>
+                <router-view ref="content_comp"/>
             </div>
             <side-bar ref="side_bar"></side-bar>
         </div>
@@ -40,24 +40,28 @@ export default {
                 editor: {
                     left:[],
                     right:[{
-                        id:"",
-                        icon: "fas fa-cloud-upload-alt",
+                        id:"save",
+                        icon: "fas fa-save",
                         label:'',
-                        action:this.onPagePopup
+                        action:this.onSavePage
                     }],
                     panels:[{
                         name:'Page',
                         comp:'page-panel'
+                    },{
+                        name:'Component',
+                        comp:'component-panel'
+                    },{
+                        name:'Outline',
+                        comp:'outline-panel'
+                    },{
+                        name:'Property',
+                        comp:'property-panel'
                     }]
                 },
                 viewer: {
                     left:[],
-                    right:[{
-                        id:"",
-                        icon: "fas fa-cloud-upload-alt",
-                        label:'',
-                        action:this.onPagePopup
-                    }],
+                    right:[],
                     panels:[{
                         name:'Page',
                         comp:'page-panel'
@@ -72,8 +76,8 @@ export default {
                         action:this.onSaveFlow
                     }],
                     panels:[{
-                        name:'Page',
-                        comp:'page-panel'
+                        name:'Outline',
+                        comp:'outline-panel'
                     },{
                         name:'Property',
                         comp:'property-panel'
@@ -102,8 +106,22 @@ export default {
         "analysis": Analysis
     },
     methods: {
+        onSavePage() {
+            console.log('save');
+            var me = this;
+            if(this.$refs.content_comp && this.$refs.content_comp.save) {
+                this.$refs.content_comp.save().then(function() {
+                    me.custom_events.emit('page', {});
+                    me.custom_events.emit('outline', {});
+                })
+            }
+        },
         onSaveFlow() {
-            this.core.flow.manager.saveFlow();
+            var me = this;
+            this.core.flow.manager.saveFlow().then(function() {
+                me.custom_events.emit('page', {});
+                me.custom_events.emit('outline', {});
+            });
         },
         onPagePopup() {
             this.$refs.pageModal.show();

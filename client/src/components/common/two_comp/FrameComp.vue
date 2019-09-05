@@ -1,22 +1,15 @@
 <template>
-    <div :id="meta.id" :style="meta.props.style">
-        <l-map :zoom="meta.props.setter.zoom" :center="meta.props.setter.center">
-            <l-tile-layer :url="meta.props.setter.url"></l-tile-layer>
-        </l-map>
-    </div>
+    <div :style="meta.props.style"></div>
 </template>
 
 <script>
 
-import L from 'leaflet';
-import {LMap, LTileLayer, LMarker} from 'vue2-leaflet';
-import uuid from 'uuid/v4';
-import 'leaflet/dist/leaflet.css';
-
 export default {
-    compName:'map-layer-comp',
-    category:'Layer',
     type:'two_comp',
+    category:'Basic',
+    compName:'frame-comp',
+    input:true,
+    output:false,
     props: ['meta'],
     init_props: {
         style: {
@@ -24,30 +17,17 @@ export default {
             overflow: "hidden",
             top:"",
             left:"",
-            width:"500px",
-            height:"500px",
+            width:"120px",
+            height:"60px",
             zIndex: "0",
-            border:"1px dashed black"
+            border:"1px dashed black",
+            background:"red"
         },
-        setter: {
-            zoom:13,
-            center: {"lat":40.41322,"lng":-1.219482},
-            url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-        },
+        setter: {},
         children:[]
     },
     fields:{
-        setter:[[{
-            "key":"props.setter.center.lat",
-            "label":"위도",
-            "type":"el-input",
-            "description":"위도"
-        },{
-            "key":"props.setter.center.lng",
-            "label":"경도",
-            "type":"el-input",
-            "description":"경도"
-        }]],
+        setter:[],
         style:[[{
             "key":"id",
             "label":"ID",
@@ -79,6 +59,11 @@ export default {
             "type":"el-input",
             "description":"BORDER"
         },{
+            "key":"props.style.background",
+            "label":"BORDER",
+            "type":"el-input",
+            "description":"BACKGROUND"
+        },{
             "key":"props.style.zIndex",
             "label":"Z-INDEX",
             "type":"el-input",
@@ -90,26 +75,28 @@ export default {
             meta:this.meta
         }
     },
-    components : {
-        LMap, LTileLayer, LMarker
-    },
     methods: {
         input_data:function(data){
-            console.log(data);
+            
         },
         output_data: function() {
-            
+            // if(this.meta.flow.wires && this.meta.flow.wires.length > 0) {
+            //     for(var i = 0; i < this.meta.flow.wires.length; i++) {
+            //         var wired_obj = this.meta.flow.wires[i];
+            //         wired_obj.input_data(this);
+            //     }
+            // }
         }
+    },
+    components : {
+        
     },
     created() {
         console.log('created')
     },
     mounted() {
-        console.log('mounted');
+        console.log('mounted')
         this.core.flow.manager.addCompNode(this);
-    },
-    updated() {
-        console.log('map updated');
     },
     destroyed() {
         console.log('destroyed')

@@ -1,3 +1,5 @@
+const http = require("../../../utils/http").default;
+
 module.exports = function PollingNode(properties) {
     this.id = properties.id;
     this.input = properties.input;
@@ -10,20 +12,25 @@ module.exports = function PollingNode(properties) {
 
     }.bind(this);
     this.output_data = function() {
-        if(this.wires && this.wires.length > 0) {
-            for(var i = 0; i < this.wires.length; i++) {
-                var wired_obj = this.wires[i];
-                wired_obj.input_data('test');
+        http.get(this.meta.props.setter.url).then(function(res) {
+            if(this.flow.wires && this.flow.wires.length > 0) {
+                for(var i = 0; i < this.flow.wires.length; i++) {
+                    var wired_obj = this.flow.wires[i];
+                    wired_obj.input_data(res);
+                }
             }
-        }
+        }.bind(this));
     }.bind(this);
 
     this.created = function() {
+        
+    }
 
+    this.mounted = function() {
+        this.output_data();
     }
 
     this.destroyed = function() {
-        
         this.id = null;
         this.input = null;
         this.type = null;

@@ -1,32 +1,121 @@
 <template>
-    <div :style="props.style">
-        <component v-for="item in props.children" :key="item.id" :is="item.compName"
-        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+    <div :style="meta.props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
+        <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-on:click.native="onSelectedComp(item)"
+        :meta="item"></component>
     </div>
 </template>
 
 <script>
+import uuid from 'uuid/v4';
 
 export default {
-    name:'two-layer-comp',
+    compName:'two-layer-comp',
+    category:'Layer',
     type:'two_comp',
-    props: ['id','props','data', 'input', 'output', 'page_id'],
+    props: ['meta'],
+    init_props: {
+        style: {
+            position: "absolute",
+            overflow: "hidden",
+            top:"",
+            left:"",
+            width:"100%",
+            height:"100%",
+            zIndex: "0",
+            border:"1px dashed black"
+        },
+        children:[]
+    },
     fields:{
         setter:[],
-        style:[]
+        style:[[{
+            "key":"id",
+            "label":"ID",
+            "type":"el-input",
+            "description":"ID"
+        }],[{
+            "key":"props.style.top",
+            "label":"TOP",
+            "type":"el-input",
+            "description":"TOP"
+        },{
+            "key":"props.style.left",
+            "label":"LEFT",
+            "type":"el-input",
+            "description":"LEFT"
+        }],[{
+            "key":"props.style.width",
+            "label":"WIDTH",
+            "type":"el-input",
+            "description":"LEFT"
+        },{
+            "key":"props.style.height",
+            "label":"HEIGHT",
+            "type":"el-input",
+            "description":"LEFT"
+        }],[{
+            "key":"props.style.border",
+            "label":"BORDER",
+            "type":"el-input",
+            "description":"BORDER"
+        },{
+            "key":"props.style.zIndex",
+            "label":"Z-INDEX",
+            "type":"el-input",
+            "description":"Z-INDEX"
+        }]]
     },
     data () {
-        return { }
+        return {
+            meta:this.meta
+        }
     },
     components : {
         
     },
     methods: {
+        onSelectedComp(item) {
+            Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
+        },
+        dragover(e) {
+            e.preventDefault();
+        },
+        drop(e) {
+            e.preventDefault();
+            var transfer_data = e.dataTransfer.getData("component");
+            if(transfer_data) {
+                var data = JSON.parse(transfer_data);
+                if(data.type === 'two_comp') {
+                    console.log('drop comp', data);
+                    data.init_props.style.top = e.offsetY + 'px';
+                    data.init_props.style.left = e.offsetX + 'px';
+                    var instance = {
+                        id:uuid(),
+                        page_id:this.page_id,
+                        compName:data.compName,
+                        type:data.type,
+                        input:data.input,
+                        output:data.output,
+                        props:data.init_props
+                    }
+                    this.addChildren(instance);
+                    e.stopImmediatePropagation();
+                }
+            }
+        },
         input_data:function(data){
             console.log(data);
         },
         output_data: function() {
             
+        },
+        addChildren: function(instance) {
+            if(!this.meta.props.children) {
+                console.log('!!!!!why!!!?')
+                this.meta.props.children = [];
+            }
+            this.meta.props.children.push(instance);
+            this.$forceUpdate();
         }
     },
     created() {

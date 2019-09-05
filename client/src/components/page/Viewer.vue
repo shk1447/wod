@@ -1,7 +1,6 @@
 <template>
   <div class="viewer-area" @dragover="dragover" @drop="drop">
-    <component v-for="item in instances" :key="item.id" :is="item.compName"
-        :id="item.id" :page_id="item.page_id" :props="item.props" :data="item.data" :input="item.input" :output="item.output"></component>
+    <component v-for="item in instances" :key="item._id" :is="item.compName" :meta="item"></component>
   </div>
 </template>
 
@@ -11,6 +10,7 @@ import { setTimeout } from 'timers';
 export default {
     data () {
         return {
+            page_id:"",
             instances : []
         }
     },
@@ -32,6 +32,7 @@ export default {
             var data = JSON.parse(transfer_data);
             setTimeout(function() {
                 me.$loading({})
+                me.page_id = data.page_id;
                 me.instances = data.instances;
                 me.$nextTick(function() {
                     this.core.flow.manager.executeFlow();
@@ -60,6 +61,6 @@ export default {
     .viewer-area {
         position:absolute;
         height:calc(100% - 50px);
-        width:calc(100% - 50px);
+        width:100%;
     }
 </style>
