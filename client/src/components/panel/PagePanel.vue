@@ -132,7 +132,7 @@ export default {
         onDeletePage(item) {
             var me = this;
             api.nodes.removePage(item).then(function(res) {
-                me.refreshPagePanel();
+                me.refresh();
             })
         },
         onDragStart(node, e) {
