@@ -1,6 +1,9 @@
+import ThreeComponentOutline from '../util/ThreeComponentOutline/ThreeComponentOutline'
+
 export default {
     type:"three_comp",
     category:'KEPCO',
+    mixins : [ThreeComponentOutline],
     compName:"boiler-comp",
     fields: {
         style:[],
@@ -22,6 +25,13 @@ export default {
         }]]
     },
     component: function() {
+        console.log("####################COMPONENT ####################")
+        var that = this;
+        this.mixins.forEach((mix)=>{
+            Object.assign(that, mix);
+        });
+        console.log(this);
+
         this.$obj = undefined;
         this.$texture = undefined;
         this.$parent = null;
