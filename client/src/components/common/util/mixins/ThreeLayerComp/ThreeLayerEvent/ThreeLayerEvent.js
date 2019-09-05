@@ -5,11 +5,21 @@ const ThreeLayerEvent = {
         return {
             domEvents : null,
             threeLayerEventMap : {},
-            THREEx : {}
+            THREEx : {},
+            threeLayerCompEvents : {
+            "click" : this.id + "/click",
+            "mouseover" : this.id + "/mouseover",
+            "dblclick" : this.id + "/dblclick",
+            "mouseout" : this.id + "/mouseout",
+            "mousedown" : this.id + "/mousedown",
+            "mouseup" : this.id + "/mouseup"
+             }
         }
     },
     methods : {
         initializeThreeLayerEvent(camera, domElement){
+            Object.freeze(this.threeLayerCompEvents);
+
             domEvents(THREE, this.THREEx);
             this.domEvents = new this.THREEx.DomEvents(camera, domElement);
             console.log("@@@@@@@@@@@@@@@ THREE LAYEr EVENT @@@@@@@@@@@@@@@@@@")

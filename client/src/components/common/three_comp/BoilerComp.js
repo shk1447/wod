@@ -1,4 +1,4 @@
-import ThreeComponentOutline from '../util/ThreeComponentOutline/ThreeComponentOutline'
+import ThreeComponentOutline from '../util/mixins/ThreeComp/ThreeComponentOutline/ThreeComponentOutline'
 
 export default {
     type:"three_comp",

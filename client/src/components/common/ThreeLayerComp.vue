@@ -3,23 +3,24 @@
         <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
+                @topView = "topView"
+                @quarterView = "quarterView"
         ></CameraControlPanel>
     </div>
 </template>
 
 <script>
-import _ from 'lodash';
 import * as THREE from 'three'
-import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
-import OrbitControl from './util/OrbitControl/OrbitControl';
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
-import ThreeLayerEvent from './util/ThreeLayerEvent/ThreeLayerEvent'
-
+import ThreeLayerEvent from './util/mixins/ThreeLayerComp/ThreeLayerEvent/ThreeLayerEvent'
+import Camera from './util/mixins/ThreeLayerComp/Camera/Camera'
+import Scene from './util/mixins/ThreeLayerComp/Scene/Scene'
+import Children from './util/mixins/ThreeLayerComp/Children/Children'
 export default {
     compName:'three-layer-comp',
     category:'Layer',
     type:'two_comp',
-    mixins : [ThreeLayerEvent],
+    mixins : [ThreeLayerEvent, Camera, Scene, Children],
     props: ['meta'],
     init_props: {
         style: {
@@ -174,89 +175,40 @@ export default {
         zoomOut(){
             this.controls.zoomOut();
         },
-        render() {
-            // //##### Camera Position Property change #####
-            // this.camera.position.set(
-            //     parseFloat(this.meta.props.style.camera.position.x),
-            //     parseFloat(this.meta.props.style.camera.position.y),
-            //     parseFloat(this.meta.props.style.camera.position.z)
-            // );
-            // this.camera.updateMatrixWorld();
-            // this.camera.near = parseFloat(this.meta.props.style.camera.near);
-            // this.camera.far = parseFloat(this.meta.props.style.camera.far);
-            // this.camera.fov = parseFloat(this.meta.props.style.camera.fov);
-            // this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
-            this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
+        topView(){
+            this.camera.position.set(0, 100, 0);
             this.camera.updateProjectionMatrix();
-            //##### Camera Position Property change #####
+            this.render();
+        },
+        quarterView(){
 
-            //#### RE- RENDER ####
+        },
+        render() {
+            this.sceneResizeCameraUpdate(this.container, this.renderer);
             this.renderer.render(this.scene, this.camera);
-            //#### RE- RENDER ####
+
         },
         init() {
-            var me = this;
-            this.mouseoverComponent = null;
-            this.container = this.$refs.three_container;
-            this.scene = new THREE.Scene();
-            this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-            this.renderer.domElement.style.position = "absolute";
-            this.renderer.domElement.style.top = "0px";
-            this.renderer.domElement.style.left = "0px";
-            this.renderer.domElement.style.zIndex = "0";
-            this.renderer.setSize( this.container.clientWidth, this.container.clientHeight );
-            this.container.appendChild( this.renderer.domElement );
-
-            console.log('############### META ####################')
-            console.log(this.meta);
-            this.camera = new THREE.PerspectiveCamera( this.meta.props.setter.camera.fov, this.meta.props.setter.camera.aspect, this.meta.props.setter.camera.near, this.meta.props.setter.camera.far);
-            this.camera.position.set(this.meta.props.setter.camera.position.x, this.meta.props.setter.camera.position.y, this.meta.props.setter.camera.position.z);
-
-            // controls
-            this.controls = new OrbitControl( this.camera, this.renderer.domElement );
-            this.controls.enableDamping = true;
-            this.controls.dampingFactor = 0.25;
-            this.controls.screenSpacePanning = false;
-            this.controls.minDistance = 0;
-            this.controls.maxDistance = 100000;
-            this.controls.maxPolarAngle = Math.PI / 2;
-            this.controls.addEventListener( 'change', function(){
-                me.$forceUpdate();
-            });
-
             var manager = new THREE.LoadingManager(this.loadedModel);
             manager.onProgress = function(item, loaded, total) {
                 console.log(item, loaded, total);
             };
 
-            // lights
-            var light = new THREE.DirectionalLight( 0xffffff );
-            light.position.set( 1, 1, 1 );
-            this.scene.add( light );
-            var light = new THREE.DirectionalLight( 0x888888 );
-            light.position.set( - 1, - 1, - 1 );
-            this.scene.add( light );
-            var light = new THREE.AmbientLight( 0x222222 );
-            this.scene.add( light );
 
-            //############### GRID HELPER ########################
-            var size = 10;
-            var divisions = 100;
-            var gridHelper = new THREE.GridHelper(size, divisions, 0x000000);
-            this.scene.add(gridHelper);
-            //############### CUSTOM EVENT DEFNITIONS #####################
-            this.threeLayerCompEvents = {
-                "click" : this.id + "/click",
-                "mouseover" : this.id + "/mouseover",
-                "dblclick" : this.id + "/dblclick",
-                "mouseout" : this.id + "/mouseout",
-                "mousedown" : this.id + "/mousedown",
-                "mouseup" : this.id + "/mouseup"
-            };
-            Object.freeze(this.threeLayerCompEvents);
+            //################## INITIALIZE SCENE ###########################
+            this.initializeScene(this);
+            //################## INITIALIZE CAMERA ###########################
+            this.initializeCamera(this.meta.props.setter.camera);
+            this.setCameraPropsWatch(this, 'meta.props.setter.camera');
+            //################## INITIALIZE CONTROL ###########################
+            this.initializeControl(this, this.camera);
 
 
-            //################# CUSTOM EVENT ADD ####################################
+
+            //################## INITIALIZE GRID HELPER ###########################
+            this.initializeHelper(10, 100, 0x000000);
+
+            //################# ADD CUSTOM EVENT ####################################
             this.initializeThreeLayerEvent(this.camera, this.renderer.domElement);
             this.customThreeLayerCompMouseDownHandler = function(event){
                 console.log("############## Mousedown Event#####################");
@@ -301,139 +253,16 @@ export default {
             this.addLayerEventListener('custom_event', this.id + '/mousedown', this.customThreeLayerCompMouseDownHandler.bind(this));
             this.addLayerEventListener('custom_event', this.id + '/mouseover', this.customThreeLayerCompMouseOverHandler.bind(this));
             this.addLayerEventListener('custom_event', this.id + '/mouseout', this.customThreeLayerCompMouseOutHandler.bind(this));
-            //################# CUSTOM EVENT ADD ####################################
 
-            me.$forceUpdate();
+            this.render();
         },
         loadedModel() {
             console.log('loaded model');
-        },
-        addChildren() {
-            var me = this;
-            if(this.props.children && this.props.children.length > 0) {
-                _.each(this.props.children, function(comp, i) {
-                    var mtlLoader = new MTLLoader();
-                    var objLoader = new OBJLoader();
-
-                    var component = new me.three_comp[comp.compName].component();
-                    //############################## APPLY MIXIN ##########################################
-                    me.three_comp[comp.compName].mixins.forEach((mix)=>{
-                        //data mixin
-                        var data = mix.data();
-                        var data_key = Object.keys(data);
-                        data_key.forEach((key)=>{
-                            if(!component.hasOwnProperty(key)){
-                                var temp = {};
-                                temp[key] = data[key];
-                                _.merge(component, temp)
-                            }
-                        });
-                        //method mixin
-                        var methods = mix.methods;
-                        var method_keys = Object.keys(methods);
-                        console.log(method_keys);
-                        method_keys.forEach((method)=>{
-                            if(!component.hasOwnProperty(method)){
-                                var temp = {};
-                                temp[method] = methods[method];
-                                _.merge(component, temp)
-                            }
-                        });
-
-                    });
-                    //############################## APPLY MIXIN ##########################################
-                    component.created();
-
-
-                    component.props = _.extend(component.props, comp.props);
-
-                    component.id = comp.id; //manager.js에서 add, remove할 때 id를 갖고 하기 때문에 3d component에 id를 부여
-                    component.page_id = comp.page_id;
-                    component.$parent = me; //input_data 함수가 실행되면 렌더를 한번 다시 해줘야 화면이 바뀌기 때문에 자신의 parent를 갖고 있도록 한다.
-                    component.updated();
-
-                    mtlLoader.load(component.props.path.material, (materials)=>{
-                        materials.preload();
-                        objLoader.setMaterials(materials);
-                        objLoader.load(component.props.path.obj,(object)=>{
-                            component.$obj = object;
-                            if(component.$obj.children.length){
-                                component.$obj.children.forEach(function(child){
-                                    child.compId = component.id
-                                })
-                            }else{
-                                component.$obj.compId = component.id;
-                            }
-                            me.components.push(component);
-                            me.appendElement.add(component.$obj);
-
-                            var outline = component.createOutlineElement(component);
-                            me.appendElement.add(outline);
-
-
-                            var that = me;
-                            me.addLayerEventListener('layer_mouse_event', 'mousedown',function(event){
-                                console.log(event);
-                                if(event.origDomEvent.button === 0)
-                                    that.custom_events.emit(that.id + '/mousedown', {target : component});
-                            }, component.$obj);
-
-                            me.addLayerEventListener('layer_mouse_event', 'click',function(event){
-                                if(event.origDomEvent.button === 0)
-                                    that.custom_events.emit(that.id + '/click', {target : component});
-                            }, component.$obj);
-
-                            if(component.$obj.children.length){
-                                component.$obj.children.forEach(function(child){
-                                    var that2 = me;
-                                    me.addLayerEventListener('layer_mouse_event', 'mouseover',function(event){
-                                        if(event.origDomEvent.button === 0)
-                                            that.custom_events.emit(that2.id + '/mouseover', {target : component});
-                                    }, child);
-                                    me.addLayerEventListener('layer_mouse_event', 'mouseout',function(event){
-                                        if(event.intersect === undefined){
-                                            that2.custom_events.emit(that2.id + '/mouseout', {target : component});
-                                            that2.mouseoverComponent = null;
-                                        }else{
-                                            if(event.target.compId === that2.mouseoverComponent)
-                                                return;
-                                            else{
-                                                that2.custom_events.emit(that2.id + '/mouseout', {target : component});                                            }
-                                        }
-                                    }, child);
-                                })
-                            }
-                            component.mounted();
-                            console.log(component);
-
-                            //render once
-                            me.renderer.render( me.scene, me.camera );
-
-                            console.log("############### CACHE #########################")
-                            console.log(THREE.Cache);
-
-                            console.log('################# SCENE ###########################')
-                            console.log(me.scene.appendElement);
-                        })
-                    })
-                })
-            }
         }
     },
     components : {CameraControlPanel},
     created() {
         console.log('three created props' , this.meta.props);
-        this.container = undefined;
-        this.camera = undefined;
-        this.controls = undefined;
-        this.scene = undefined;
-        this.renderer = undefined;
-
-        this.textureLoader = undefined;
-        this.objLoader = undefined;
-
-        this.components = [];
-
         console.log(this.three_comp);
         console.log('created')
     },
@@ -442,21 +271,17 @@ export default {
         console.log('three layer mounted')
         this.core.flow.manager.addCompNode(this);
         this.init();
+        this.addChildren(this)
     },
     updated() {
         console.log('updated!!!!!')
         this.render();
     },
     destroyed() {
-        this.container = undefined;
-        this.camera = undefined;
+        this.SceneDestroyed();
+        this.CameraDestroyed();
+        this.ChildrenDestroyed();
 
-        this.controls.removeEventListener('change');
-        this.controls = undefined;
-
-        this.scene = undefined;
-        this.renderer = undefined;
-        this.components = [];
         console.log('destroyed')
         this.core.flow.manager.removeCompNode(this);
     }

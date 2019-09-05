@@ -47,7 +47,7 @@ export default {
     methods: {
         editorInit: function () {
             require('brace/ext/language_tools') //language extension prerequsite...
-            require('brace/mode/html')                
+            require('brace/mode/html')
             require('brace/mode/javascript')    //language
             require('brace/mode/less')
             require('brace/theme/chrome')
@@ -74,7 +74,7 @@ export default {
         }
     },
     created() {
-        
+
     },
     updated() {
         console.log('updated!!', this.selected_item);
@@ -82,10 +82,10 @@ export default {
         this.fields = comp_fields ? comp_fields : {setter : [], style : []};
     },
     mounted() {
-        
+
     },
     destroyed() {
-        
+
     }
 }
 </script>
