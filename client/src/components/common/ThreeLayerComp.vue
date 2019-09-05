@@ -1,5 +1,5 @@
 <template>
-    <div ref="three_container" :style="props.style">
+    <div ref="three_container" :style="props.style" v-on:click="layerCompMouseDown">
         <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
@@ -10,10 +10,10 @@
 <script>
 import _ from 'lodash';
 import * as THREE from 'three'
-import domEvents from 'threex-domevents'
 import {MTLLoader, OBJLoader} from "three-obj-mtl-loader";
 import OrbitControl from './util/OrbitControl/OrbitControl';
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
+import ThreeLayerEvent from './util/ThreeLayerEvent/ThreeLayerEvent'
 export default {
     name:'three-layer-comp',
     type:'two_comp',
@@ -22,6 +22,7 @@ export default {
         setter:[],
         style:[]
     },
+    mixins : [ThreeLayerEvent],
     data () {
         return {
         }
@@ -45,6 +46,9 @@ export default {
         init() {
             var me = this;
             this.mouseoverComponent = null;
+            this.mousedownComponent = null;
+            this.mouse = new THREE.Vector2();
+            this.raycaster = new THREE.Raycaster();
             this.container = this.$refs.three_container;
             this.scene = new THREE.Scene();
             this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -88,41 +92,80 @@ export default {
             this.scene.add( light );
 
             ///add custom events listener
-            var THREEx = {};
-            domEvents(THREE, THREEx);
 
-            this.domEvents = new THREEx.DomEvents(this.camera, this.renderer.domElement);
+            console.log("####################### THIS ##########################")
+            console.log(this);
+
+
+
             this.threeLayerCompEvents = {
                 "click" : this.id + "/click",
                 "mouseover" : this.id + "/mouseover",
                 "dblclick" : this.id + "/dblclick",
-                "mouseout" : this.id + "/mouseout"
+                "mouseout" : this.id + "/mouseout",
+                "mousedown" : this.id + "/mousedown",
+                "mouseup" : this.id + "/mouseup"
             };
             Object.freeze(this.threeLayerCompEvents);
 
-            this.custom_events.on(this.threeLayerCompEvents.click, function(event){
-                alert('click component');
-            });
-            this.custom_events.on(this.threeLayerCompEvents.mouseover, function(event){
+
+            //################# CUSTOM EVENT ADD ####################################
+            this.initializeThreeLayerEvent(this.camera, this.renderer.domElement);
+            this.customThreeLayerCompMouseDownHandler = function(event){
+                console.log("############## Mousedown Event#####################");
+                if(this.mousedownComponent !== null)
+                    this.mousedownComponent.outlineElement.visible = false;
+                console.log(event.target);
+                event.target.outlineElement.visible = true;
+                this.mousedownComponent = event.target;
+                this.render();
+            }
+            this.customThreeLayerCompMouseOverHandler = function(event){
                 console.log(event.target);
                 if(event.target.$obj.children.length){
+                    var that = this;
                     event.target.$obj.children.forEach(function(child){
                         child.material.emissive.setHex("0x64FE2E")
                         child.material.needsUpdate = true;
-                        me.render();
+                        that.render();
                     })
                 }
-            });
-            this.custom_events.on(this.threeLayerCompEvents.mouseout, function(event){
-                console.log(event.target);
-                if(event.target.$obj.children.length){
-                    event.target.$obj.children.forEach(function(child){
-                        child.material.emissive.setHex("0x000000")
-                        child.material.needsUpdate = true;
-                        me.render();
-                    })
+            }
+            this.customThreeLayerCompMouseOutHandler = function(event){
+                var that = this;
+                if(this.mousedownComponent !== null){
+                    if(this.mousedownComponent !== event.target.id){
+                        if(event.target.$obj.children.length){
+                            event.target.$obj.children.forEach(function(child){
+                                child.material.emissive.setHex("0x000000")
+                                child.material.needsUpdate = true;
+                                that.render();
+                            })
+                        }
+                    }
+                }else{
+                    if(event.target.$obj.children.length){
+                        event.target.$obj.children.forEach(function(child){
+                            child.material.emissive.setHex("0x000000")
+                            child.material.needsUpdate = true;
+                            that.render();
+                        })
+                    }
                 }
-            });
+            }
+            this.addLayerEventListener('custom_event', this.id + '/mousedown', this.customThreeLayerCompMouseDownHandler.bind(this));
+            this.addLayerEventListener('custom_event', this.id + '/mouseover', this.customThreeLayerCompMouseOverHandler.bind(this));
+            this.addLayerEventListener('custom_event', this.id + '/mouseout', this.customThreeLayerCompMouseOutHandler.bind(this));
+            //################# CUSTOM EVENT ADD ####################################
+        },
+        layerCompMouseDown(event){
+            console.log(event);
+            this.mouse.x = (event.offsetX / event.target.width) * 2 - 1;
+            this.mouse.y = (event.offsetY / event.target.height) * 2 - 1;
+
+            this.raycaster.setFromCamera(this.mouse, this.camera);
+            var intersects = this.raycaster.intersectObjects(this.scene.children, true);
+            console.log(intersects);
         },
         loadedModel() {
             console.log('loaded model');
@@ -133,8 +176,36 @@ export default {
                 _.each(this.props.children, function(comp, i) {
                     var mtlLoader = new MTLLoader();
                     var objLoader = new OBJLoader();
+
                     var component = new me.three_comp[comp.compName].component();
+                    //############################## APPLY MIXIN ##########################################
+                    me.three_comp[comp.compName].mixins.forEach((mix)=>{
+                        //data mixin
+                        var data = mix.data();
+                        var data_key = Object.keys(data);
+                        data_key.forEach((key)=>{
+                            if(!component.hasOwnProperty(key)){
+                                var temp = {};
+                                temp[key] = data[key];
+                                _.merge(component, temp)
+                            }
+                        });
+                        //method mixin
+                        var methods = mix.methods;
+                        var method_keys = Object.keys(methods);
+                        console.log(method_keys);
+                        method_keys.forEach((method)=>{
+                            if(!component.hasOwnProperty(method)){
+                                var temp = {};
+                                temp[method] = methods[method];
+                                _.merge(component, temp)
+                            }
+                        });
+
+                    });
+                    //############################## APPLY MIXIN ##########################################
                     component.created();
+
 
                     component.props = _.extend(component.props, comp.props);
 
@@ -144,7 +215,6 @@ export default {
                     component.updated();
 
                     mtlLoader.load(component.props.path.material, (materials)=>{
-
                         materials.preload();
                         objLoader.setMaterials(materials);
                         objLoader.load(component.props.path.obj,(object)=>{
@@ -158,20 +228,31 @@ export default {
                             }
                             me.components.push(component);
                             me.scene.add(component.$obj);
-                            var that = me;
 
-                            me.domEvents.addEventListener(component.$obj, 'click', function(event){
-                               that.custom_events.emit(that.id + '/click', {target : component});
-                            }, false);
+                            var outline = component.createOutlineElement(component);
+                            me.scene.add(outline);
+
+
+                            var that = me;
+                            me.addLayerEventListener('layer_mouse_event', 'mousedown',function(event){
+                                console.log(event);
+                                if(event.origDomEvent.button === 0)
+                                    that.custom_events.emit(that.id + '/mousedown', {target : component});
+                            }, component.$obj);
+
+                            me.addLayerEventListener('layer_mouse_event', 'click',function(event){
+                                if(event.origDomEvent.button === 0)
+                                    that.custom_events.emit(that.id + '/click', {target : component});
+                            }, component.$obj);
 
                             if(component.$obj.children.length){
                                 component.$obj.children.forEach(function(child){
                                     var that2 = me;
-                                    me.domEvents.addEventListener(child, 'mouseover', function(event){
-                                        that2.custom_events.emit(that2.id + '/mouseover', {target : component});
-                                        that2.mouseoverComponent = component.id;
-                                    });
-                                    me.domEvents.addEventListener(child, 'mouseout', function(event){
+                                    me.addLayerEventListener('layer_mouse_event', 'mouseover',function(event){
+                                        if(event.origDomEvent.button === 0)
+                                            that.custom_events.emit(that2.id + '/mouseover', {target : component});
+                                    }, child);
+                                    me.addLayerEventListener('layer_mouse_event', 'mouseout',function(event){
                                         if(event.intersect === undefined){
                                             that2.custom_events.emit(that2.id + '/mouseout', {target : component});
                                             that2.mouseoverComponent = null;
@@ -181,13 +262,20 @@ export default {
                                             else{
                                                 that2.custom_events.emit(that2.id + '/mouseout', {target : component});                                            }
                                         }
-                                    });
+                                    }, child);
                                 })
                             }
                             component.mounted();
+                            console.log(component);
 
                             //render once
                             me.renderer.render( me.scene, me.camera );
+
+                            console.log("############### CACHE #########################")
+                            console.log(THREE.Cache);
+
+                            console.log('################# SCENE ###########################')
+                            console.log(me.scene.appendElement);
                         })
                     })
                 })

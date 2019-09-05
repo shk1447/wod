@@ -1,6 +1,8 @@
+import ThreeComponentOutline from '../util/ThreeComponentOutline/ThreeComponentOutline'
 export default {
     type:"three_comp",
     name:"turbine-comp",
+    mixins : [ThreeComponentOutline],
     component: function() {
         this.$obj = undefined;
         this.$texture = undefined;
@@ -8,7 +10,6 @@ export default {
         this.props = {
             path : {
                 obj:'/assets/models/turbine/turbineGenerator_ET.obj',
-                texture:'/assets/models/turbine/maps/{childName}.png',
                 material : '/assets/models/turbine/turbineGenerator_ET.mtl'
             },
             style:{
@@ -22,9 +23,9 @@ export default {
         };
         this.mounted = function() {
             console.log('turbine mounted')
-            this.$obj.position.x = this.props.style.x;
-            this.$obj.position.y = this.props.style.y;
-            this.$obj.position.z = this.props.style.z;
+            this.$obj.position.x = this.props.style.position.x;
+            this.$obj.position.y = this.props.style.position.y;
+            this.$obj.position.z = this.props.style.position.z;
         };
         this.updated = function() {
             // three layer comp에서 mount 라이프사이클에 3D 컴포넌트를 비동기 메쉬, 매테리얼을 로드 하고

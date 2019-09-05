@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Vue from 'vue';
 
 // context menu
-import * as VueMenu from '@hscmap/vue-menu' 
+import * as VueMenu from '@hscmap/vue-menu'
 Vue.use(VueMenu)
 
 // jquery ui
@@ -69,3 +69,6 @@ window.Vue = new Vue({
     components: { App },
     template: '<App/>'
 })
+
+import * as THREE from 'three'
+THREE.Cache.enabled = true; //파일 캐싱 처리
