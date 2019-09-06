@@ -9,6 +9,67 @@ const Children = {
         }
     },
     methods : {
+        resourceLoad(comp){
+            var mtlLoader = new MTLLoader();
+            var objLoader = new OBJLoader();
+            mtlLoader.load(comp.meta.props.path.material, (materials)=>{
+                materials.preload();
+                objLoader.setMaterials(materials);
+                objLoader.load(comp.meta.props.path.obj, (object)=>{
+                    comp.$obj = object;
+                    if(comp.$obj.children.length){
+                        comp.$obj.children.forEach(function(child){
+                            child.compId = comp.id
+                        })
+                    }else{
+                        comp.$obj.compId = comp.id;
+                    }
+                    comp.$obj.scale.set(
+                        comp.meta.props.style.scale.x,
+                        comp.meta.props.style.scale.y,
+                        comp.meta.props.style.scale.z
+                    )
+                    this.custom_events.emit(comp.meta.page_id + '/resource_loaded', {target : comp});
+                    // var outline = component.createOutlineElement(component);
+                    // layerComp.scene.add(outline);
+                    //
+                    // layerComp.addLayerEventListener('layer_mouse_event', 'mousedown',function(event){
+                    //     console.log(event);
+                    //     if(event.origDomEvent.button === 0)
+                    //         layerComp.custom_events.emit(layerComp.id + '/mousedown', {target : component});
+                    // }, component.$obj);
+                    //
+                    // layerComp.addLayerEventListener('layer_mouse_event', 'click',function(event){
+                    //     if(event.origDomEvent.button === 0)
+                    //         layerComp.custom_events.emit(layerComp.id + '/click', {target : component});
+                    // }, component.$obj);
+                    //
+                    // if(component.$obj.children.length){
+                    //     component.$obj.children.forEach(function(child){
+                    //         layerComp.addLayerEventListener('layer_mouse_event', 'mouseover',function(event){
+                    //             if(event.origDomEvent.button === 0)
+                    //                 layerComp.custom_events.emit(layerComp.id + '/mouseover', {target : component});
+                    //         }, child);
+                    //         layerComp.addLayerEventListener('layer_mouse_event', 'mouseout',function(event){
+                    //             if(event.intersect === undefined){
+                    //                 layerComp.custom_events.emit(layerComp.id + '/mouseout', {target : component});
+                    //                 layerComp.mouseoverComponent = null;
+                    //             }else{
+                    //                 if(event.target.compId === layerComp.mouseoverComponent)
+                    //                     return;
+                    //                 else{
+                    //                     layerComp.custom_events.emit(layerComp.id + '/mouseout', {target : component});                                            }
+                    //             }
+                    //         }, child);
+                    //     })
+                    // }
+                    // component.mounted();
+                    //
+                    // layerComp.render();
+                })
+            })
+
+        },
         addChildren(layerComp){
             _.each(layerComp.meta.props.children, function(comp, i){
                 var mtlLoader = new MTLLoader();

@@ -3,6 +3,10 @@
         <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"
+                @moveLeft = "moveLeft"
+                @moveRight = "moveRight"
+                @moveUp = "moveUp"
+                @moveDown = "moveDown"
                 @topView = "topView"
                 @quarterView = "quarterView"
         ></CameraControlPanel>
@@ -12,15 +16,12 @@
 <script>
 import * as THREE from 'three'
 import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
-import ThreeLayerEvent from './util/mixins/ThreeLayerComp/ThreeLayerEvent/ThreeLayerEvent'
-import Camera from './util/mixins/ThreeLayerComp/Camera/Camera'
-import Scene from './util/mixins/ThreeLayerComp/Scene/Scene'
-import Children from './util/mixins/ThreeLayerComp/Children/Children'
+import threeLayer from './util/mixins/ThreeLayerComp/ThreeLayer/ThreeLayer'
 export default {
     compName:'three-layer-comp',
     category:'Layer',
     type:'two_comp',
-    mixins : [ThreeLayerEvent, Camera, Scene, Children],
+    mixins : [threeLayer],
     props: ['meta'],
     init_props: {
         style: {
@@ -160,6 +161,7 @@ export default {
                 if(data.type === 'three_comp') {
                     e.stopImmediatePropagation();
                     console.log('drop comp', data);
+                    this.addChild(data)
                 }
             }
         },
@@ -169,91 +171,14 @@ export default {
         output_data: function() {
 
         },
-        zoomIn(){
-            this.controls.zoomIn();
-        },
-        zoomOut(){
-            this.controls.zoomOut();
-        },
-        topView(){
-            this.camera.position.set(0, 100, 0);
-            this.camera.updateProjectionMatrix();
-            this.render();
-        },
-        quarterView(){
 
-        },
-        render() {
-            this.sceneResizeCameraUpdate(this.container, this.renderer);
-            this.renderer.render(this.scene, this.camera);
-
-        },
         init() {
             var manager = new THREE.LoadingManager(this.loadedModel);
             manager.onProgress = function(item, loaded, total) {
                 console.log(item, loaded, total);
             };
 
-
-            //################## INITIALIZE SCENE ###########################
-            this.initializeScene(this);
-            //################## INITIALIZE CAMERA ###########################
-            this.initializeCamera(this.meta.props.setter.camera);
-            this.setCameraPropsWatch(this, 'meta.props.setter.camera');
-            //################## INITIALIZE CONTROL ###########################
-            this.initializeControl(this, this.camera);
-
-
-
-            //################## INITIALIZE GRID HELPER ###########################
-            this.initializeHelper(10, 100, 0x000000);
-
-            //################# ADD CUSTOM EVENT ####################################
-            this.initializeThreeLayerEvent(this.camera, this.renderer.domElement);
-            this.customThreeLayerCompMouseDownHandler = function(event){
-                console.log("############## Mousedown Event#####################");
-                this.mousedownComponent.outlineElement.visible = false;
-                console.log(event.target);
-                event.target.outlineElement.visible = true;
-                this.render();
-            }
-            this.customThreeLayerCompMouseOverHandler = function(event){
-                console.log(event.target);
-                if(event.target.$obj.children.length){
-                    var that = this;
-                    event.target.$obj.children.forEach(function(child){
-                        child.material.emissive.setHex("0x64FE2E")
-                        child.material.needsUpdate = true;
-                        that.render();
-                    })
-                }
-            }
-            this.customThreeLayerCompMouseOutHandler = function(event){
-                var that = this;
-                if(this.mousedownComponent !== null){
-                    if(this.mousedownComponent !== event.target.id){
-                        if(event.target.$obj.children.length){
-                            event.target.$obj.children.forEach(function(child){
-                                child.material.emissive.setHex("0x000000")
-                                child.material.needsUpdate = true;
-                                that.render();
-                            })
-                        }
-                    }
-                }else{
-                    if(event.target.$obj.children.length){
-                        event.target.$obj.children.forEach(function(child){
-                            child.material.emissive.setHex("0x000000")
-                            child.material.needsUpdate = true;
-                            that.render();
-                        })
-                    }
-                }
-            }
-            this.addLayerEventListener('custom_event', this.id + '/mousedown', this.customThreeLayerCompMouseDownHandler.bind(this));
-            this.addLayerEventListener('custom_event', this.id + '/mouseover', this.customThreeLayerCompMouseOverHandler.bind(this));
-            this.addLayerEventListener('custom_event', this.id + '/mouseout', this.customThreeLayerCompMouseOutHandler.bind(this));
-
+            this.initializeThreeLayer();
             this.render();
         },
         loadedModel() {
@@ -271,17 +196,14 @@ export default {
         console.log('three layer mounted')
         this.core.flow.manager.addCompNode(this);
         this.init();
-        this.addChildren(this)
+        // this.addChildren(this)
     },
     updated() {
         console.log('updated!!!!!')
         this.render();
     },
     destroyed() {
-        this.SceneDestroyed();
-        this.CameraDestroyed();
-        this.ChildrenDestroyed();
-
+        this.destroyThreeLayer();
         console.log('destroyed')
         this.core.flow.manager.removeCompNode(this);
     }

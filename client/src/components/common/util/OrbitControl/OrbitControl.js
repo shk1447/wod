@@ -283,6 +283,26 @@ var OrbitControl = function ( object, domElement ) {
         }
         this.update();
     };
+    this.panning = function(key){
+        switch(key){
+            case 'up':
+                pan( 0, scope.keyPanSpeed);
+                break;
+            case 'down':
+                pan( 0, - scope.keyPanSpeed);
+                break;
+            case 'left':
+                pan( scope.keyPanSpeed, 0);
+                break;
+            case 'right':
+                pan( - scope.keyPanSpeed, 0);
+                break;
+        }
+        scope.update();
+    };
+    this.setTarget = function(target){
+        scope.target.copy(target);
+    }
     /** hong **/
     //
     // internals
@@ -389,7 +409,7 @@ var OrbitControl = function ( object, domElement ) {
 
         var offset = new THREE.Vector3();
 
-        return function pan( deltaX, deltaY ) {
+        return function pan( deltaX, deltaY) {
 
             var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 

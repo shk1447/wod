@@ -25,26 +25,33 @@ export default {
         }]]
     },
     component: function() {
-        console.log("####################COMPONENT ####################")
-        var that = this;
-        this.mixins.forEach((mix)=>{
-            Object.assign(that, mix);
-        });
-        console.log(this);
-
         this.$obj = undefined;
         this.$texture = undefined;
         this.$parent = null;
-        this.props = {
-            path : {
-                obj:'/assets/models/boiler/boiler_ET.obj',
-                texture:'/assets/models/boiler/maps/{childName}.png',
-                material : '/assets/models/boiler/boiler_ET.mtl'
-            },
-            style:{
-                x:0,
-                y:0,
-                z:0
+        this.meta = {
+            props : {
+                path : {
+                    obj:'/assets/models/boiler/boiler_ET.obj',
+                    texture:'/assets/models/boiler/maps/{childName}.png',
+                    material : '/assets/models/boiler/boiler_ET.mtl'
+                },
+                style:{
+                    position : {
+                        x : 0,
+                        y : 0,
+                        z : 0
+                    },
+                    rotation : {
+                        x : 0,
+                        y : 0,
+                        z : 0
+                    },
+                    scale : {
+                        x : 0.1,
+                        y : 0.1,
+                        z : 0.1
+                    }
+                }
             }
         };
         this.created = function() {
