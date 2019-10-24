@@ -1,27 +1,42 @@
 <template>
-    <div ref="three_container" :style="meta.props.style" @dragover="dragover" @drop="drop">
-        <CameraControlPanel
-                @zoomIn="zoomIn"
-                @zoomOut = "zoomOut"
-                @moveLeft = "moveLeft"
-                @moveRight = "moveRight"
-                @moveUp = "moveUp"
-                @moveDown = "moveDown"
-                @topView = "topView"
-                @quarterView = "quarterView"
-        ></CameraControlPanel>
-    </div>
+    <Renderer
+              v-bind:renderer_props = "{antialias : true, alpha : true}"
+              v-bind:layer_meta = "meta">
+        <Scene>
+            <LayerGrid v-bind:size = "1000" v-bind:divisions="100"></LayerGrid>
+            <DirectionalLight v-bind:position = "{x : 1, y : 1, z: 1}"  v-bind:color = "0xffffff" v-bind:name="'_directionalLight'"></DirectionalLight>
+            <DirectionalLight v-bind:position = "{x : -1, y : -1, z: -1}"  v-bind:color = "0x888888" v-bind:name="'_directionalLight2'"></DirectionalLight>
+            <AmbientLight v-bind:color ="0x222222" v-bind:name="'_ambientLight'"></AmbientLight>
+            <PerspectiveCamera v-bind:camera_props="meta.props.setter.camera"></PerspectiveCamera>
+            <OrthographicCamera v-bind:camera_props="meta.props.setter.camera"></OrthographicCamera>
+            <ThreeEvent></ThreeEvent>
+            <OrbitControls></OrbitControls>
+            <TransformControl></TransformControl>
+            <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-bind:meta = "item"></component>
+        </Scene>
+
+    </Renderer>
+
 </template>
 
 <script>
 import * as THREE from 'three'
-import CameraControlPanel from './util/CameraControlPanel/CameraControlPanel'
-import threeLayer from './util/mixins/ThreeLayerComp/ThreeLayer/ThreeLayer'
+import CameraControlPanel from './three_layer_comp/CameraControlPanel/CameraControlPanel'
+import LayerControlPanel from './util/LayerControlPanel/LayerControlPanel'
+import Renderer from './three_layer_comp/Renderer/Renderer'
+import Scene from './three_layer_comp/Scene/Scene'
+import DirectionalLight from './three_layer_comp/Light/DirectionalLight'
+import AmbientLight from './three_layer_comp/Light/AmbientLight'
+import PerspectiveCamera from './three_layer_comp/Camera/PerspectiveCamera'
+import OrbitControls from './three_layer_comp/OrbitControl/OrbitControls'
+import OrthographicCamera from './three_layer_comp/Camera/OrthographicCamera'
+import ThreeEvent from './three_layer_comp/ThreeEvent/ThreeEvent'
+import LayerGrid from './three_layer_comp/LayerGrid/LayerGrid'
+import TransformControl from './three_layer_comp/TransformControl/TransformControl'
 export default {
     compName:'three-layer-comp',
     category:'Layer',
     type:'two_comp',
-    mixins : [threeLayer],
     props: ['meta'],
     init_props: {
         style: {
@@ -45,6 +60,11 @@ export default {
                     y : 10,
                     z : 10
                 }
+            },
+            grid : {
+                size : 1000,
+                divisions : 500,
+                gridList : []
             }
         },
         children:[]
@@ -141,6 +161,20 @@ export default {
                     "type" : "el-input",
                     "description" : "camera fov"
                 }
+            ],
+            [
+                {
+                    "key" : "props.setter.grid.size",
+                    "label" : "g_size",
+                    "type" : "el-input",
+                    "description" : "grid size"
+                },
+                {
+                    "key" : "props.setter.grid.divisions",
+                    "label" : "g_div",
+                    "type" : "el-input",
+                    "description" : "grid divisions"
+                }
             ]
         ]
     },
@@ -161,7 +195,10 @@ export default {
                 if(data.type === 'three_comp') {
                     e.stopImmediatePropagation();
                     console.log('drop comp', data);
-                    this.addChild(data)
+                    // this.addChild(data)
+                    console.log("################## DROP META #########################")
+                    console.log(this.meta);
+
                 }
             }
         },
@@ -178,32 +215,40 @@ export default {
                 console.log(item, loaded, total);
             };
 
-            this.initializeThreeLayer();
-            this.render();
+            // this.initializeThreeLayer();
+            // this.render();
         },
         loadedModel() {
             console.log('loaded model');
         }
     },
-    components : {CameraControlPanel},
+    components : {
+        LayerGrid,
+        ThreeEvent,
+        OrthographicCamera,
+        AmbientLight,
+        OrbitControls,
+        PerspectiveCamera, DirectionalLight, Scene, Renderer, LayerControlPanel, CameraControlPanel, TransformControl
+    },
     created() {
         console.log('three created props' , this.meta.props);
         console.log(this.three_comp);
+        console.log(this.meta);
         console.log('created')
     },
     mounted() {
         console.log(this.components);
         console.log('three layer mounted')
+        console.log(this);
         this.core.flow.manager.addCompNode(this);
-        this.init();
+        // this.init();
         // this.addChildren(this)
     },
     updated() {
         console.log('updated!!!!!')
-        this.render();
+        // this.render();
     },
     destroyed() {
-        this.destroyThreeLayer();
         console.log('destroyed')
         this.core.flow.manager.removeCompNode(this);
     }

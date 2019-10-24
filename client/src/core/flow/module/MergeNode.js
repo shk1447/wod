@@ -1,4 +1,4 @@
-module.exports = function FunctionNode(properties) {
+module.exports = function MergeNode(properties) {
     this.id = properties.id;
     this.input = properties.input;
     this.output = properties.output;

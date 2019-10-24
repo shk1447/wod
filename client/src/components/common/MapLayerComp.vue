@@ -104,7 +104,7 @@ export default {
         LMap, LTileLayer, LMarker
     },
     methods: {
-        input_data:function(data){
+        input_data:function(data, caller){
             console.log(data);
         },
         output_data: function() {

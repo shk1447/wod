@@ -41,9 +41,9 @@ export default {
                         z : 0
                     },
                     scale : {
-                        x : 0,
-                        y : 0,
-                        z : 0
+                        x : 0.1,
+                        y : 0.1,
+                        z : 0.1
                     }
                 }
             }
@@ -53,9 +53,6 @@ export default {
         };
         this.mounted = function() {
             console.log('turbine mounted')
-            this.$obj.position.x = this.props.style.x;
-            this.$obj.position.y = this.props.style.y;
-            this.$obj.position.z = this.props.style.z;
         };
         this.updated = function() {
             // three layer comp에서 mount 라이프사이클에 3D 컴포넌트를 비동기 메쉬, 매테리얼을 로드 하고

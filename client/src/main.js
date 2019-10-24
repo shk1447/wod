@@ -37,6 +37,8 @@ _.each(common, function(comp_list, type) {
             Vue.component(comp.compName, comp);
             Vue.prototype.two_comp[comp.compName] = comp;
         } else if(comp.type === "three_comp") {
+            console.log(comp);
+            Vue.component(comp.compName, comp);
             Vue.prototype.three_comp[comp.compName] = comp;
         }
     })

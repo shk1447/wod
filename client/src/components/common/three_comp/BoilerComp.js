@@ -1,9 +1,7 @@
-import ThreeComponentOutline from '../util/mixins/ThreeComp/ThreeComponentOutline/ThreeComponentOutline'
 
 export default {
     type:"three_comp",
     category:'KEPCO',
-    mixins : [ThreeComponentOutline],
     compName:"boiler-comp",
     fields: {
         style:[],
@@ -58,10 +56,7 @@ export default {
             console.log('boiler created')
         };
         this.mounted = function() {
-            console.log('boiler mounted')
-            this.$obj.position.x = this.props.style.x;
-            this.$obj.position.y = this.props.style.y;
-            this.$obj.position.z = this.props.style.z;
+            console.log('boiler mounted');
             console.log(this);
 
         };

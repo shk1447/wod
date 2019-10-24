@@ -255,8 +255,8 @@ module.exports = (function() {
                 event:d3.event
             },
             menu_items: [{
-                id:"node",
-                label:"Node",
+                id:"flow",
+                label:"Flow",
                 children:flow_modules.map(function(d) {return {id:d.compName, label:d.compName, action:addNode.bind(this),instance:d}}.bind(this))
             },{
                 id:"reset",

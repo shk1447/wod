@@ -6,7 +6,7 @@ module.exports = function PushNode(properties) {
     this.props = properties.props;
     this.flow = properties.flow;
 
-    this.input_data = function(data) {
+    this.input_data = function(data, caller) {
         this.output_data(data);
     }.bind(this);
     
@@ -14,7 +14,7 @@ module.exports = function PushNode(properties) {
         if(this.flow.wires && this.flow.wires.length > 0) {
             for(var i = 0; i < this.flow.wires.length; i++) {
                 var wired_obj = this.flow.wires[i];
-                wired_obj.input_data(data);
+                wired_obj.input_data(data, this);
             }
         }
     }.bind(this);

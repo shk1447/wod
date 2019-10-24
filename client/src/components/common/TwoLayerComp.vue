@@ -7,8 +7,10 @@
 
 <script>
 import uuid from 'uuid/v4';
+import BaseComp from './BaseComp.js';
 
 export default {
+    mixins:[BaseComp],
     compName:'two-layer-comp',
     category:'Layer',
     type:'two_comp',
@@ -67,7 +69,7 @@ export default {
     },
     data () {
         return {
-            meta:this.meta
+            test:'test'
         }
     },
     components : {
@@ -103,7 +105,7 @@ export default {
                 }
             }
         },
-        input_data:function(data){
+        input_data:function(data, caller){
             console.log(data);
         },
         output_data: function() {
@@ -123,11 +125,13 @@ export default {
     },
     mounted() {
         console.log('mounted')
-        this.core.flow.manager.addCompNode(this);
+        console.log(this.meta);
+        console.log(this.test);
+        //this.core.flow.manager.addCompNode(this);
     },
     destroyed() {
         console.log('destroyed')
-        this.core.flow.manager.removeCompNode(this);
+        //this.core.flow.manager.removeCompNode(this);
     }
 }
 </script>

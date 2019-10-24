@@ -8,7 +8,7 @@ module.exports = function PollingNode(properties) {
     this.props = properties.props;
     this.flow = properties.flow;
 
-    this.input_data = function() {
+    this.input_data = function(data, caller) {
 
     }.bind(this);
     this.output_data = function() {
@@ -16,7 +16,7 @@ module.exports = function PollingNode(properties) {
             if(this.flow.wires && this.flow.wires.length > 0) {
                 for(var i = 0; i < this.flow.wires.length; i++) {
                     var wired_obj = this.flow.wires[i];
-                    wired_obj.input_data(res);
+                    wired_obj.input_data(res, this);
                 }
             }
         }.bind(this));
