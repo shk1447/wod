@@ -59,15 +59,15 @@ export default {
             "type":"el-input",
             "description":"BORDER"
         },{
-            "key":"props.style.background",
-            "label":"BORDER",
-            "type":"el-input",
-            "description":"BACKGROUND"
-        },{
             "key":"props.style.zIndex",
             "label":"Z-INDEX",
             "type":"el-input",
             "description":"Z-INDEX"
+        }],[{
+            "key":"props.style.background",
+            "label":"BACKGROUND",
+            "type":"el-input",
+            "description":"BACKGROUND"
         }]]
     },
     data () {

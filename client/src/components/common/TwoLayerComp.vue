@@ -1,6 +1,6 @@
 <template>
-    <div :style="meta.props.style" @dragover="dragover" @drop="drop" v-on:click.native="onSelectedComp">
-        <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-on:click.native="onSelectedComp(item)"
+    <div :style="meta.props.style" @dragover="dragover" @drop="drop">
+        <component v-for="(item, index) in meta.props.children" :key="index" :is="item.compName" v-on:click.native="onSelectedComp(item, $event)"
         :meta="item"></component>
     </div>
 </template>
@@ -21,8 +21,8 @@ export default {
             overflow: "hidden",
             top:"",
             left:"",
-            width:"100%",
-            height:"100%",
+            width:"500px",
+            height:"300px",
             zIndex: "0",
             border:"1px dashed black"
         },
@@ -76,8 +76,11 @@ export default {
         
     },
     methods: {
-        onSelectedComp(item) {
+        onSelectedComp(item, event) {
             Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
+            Vue.custom_events.emit('active_transform', {active:true,event:event,item:item});
+            event.preventDefault();
+            event.stopImmediatePropagation();
         },
         dragover(e) {
             e.preventDefault();
@@ -125,8 +128,6 @@ export default {
     },
     mounted() {
         console.log('mounted')
-        console.log(this.meta);
-        console.log(this.test);
         //this.core.flow.manager.addCompNode(this);
     },
     destroyed() {

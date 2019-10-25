@@ -33,6 +33,9 @@ export default (function() {
     return {
         on:on,
         off:off,
-        emit:emit
+        emit:emit,
+        event_list:{
+            
+        }
     }
 })();

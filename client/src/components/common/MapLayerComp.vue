@@ -25,7 +25,7 @@ export default {
             top:"",
             left:"",
             width:"500px",
-            height:"500px",
+            height:"300px",
             zIndex: "0",
             border:"1px dashed black"
         },

@@ -77,6 +77,8 @@ export default {
             var setter = this.setValueByPath(this.selected_item, key, event);
             if(this.activeType === 'setter') {
                 this.custom_events.emit('redrawFlow');
+            } else {
+                //Vue.custom_events.emit('active_transform', {active:true});
             }
             this.$forceUpdate();
         },
@@ -114,7 +116,7 @@ export default {
     display: flex;
     text-align: right;
     margin-right: 6px;
-    width:60px;
+    width:80px;
     line-height:12px;
     align-items: center;
     justify-content: flex-end;

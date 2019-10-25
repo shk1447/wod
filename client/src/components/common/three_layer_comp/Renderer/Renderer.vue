@@ -1,6 +1,6 @@
 <template>
     <div ref="three_container" :style="layer_meta.props.style"  @dragover="dragover" @drop="drop" @mousedown="layerMouseDown">
-        <div style="position : absolute; top : 0px; left : 0px; z-index : 1">
+        <div style="position : absolute; top : 0px; left : 0px; z-index : 1; width: 100%; height:20px;">
             <CameraControlPanel
                 @zoomIn="zoomIn"
                 @zoomOut = "zoomOut"

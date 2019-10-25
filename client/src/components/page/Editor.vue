@@ -1,5 +1,6 @@
 <template>
-<div class="editor-area" @dragover="dragover" @drop="drop">
+<div class="editor-area" @dragover="dragover" @drop="drop" v-on:click.native="onInitialize($event)">
+    <transform-area></transform-area>
     <component v-for="item in instances" :key="item._id" :is="item.compName" :meta="item"></component>
 </div>
 </template>
@@ -8,6 +9,8 @@
 import _ from 'lodash';
 import api from "../../api";
 
+import TransformArea from './editor/TransformArea.vue';
+
 export default {
     data () {
         return {
@@ -15,7 +18,14 @@ export default {
             instances : []
         }
     },
+    components: {
+        'transform-area':TransformArea
+    },
     methods: {
+        onInitialize(e) {
+            console.log(e);
+            Vue.custom_events.emit('active_transform', {active:false});
+        },
         save() {
             var me = this;
             var param_instances = [];
