@@ -1,5 +1,5 @@
 <template>
-    <button :style="meta.props.style" @click="output_data">{{meta.props.style.label}}</button>
+    <input :style="meta.props.style" @keyup="output_data" :placeholder="meta.props.style.placeHolder"/>
 </template>
 
 <script>
@@ -7,7 +7,7 @@
 export default {
     type:'two_comp',
     category:'Form',
-    compName:'button-comp',
+    compName:'input-comp',
     input:false,
     output:true,
     props: ['meta'],
@@ -20,8 +20,8 @@ export default {
             width:"120px",
             height:"60px",
             zIndex: "0",
-            border:"1px dashed black",
-            label:'CLICK'
+            border:"1px solid black",
+            placeHolder:'please input.'
         },
         setter: {},
         children:[]
@@ -64,10 +64,10 @@ export default {
             "type":"el-input",
             "description":"Z-INDEX"
         }],[{
-            "key":"props.style.label",
-            "label":"LABEL",
+            "key":"props.style.placeHolder",
+            "label":"PLACEHOLDER",
             "type":"el-input",
-            "description":"LABEL"
+            "description":"PLACEHOLDER"
         }]]
     },
     data () {
@@ -79,11 +79,11 @@ export default {
         input_data:function(data){
             
         },
-        output_data: function() {
+        output_data: function(e) {
             if(this.meta.flow.wires && this.meta.flow.wires.length > 0) {
                 for(var i = 0; i < this.meta.flow.wires.length; i++) {
                     var wired_obj = this.meta.flow.wires[i];
-                    wired_obj.input_data(this);
+                    wired_obj.input_data({event:e,comp:this});
                 }
             }
         }

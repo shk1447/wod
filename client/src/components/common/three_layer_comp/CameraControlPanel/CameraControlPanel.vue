@@ -22,30 +22,40 @@
         },
         methods : {
             moveLeft(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 if(event.which === 1){
                     this.isClicked = true;
                     this.mouseDownHandler('moveLeft')
                 }
             },
             moveRight(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 if(event.which === 1){
                     this.isClicked = true;
                     this.mouseDownHandler('moveRight')
                 }
             },
             moveUp(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 if(event.which === 1){
                     this.isClicked = true;
                     this.mouseDownHandler('moveUp')
                 }
             },
             moveDown(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 if(event.which === 1){
                     this.isClicked = true;
                     this.mouseDownHandler('moveDown')
                 }
             },
             zoomIn(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 console.log(event);
                 if(event.which === 1){
                     this.isClicked = true;
@@ -53,20 +63,28 @@
                 }
             },
             zoomOut(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 if(event.which === 1){
                     this.isClicked = true;
                     this.mouseDownHandler('zoomOut')
                 }
             },
             topView(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 this.$emit('topView')
 
             },
             quarterView(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 this.$emit('quarterView')
 
             },
-            mouseUpEventHandler(){
+            mouseUpEventHandler(event){
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 this.isClicked = false;
                 clearTimeout(this.timeoutID)
             },

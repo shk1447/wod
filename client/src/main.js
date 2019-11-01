@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import _ from 'lodash';
 import Vue from 'vue';
 
