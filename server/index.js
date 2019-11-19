@@ -107,6 +107,7 @@ module.exports = function(config) {
     // })
 
     // middle-ware performance check!
+    app.use(compression());
     app.set('view cache', true);
     app.use('/assets', express.static(path.resolve(process.env.root_path,'./assets')));
     app.use('/css', express.static(path.resolve(process.env.root_path,'./css')));
@@ -119,7 +120,7 @@ module.exports = function(config) {
     app.use(helmet.xssFilter());
     app.disable('x-powered-by');
     app.use(cors());
-    app.use(compression());
+    
     app.use(bodyParser.urlencoded({limit:'5mb',extended:true}));
     app.use(bodyParser.json({limit:'5mb'}));
     app.use(busboy());
