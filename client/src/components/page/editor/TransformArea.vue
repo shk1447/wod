@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import FreeTransform from 'vue-free-transform';
+import FreeTransform from './FreeTransform';
 
 export default {
     data () {
@@ -39,7 +39,6 @@ export default {
             console.log(a,b,c);
         },
         update(e) {
-            console.log(e);
             if(e.angle || e.scaleX) {
                 if(e.angle) {
                     // rotation
@@ -47,6 +46,36 @@ export default {
                     // scale
                     // this.element.scaleX = e.scaleX;
                     // this.element.scaleY = e.scaleY;
+                    // tl tm tr ml mr bl bm br
+
+                    this.element.width = (e.origin_width * e.scaleX);
+                    this.element.height = (e.origin_height * e.scaleY);
+
+                    switch(e.scaleType) {
+                        case "tl" : 
+                            this.element.x = e.origin_x + e.origin_width - (e.origin_width * e.scaleX);
+                            this.element.y = e.origin_y + e.origin_height - (e.origin_height * e.scaleY);
+                            this.params.item.props.style.left = this.element.x + "px";
+                            this.params.item.props.style.top = this.element.y + "px";
+                        break;
+                        case "tm" :
+                            this.element.y = e.origin_y + e.origin_height - (e.origin_height * e.scaleY);
+                            this.params.item.props.style.top = this.element.y + "px";
+                        break;
+                        case "tr" :
+                            this.element.y = e.origin_y + e.origin_height - (e.origin_height * e.scaleY);
+                            this.params.item.props.style.top = this.element.y + "px";
+                        break;
+                        case "ml" :
+                            this.element.x = e.origin_x + e.origin_width - (e.origin_width * e.scaleX);
+                            this.params.item.props.style.left = this.element.x + "px";
+                        break;
+                        case "bl" :
+                            this.element.x = e.origin_x + e.origin_width - (e.origin_width * e.scaleX);
+                            this.params.item.props.style.left = this.element.x + "px";
+                        break;
+                    }
+                    console.log(e.scaleType);
                     this.params.item.props.style.width = this.element.width + 'px';
                     this.params.item.props.style.height = this.element.height + 'px';
                 }

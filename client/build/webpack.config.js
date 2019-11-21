@@ -72,11 +72,14 @@ var webpack_config = {
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module) {
+      minChunks(module) {
+        // any required modules inside node_modules are extracted to vendor
         return (
-          module.resource &&
-          /\.(js|css|sass|scss|less|json)$/.test(module.resource) &&
-          (module.resource.indexOf(path.join(__dirname, '../node_modules')) === 0 || module.resource.indexOf('/use-with-node-js/') >= 0)
+            module.resource &&
+            /\.(js|css|sass|scss|less|json)$/.test(module.resource) &&
+            module.resource.indexOf(
+                path.join(__dirname, '../node_modules')
+            ) === 0
         )
       }
     }),
