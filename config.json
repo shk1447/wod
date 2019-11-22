@@ -1,7 +1,7 @@
 {
     "root_path":"",
     "https":false,
-    "port": 9001,
+    "port": 9000,
     "tcp_port":2000,
     "session_time":120,
     "external":{

@@ -36,18 +36,14 @@ export default {
     },
     methods: {
         onSelect(a,b,c) {
-            console.log(a,b,c);
+            
         },
         update(e) {
             if(e.angle || e.scaleX) {
                 if(e.angle) {
                     // rotation
                 } else {
-                    // scale
-                    // this.element.scaleX = e.scaleX;
-                    // this.element.scaleY = e.scaleY;
                     // tl tm tr ml mr bl bm br
-
                     this.element.width = (e.origin_width * e.scaleX);
                     this.element.height = (e.origin_height * e.scaleY);
 
@@ -75,7 +71,6 @@ export default {
                             this.params.item.props.style.left = this.element.x + "px";
                         break;
                     }
-                    console.log(e.scaleType);
                     this.params.item.props.style.width = this.element.width + 'px';
                     this.params.item.props.style.height = this.element.height + 'px';
                 }
@@ -114,6 +109,8 @@ export default {
         console.log('mounted')
     },
     destroyed() {
+        var me = this;
+        me.custom_events.off('active_transform',me.handleSelectedItem);
         console.log('destroyed')
     }
 }

@@ -61,7 +61,12 @@ export default {
                 },
                 viewer: {
                     left:[],
-                    right:[],
+                    right:[{
+                        id:"",
+                        label:"",
+                        icon:"fas fa-code",
+                        action:this.onFlow
+                    }],
                     panels:[{
                         name:'Page',
                         comp:'page-panel'
@@ -106,6 +111,9 @@ export default {
         "analysis": Analysis
     },
     methods: {
+        onFlow() {
+            Vue.custom_events.emit('toggle_flip', {});
+        },
         onSavePage() {
             console.log('save');
             var me = this;

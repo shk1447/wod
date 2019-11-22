@@ -35,7 +35,7 @@ export default {
             var me = this;
             var ret_list = [];
             if(me.active_page === '') {
-                ret_list = me.comp_list;
+                ret_list = [];
             } else {
                 ret_list = me.comp_list.filter(function(d) { return d.page_id === me.active_page});
             }

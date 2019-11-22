@@ -96,6 +96,7 @@ export default {
     },
     destroyed() {
         console.log('destroyed')
+        this.onInitialize();
     }
 }
 </script>
