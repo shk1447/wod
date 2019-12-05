@@ -96,7 +96,8 @@ export default {
                     right:[],
                     panels:[]
                 }
-            }
+            },
+            flow:false
         }
     },
     components: {
@@ -112,6 +113,15 @@ export default {
     },
     methods: {
         onFlow() {
+            this.flow = !this.flow;
+            if(this.flow) {
+                this.tool.viewer.panels.push({
+                    name:'Property',
+                    comp:'property-panel'
+                });
+            } else {
+                this.tool.viewer.panels.pop();
+            }
             Vue.custom_events.emit('toggle_flip', {});
         },
         onSavePage() {

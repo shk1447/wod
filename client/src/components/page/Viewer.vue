@@ -57,8 +57,7 @@ export default {
     },
     mounted() {
         console.log('mounted');
-        var me = this;
-        me.custom_events.on('toggle_flip',me.toggleFlip);
+        this.custom_events.on('toggle_flip',this.toggleFlip);
     },
     updated() {
         console.log('updated')
@@ -66,7 +65,7 @@ export default {
     destroyed() {
         console.log('destroyed');
         this.core.flow.manager.destroyFlow();
-        me.custom_events.off('toggle_flip',me.toggleFlip);
+        this.custom_events.off('toggle_flip',this.toggleFlip);
     }
 }
 </script>

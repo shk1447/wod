@@ -8,7 +8,9 @@
 import _ from 'lodash';
 export default {
     data () {
-        return {}
+        return {
+            page_id:""
+        }
     },
     methods: {
         dragover(e) {
