@@ -86,7 +86,7 @@ export default {
     created() {
         var me = this;
         me.custom_events.on('outline', me.refresh);
-        me.custom_events.on('outline_active', me.setActive);
+        me.custom_events.on('onloaded_page', me.setActive);
     },
     mounted() {
         var me = this;
@@ -99,7 +99,7 @@ export default {
     destroyed() {
         var me = this;
         me.custom_events.off('outline', me.refresh);
-        me.custom_events.off('outline_active', me.setActive);
+        me.custom_events.off('onloaded_page', me.setActive);
     }
 }
 </script>

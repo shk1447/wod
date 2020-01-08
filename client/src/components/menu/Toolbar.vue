@@ -1,7 +1,7 @@
 <template>
 <div class="toolbar-wrapper">
     <template v-for="tool in tool.left" >
-        <div class="tool left" :key="tool.id" v-on:click="tool.action">
+        <div :class="'tool left' + (tool.disabled ? ' disabledTool' : '')" :key="tool.id" v-on:click="tool.action">
             <span style="font-size:1.2em;">
                 <i v-if="tool.icon !== ''" :class="tool.icon"></i>{{tool.label}}
             </span>
@@ -9,7 +9,7 @@
     </template>
     <div style="flex:1 1 100%; -webkit-app-region: drag;"></div>
     <template v-for="tool in tool.right" >
-        <div class="tool right" :key="tool.id" v-on:click="tool.action">
+        <div :class="'tool right' + (tool.disabled ? ' disabledTool' : '')" :key="tool.id" v-on:click="tool.action">
             <span style="font-size:1.2em;">
                 <i v-if="tool.icon !== ''" :class="tool.icon"></i>{{tool.label}}
             </span>
@@ -87,6 +87,11 @@ export default {
 
     .tool.right {
         border-left:1px solid #e0e3eb;
+    }
+
+    .disabledTool {
+        opacity: 0.4;
+        pointer-events: none;
     }
 
 </style>

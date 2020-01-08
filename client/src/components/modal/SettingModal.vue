@@ -21,8 +21,8 @@
             v-model="isCloud"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            active-text="Cloud"
-            inactive-text="Local">
+            active-text="CLOUD"
+            inactive-text="LOCAL">
         </el-switch>
         <el-form ref="setting_page_form" size="mini" label-position="left" :model="getForms" label-width="60px" :rules="getRules">
             <el-form-item label="JSON" prop="instances_path">

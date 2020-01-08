@@ -87,7 +87,7 @@ export default {
                         message:"페이지가 로드되었습니다.",
                         type:"success"
                     });
-                    me.custom_events.emit('outline_active', data.page_id)
+                    me.custom_events.emit('onloaded_page', data.page_id)
                 },0)
             }
         }

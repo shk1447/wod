@@ -45,9 +45,10 @@ export default {
                         id:"save",
                         icon: "fas fa-save",
                         label:'',
-                        action:this.onSavePage
+                        action:this.onSavePage,
+                        disabled:true
                     },{
-                        id:"save",
+                        id:"setting",
                         icon: "fas fa-cog",
                         label:'',
                         action:this.onSetting
@@ -72,7 +73,8 @@ export default {
                         id:"",
                         label:"",
                         icon:"fas fa-code",
-                        action:this.onFlow
+                        action:this.onFlow,
+                        disabled:true
                     }],
                     panels:[{
                         name:'Page',
@@ -150,6 +152,9 @@ export default {
                 this.$refs.side_bar.panels = this.tool[this.$route.name].panels;
             }
             this.$refs.side_bar.content_area = this.$refs.content_area;
+        },
+        activeSaveBtn(page_id) {
+            this.tool.editor.right[0].disabled = false;
         }
     },
     beforeCreate() {
@@ -171,6 +176,7 @@ export default {
             this.$refs.side_bar.panels = this.tool[this.$route.name].panels;
         }
         this.$refs.side_bar.content_area = this.$refs.content_area;
+        this.custom_events.on('onloaded_page', this.activeSaveBtn);
         console.log('mounted');
     },
     beforeUpdate() {
@@ -183,7 +189,7 @@ export default {
 
     },
     destroyed() {
-
+        this.custom_events.off('onloaded_page', this.activeSaveBtn);
     }
 }
 </script>
