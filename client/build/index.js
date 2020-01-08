@@ -22,7 +22,7 @@ const webpackConfig = require('./webpack.config');
 const spinner = ora('building for production...');
 spinner.start();
 
-var root_path = path.resolve(__dirname,'../../bundle');
+var root_path = path.resolve(__dirname,'../../app/bundle');
 rm(root_path, err => {
   if(err) throw err;
   webpack(webpackConfig, (err, stats) => {

@@ -257,7 +257,11 @@ module.exports = (function() {
             menu_items: [{
                 id:"flow",
                 label:"Flow",
-                children:flow_modules.map(function(d) {return {id:d.compName, label:d.compName, action:addNode.bind(this),instance:d}}.bind(this))
+                children:flow_modules.map(function(d) {
+                    return {
+                        id:d.compName, label:d.compName, action:addNode.bind(this),instance:d
+                    }
+                }.bind(this))
             },{
                 id:"reset",
                 label:"Reset",
@@ -283,7 +287,7 @@ module.exports = (function() {
         menu.instance.id = uuid();
         menu.instance.page_id = 'flow';
         menu.instance.flow = {
-            x:this.context_position.x,
+            x: this.context_position.x,
             y: this.context_position.y
         }
         addNodes([menu.instance])

@@ -27,6 +27,13 @@ export default {
             Vue.custom_events.emit('active_transform', {active:false});
         },
         save() {
+            // var a = document.createElement('a');
+            // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({"test":"test"}));
+            // a.setAttribute("target",     "_blank"     );
+            // a.setAttribute("href",     dataStr     );
+            // a.setAttribute("download", "scene.json");
+            // a.click();
+            window.saveFile();
             var me = this;
             var param_instances = [];
             function recursive_instances(instances, parent_id) {

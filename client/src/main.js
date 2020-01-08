@@ -26,6 +26,10 @@ import vmodal from 'vue-js-modal';
 Vue.use(vmodal);
 Vue.use(ElementUI, { locale });
 
+import * as VueGL from 'vue-gl';
+
+Object.keys(VueGL).forEach((name) => { Vue.component(name, VueGL[name]) })
+
 Vue.prototype.two_comp = {};
 Vue.prototype.three_comp = {};
 Vue.prototype.flow_comp = {};

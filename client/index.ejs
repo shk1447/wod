@@ -5,8 +5,26 @@
     <title>Research Project</title>
     <link rel="stylesheet" href="./vendor/font-awesome-5.8.1/css/all.css">
     <!--<script src='./vendor/three/examples/js/libs/stats.min.js'></script>-->
-    <script></script>
-    <script></script>
+    <script>
+        window.saveFile = function(opt, content) {
+            try {
+                const fs = require('fs');
+                const { dialog } = require('electron').remote;
+                dialog.showSaveDialog({
+                    title: opt.title
+                }, (filename) => {
+                    fs.writeFile(filename, content, (err) => {
+                        if(err) {
+                            console.log('err : ', err.message);
+                            return;
+                        }
+                    })
+                })
+            } catch (error) {
+                
+            }
+        }
+    </script>
 </head>
 
 <body>

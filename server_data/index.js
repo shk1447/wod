@@ -45,23 +45,43 @@ server.listen(9090, function() {
 const {Database, Tcp, Udp} = require('./connector')
 
 module.exports = function() {
-    var db = new Database({
-        "type":"mysql",
-        "host": "127.0.0.1",
-        "user": "root",
-        "password": "soul1087",
-        "database": "renobit"
-    })
+    // var db = new Database({
+    //     "type":"mysql",
+    //     "host": "127.0.0.1",
+    //     "user": "root",
+    //     "password": "soul1087",
+    //     "database": "renobit"
+    // })
     
-    db.executeQuery("SELECT * FROM TB_LICENSE").then((rows) => {
-        //console.log(rows);
-    });
+    // db.executeQuery("SELECT * FROM TB_LICENSE").then((rows) => {
+    //     console.log(rows);
+    // });
+
+    // var oracledb = new Database({
+    //     type:"oracledb",
+    //     host:"localhost",
+    //     user:"renobit_java",
+    //     password:"renobit_java",
+    //     database:"xe"
+    // });
+
+    // setTimeout(function() {
+    //     for(var i = 30000; i < 40000; i++) {
+    //         var query = "INSERT INTO PERF_TEST VALUES ('ID" + i.toString() + "','NAME" + i.toString() + "','blah blah blah blah blah blah blah blah blah blah blah blah')";
+    //         oracledb.executeQuery(query).then((a) => {
+    //             console.log(a);
+    //         }).catch((err) => {
+    //             console.log(err);
+    //         });
+    //         //console.log(query);
+    //     }
+    // },1000)
 
     var tcp = new Tcp({host:"localhost", port:9090})
     tcp.on("data", function(data) {
-        console.log(data);
+        console.log('received data from server :' , data);
     });
     setInterval(function() {
-        tcp.write("i am client");
+        tcp.write("hello server");
     },2000)
 }();

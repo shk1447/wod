@@ -18,17 +18,13 @@ module.exports = function(app,config) {
                 if(path === 'data' || (path === 'users' && (funcName === 'login' || funcName === 'logout'))) {
                     app[routeName]('/' + path + '/' + funcName, func);
                 } else {
-                    app[routeName]('/' + path + '/' + funcName, ensureAuth, func);
+                    app[routeName]('/' + path + '/' + funcName, func);
                 }
             })
         })
     })
 
     app.get('/', function(req,res,next) {
-        if(req.isAuthenticated()) {
-            res.sendFile(path.resolve(process.env.root_path, './index.html'));
-        } else {
-            res.redirect('/login');
-        }
+        res.sendFile(path.resolve(process.env.root_path, './index.html'));
     })
 }

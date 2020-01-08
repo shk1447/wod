@@ -13,7 +13,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-var root_path = path.resolve(__dirname,'../../bundle');
+var root_path = path.resolve(__dirname,'../../app/bundle');
 
 var webpack_config = {
   watch:process.env.watch === 'true',
@@ -44,9 +44,6 @@ var webpack_config = {
     },{
       from: path.resolve(__dirname, '../src/vendor'),
       to: path.resolve(root_path, './vendor')
-    },{
-      from: path.resolve(__dirname, '../../login'),
-      to: path.resolve(root_path, './login')
     }]),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html

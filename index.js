@@ -15,5 +15,5 @@ process.env.mode = cmd.mode;
 process.env.port = config.port;
 process.env.database = config.database.type;
 process.env.root_path = config.root_path !== "" ? path.resolve(config.root_path, './bundle')
-    : path.resolve(__dirname, relative_path, './bundle');
+    : path.resolve(__dirname, relative_path, './app/bundle');
 require('./server')(config);

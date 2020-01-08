@@ -7,7 +7,7 @@
             </span>
         </div>
     </template>
-    <div style="flex:1 1 100%; "></div>
+    <div style="flex:1 1 100%; -webkit-app-region: drag;"></div>
     <template v-for="tool in tool.right" >
         <div class="tool right" :key="tool.id" v-on:click="tool.action">
             <span style="font-size:1.2em;">

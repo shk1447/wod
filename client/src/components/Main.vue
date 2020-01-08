@@ -10,6 +10,7 @@
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
 
         <page-modal ref="pageModal"></page-modal>
+        <login-modal ref="loginModal"></login-modal>
         <context-menu ref="contextMenu"></context-menu>
     </div>
 </template>
@@ -27,6 +28,7 @@ import Manager from './page/Manager.vue';
 import Analysis from './page/Analysis.vue';
 
 import PageModal from './modal/CreatePageModal.vue';
+import LoginModal from './modal/LoginModal.vue';
 
 
 export default {
@@ -74,22 +76,8 @@ export default {
                 },
                 manager: {
                     left:[],
-                    right:[{
-                        id:"",
-                        label:' Deploy',
-                        icon:"fas fa-upload",
-                        action:this.onSaveFlow
-                    }],
-                    panels:[{
-                        name:'Outline',
-                        comp:'outline-panel'
-                    },{
-                        name:'Property',
-                        comp:'property-panel'
-                    },{
-                        name:'Description',
-                        comp:'description-panel'
-                    }]
+                    right:[],
+                    panels:[]
                 },
                 analysis: {
                     left:[],
@@ -101,6 +89,7 @@ export default {
         }
     },
     components: {
+        "login-modal": LoginModal,
         "page-modal": PageModal,
         "context-menu": ContextMenu,
         "nav-menu" : NavMenu,
@@ -121,8 +110,9 @@ export default {
                 });
             } else {
                 this.tool.viewer.panels.pop();
+                this.onSaveFlow();
             }
-            Vue.custom_events.emit('toggle_flip', {});
+            Vue.custom_events.emit('toggle_flip', {page_id:this.$refs.content_comp.page_id});
         },
         onSavePage() {
             console.log('save');
@@ -139,6 +129,7 @@ export default {
             this.core.flow.manager.saveFlow().then(function() {
                 me.custom_events.emit('page', {});
                 me.custom_events.emit('outline', {});
+                me.$refs.content_comp.reload();
             });
         },
         onPagePopup() {
@@ -166,6 +157,7 @@ export default {
 
     },
     mounted() {
+        this.$refs.loginModal.show();
         // this.active_content = this.$route.name;
         if(this.$route.name) {
             this.$refs.tool_bar.tool = this.tool[this.$route.name];
@@ -191,9 +183,9 @@ export default {
 
 <style>
     html, body {
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
     }
 
     body {

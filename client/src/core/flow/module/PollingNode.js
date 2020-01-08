@@ -11,6 +11,7 @@ module.exports = function PollingNode(properties) {
     this.input_data = function(data, caller) {
 
     }.bind(this);
+    
     this.output_data = function() {
         http.get(this.meta.props.setter.url).then(function(res) {
             if(this.flow.wires && this.flow.wires.length > 0) {
@@ -20,7 +21,7 @@ module.exports = function PollingNode(properties) {
                 }
             }
         }.bind(this));
-    }.bind(this);
+    };
 
     this.created = function() {
         

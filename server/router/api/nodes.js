@@ -5,21 +5,21 @@ const mongoose = require('mongoose');
 module.exports = {
     get : {
         "comp":function(req,res,next) {
-            nodes.find({page_id:{$ne:'flow'}}).then((nodes) => {
+            nodes.find({type:{$ne:'flow_comp'}}).then((nodes) => {
                 res.status(200).send(nodes);
             }).catch((err) => {
                 res.status(500).send(err);
             });
         },
         "flow":function(req,res,next) {
-            nodes.find({"flow":{$exists:true}}).then((nodes) => {
+            nodes.find({"page_id":req.query.page_id}).then((nodes) => {
                 res.status(200).send(nodes);
             }).catch((err) => {
                 res.status(500).send(err);
             });
         },
         "all" : function(req,res,next) {
-            nodes.find({page_id:{$ne :'flow'}}).then((nodes) => {
+            nodes.find({type:{$ne :'flow_comp'}}).then((nodes) => {
                 var page_list = [];
                 _.each(nodes, (node, i) => {
                     if(node.page_id) {

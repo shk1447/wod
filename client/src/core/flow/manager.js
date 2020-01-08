@@ -2,6 +2,7 @@ const _ = require('lodash');
 const api = require('../../api').default;
 
 module.exports = function(layer) {
+    var pageId = "";
     var layer = layer;
     var map = {}
     var delete_items = [];
@@ -18,8 +19,18 @@ module.exports = function(layer) {
             delete map[instance.meta.page_id+"/"+instance.meta.id];
             console.log(map)
         },
-        loadFlow:function() {
-            api.nodes.getFlow().then(function(nodes) {
+        loadFlow:function(page_id) {
+            layer.clear();
+            api.nodes.getFlow(page_id).then(function(nodes) {
+                _.each(nodes, function(v,k) {
+                    if(!v.flow) {
+                        v.flow = {
+                            x: parseInt(v.props.style.left),
+                            y: parseInt(v.props.style.top),
+                            wires:[]
+                        }
+                    }
+                })
                 layer.addNodes(nodes);
             });
         },
@@ -66,7 +77,7 @@ module.exports = function(layer) {
                         id:node.id,
                         input:node.input,
                         output:node.output,
-                        page_id:node.page_id,
+                        page_id:pageId,
                         parent_id:node.parent_id,
                         compName:node.compName,
                         type:node.type,
@@ -82,8 +93,8 @@ module.exports = function(layer) {
                 })
             })
         },
-        executeFlow:function() {
-            api.nodes.getFlow().then(function(res) {
+        executeFlow:function(page_id) {
+            api.nodes.getFlow(page_id).then(function(res) {
                 _.each(res, function(node,i) {
                     if(node.type === 'flow_comp') {
                         var flow_module = new Vue[node.type][node.compName].class(node);
@@ -101,6 +112,7 @@ module.exports = function(layer) {
                     }
                 })
             });
+            pageId = page_id;
         },
         destroyFlow: function() {
             _.each(map, function(comp, i) {
