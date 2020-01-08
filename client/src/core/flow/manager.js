@@ -34,9 +34,6 @@ module.exports = function(layer) {
                 layer.addNodes(nodes);
             });
         },
-        addNode: function(node) {
-
-        },
         removeNode: function(node) {
             // type에 따라 다른 명령
             var instance = {

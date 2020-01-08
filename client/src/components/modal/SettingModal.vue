@@ -1,11 +1,11 @@
 <template>
 <modal
     class="w-modal"
-    ref="create_page_modal"
-    id="create-page"
-    name="create-page"
-    :width="260"
-    :height="180"
+    ref="setting_modal"
+    id="setting-page"
+    name="setting-page"
+    :width="420"
+    :height="210"
     :isAutoHeight="false"
     :reset="false"
     :clickToClose="true"
@@ -16,9 +16,17 @@
         <a class="close-modal-btn" role="button" @click="beforeModalClose()"><i class="el-icon-error"></i></a>
     </div>
     <div class="modal-body">
-        <el-form ref="create_page_form" size="mini" label-position="left" :model="form" label-width="60px" :rules="rules">
-            <el-form-item label="NAME" prop="page_id">
-                <el-input v-model="form.page_id"></el-input>
+        <el-switch
+            style="display: block; margin-bottom:20px;"
+            v-model="isCloud"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="Cloud"
+            inactive-text="Local">
+        </el-switch>
+        <el-form ref="setting_page_form" size="mini" label-position="left" :model="form" label-width="60px" :rules="rules">
+            <el-form-item label="JSON" prop="instances_path">
+                <el-input ref="test" type="file" v-model="form.instances_path" @change="onfileChange"></el-input>
             </el-form-item>
         </el-form>
     </div>
@@ -36,34 +44,30 @@ import api from "../../api";
 export default {
     data () {
         return {
-            node_types:[],
+            isCloud:false,
             form: {
-                page_id: '',
-                instances: [{
-                    id: "two_layer",
-                    input:true,
-                    output:false,
-                    compName: "two-layer-comp",
-                    type:"two_comp",
-                    props: {
-                        style:{
-                            position: "absolute",
-                            overflow: "hidden",
-                            top: "0%",
-                            left: "0%",
-                            width: "100%",
-                            height: "100%",
-                            zIndex: "0"
-                        },
-                        children:[]
-                    }
-                }],
-                instances_path:''
+                cloud: {
+                    url:''
+                },
+                local: {
+                    instances: [],
+                    instances_path:''   
+                }
             },
             rules: {
-                page_id:[{required:true,message:'Please input name', trigger:'blur'}]
-            },
-            node_info:{}
+                cloud: {
+                    url:[{required:true,message:'Please input url', trigger:'blur'}],
+                },
+                local: {
+                    instances:[{required:true,message:'Please select json file', trigger:'blur'}]
+                }
+            }
+        }
+    },
+    computed: {
+        form() {
+
+            return this.isCloud ? this.form["cloud"] : this.form["local"];
         }
     },
     components:{
@@ -71,10 +75,10 @@ export default {
     },
     methods: {
         show(opt) {
-            this.$modal.show('create-page');
+            this.$modal.show('setting-page');
         },
         beforeModalClose() {
-            this.$modal.hide('create-page');
+            this.$modal.hide('setting-page');
         },
         onfileChange(e) {
             var me = this;

@@ -61,12 +61,13 @@ import router from './router';
 import io from 'socket.io-client';
 
 Vue.prototype.web_socket = io.connect({
-    path:'/socket.io',
+    url:'ws://localhost:9000/socket.io',
     transports:['websocket'],
-    secure:true
+    secure:false
 });
 Vue.prototype.web_socket.on('connected', function(data) {
     console.log('Web Socket 연결 : ', data.id);
+    alert('test');
 })
 
 // event handler

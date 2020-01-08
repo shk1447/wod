@@ -9,7 +9,7 @@
         </div>
         <nav-menu :collapse="onCollapse" :itemClick="onItemClick"></nav-menu>
 
-        <page-modal ref="pageModal"></page-modal>
+        <setting-modal ref="settingModal"></setting-modal>
         <login-modal ref="loginModal"></login-modal>
         <context-menu ref="contextMenu"></context-menu>
     </div>
@@ -27,8 +27,8 @@ import Viewer from './page/Viewer.vue';
 import Manager from './page/Manager.vue';
 import Analysis from './page/Analysis.vue';
 
-import PageModal from './modal/CreatePageModal.vue';
 import LoginModal from './modal/LoginModal.vue';
+import SettingModal from './modal/SettingModal.vue';
 
 
 export default {
@@ -46,6 +46,11 @@ export default {
                         icon: "fas fa-save",
                         label:'',
                         action:this.onSavePage
+                    },{
+                        id:"save",
+                        icon: "fas fa-cog",
+                        label:'',
+                        action:this.onSetting
                     }],
                     panels:[{
                         name:'Page',
@@ -89,8 +94,8 @@ export default {
         }
     },
     components: {
+        "setting-modal": SettingModal,
         "login-modal": LoginModal,
-        "page-modal": PageModal,
         "context-menu": ContextMenu,
         "nav-menu" : NavMenu,
         "tool-bar" : Toolbar,
@@ -114,6 +119,9 @@ export default {
             }
             Vue.custom_events.emit('toggle_flip', {page_id:this.$refs.content_comp.page_id});
         },
+        onSetting() {
+            this.$refs.settingModal.show();
+        },
         onSavePage() {
             console.log('save');
             var me = this;
@@ -131,9 +139,6 @@ export default {
                 me.custom_events.emit('outline', {});
                 me.$refs.content_comp.reload();
             });
-        },
-        onPagePopup() {
-            this.$refs.pageModal.show();
         },
         onCollapse(state) {
             console.log(state);
