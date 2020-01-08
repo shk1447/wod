@@ -24,7 +24,7 @@
             active-text="Cloud"
             inactive-text="Local">
         </el-switch>
-        <el-form ref="setting_page_form" size="mini" label-position="left" :model="form" label-width="60px" :rules="rules">
+        <el-form ref="setting_page_form" size="mini" label-position="left" :model="getForms" label-width="60px" :rules="getRules">
             <el-form-item label="JSON" prop="instances_path">
                 <el-input ref="test" type="file" v-model="form.instances_path" @change="onfileChange"></el-input>
             </el-form-item>
@@ -65,9 +65,11 @@ export default {
         }
     },
     computed: {
-        form() {
-
+        getForms() {
             return this.isCloud ? this.form["cloud"] : this.form["local"];
+        },
+        getRules() {
+            return this.isCloud ? this.rules["cloud"] : this.rules["local"];
         }
     },
     components:{
