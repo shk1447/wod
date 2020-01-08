@@ -1,6 +1,8 @@
 import http from "../utils/http.js";
 
 export default {
+    local:true,
+    data: [],
     url:"http://localhost:9000",
     removePage:function(params) {
         var url = this.url + "/nodes/removePage";
@@ -27,7 +29,6 @@ export default {
         });
     },
     getNodes: function() {
-        console.log(this);
         var url = this.url +  "/nodes/all";
         return http.get(url).then(function(res) {
             return res;

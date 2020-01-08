@@ -28,7 +28,8 @@ export default {
                 scaleX:1,
                 scaleY:1
             },
-            params:null
+            params:null,
+            target:null
         }
     },
     components: {
@@ -86,7 +87,7 @@ export default {
             if(params.active) {
                 this.visible = true;
                 this.params = params;
-                //var offset = $(params.event.currentTarget).offset()
+                this.target = params.event.currentTarget;
                 this.refresh();
             } else {
                 this.visible = false;
@@ -94,10 +95,17 @@ export default {
             }
         },
         refresh() {
-            this.element.x = this.params.event.currentTarget.offsetLeft;
-            this.element.y = this.params.event.currentTarget.offsetTop;
-            this.element.width = this.params.event.currentTarget.clientWidth;
-            this.element.height = this.params.event.currentTarget.clientHeight;
+            this.$nextTick(() => {
+                try {
+                    this.element.x = this.target.offsetLeft;
+                    this.element.y = this.target.offsetTop;
+                    this.element.width = this.target.clientWidth;
+                    this.element.height = this.target.clientHeight;
+                    this.$forceUpdate();
+                } catch (error) {
+                    console.log(error);
+                }
+            })
         }
     },
     created() {
@@ -106,11 +114,13 @@ export default {
     mounted() {
         var me = this;
         me.custom_events.on('active_transform',me.handleSelectedItem);
+        me.custom_events.on('refresh_transform',me.refresh);
         console.log('mounted')
     },
     destroyed() {
         var me = this;
         me.custom_events.off('active_transform',me.handleSelectedItem);
+        me.custom_events.off('refresh_transform',me.refresh);
         console.log('destroyed')
     }
 }

@@ -67,7 +67,6 @@ Vue.prototype.web_socket = io.connect({
 });
 Vue.prototype.web_socket.on('connected', function(data) {
     console.log('Web Socket 연결 : ', data.id);
-    alert('test');
 })
 
 // event handler

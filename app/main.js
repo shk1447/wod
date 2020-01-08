@@ -8,12 +8,14 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
-        minWidth:1200,
-        minHeight:600,
-        width: 1200, 
-        height: 600,
+        minWidth:1600,
+        minHeight:900,
+        width: 1600, 
+        height: 900,
         kiosk: false,
-        fullscreen: false,
+        fullscreen: true,
+        fullscreenable:false,
+        resizable:false,
         frame:false
     });
 

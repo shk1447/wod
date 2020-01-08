@@ -77,10 +77,10 @@ export default {
     },
     methods: {
         onSelectedComp(item, event) {
-            Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
-            Vue.custom_events.emit('active_transform', {active:true,event:event,item:item});
             event.preventDefault();
             event.stopImmediatePropagation();
+            Vue.custom_events.emit('selected_item', {panel:'Property',type:'style',item:item});
+            Vue.custom_events.emit('active_transform', {active:true,event:event,item:item});
         },
         dragover(e) {
             e.preventDefault();

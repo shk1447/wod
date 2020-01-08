@@ -78,7 +78,7 @@ export default {
             if(this.activeType === 'setter') {
                 this.custom_events.emit('redrawFlow');
             } else {
-                //Vue.custom_events.emit('active_transform', {active:true});
+                Vue.custom_events.emit('refresh_transform', {});
             }
             this.$forceUpdate();
         },

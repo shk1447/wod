@@ -156,7 +156,9 @@ export default {
 
     },
     created() {
-
+        if(!this.$route.name) {
+            this.$router.push({path:'editor'})
+        }
     },
     beforeRouteUpdate(to, from) {
 
