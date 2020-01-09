@@ -9,8 +9,7 @@
     :isAutoHeight="false"
     :reset="false"
     :clickToClose="false"
-    :resizable="false"
-    draggable=".modal-header">
+    :resizable="false">
     
     <div class="limiter">
 		<div class="container-login100" style="background:#f0f0f0;">

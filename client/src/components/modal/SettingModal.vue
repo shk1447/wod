@@ -5,33 +5,33 @@
     id="setting-page"
     name="setting-page"
     :width="420"
-    :height="210"
+    :height="'auto'"
     :isAutoHeight="false"
     :reset="false"
     :clickToClose="true"
     :resizable="false"
     draggable=".modal-header">
     <div class="modal-header">
-        <h5>Upload Page</h5>
-        <a class="close-modal-btn" role="button" @click="beforeModalClose()"><i class="el-icon-error"></i></a>
+        <h5>Setting</h5>
+        <a class="close-modal-btn" role="button" @click="beforeModalClose()">
+            <i class="el-icon-error"></i>
+        </a>
     </div>
     <div class="modal-body">
         <el-switch
-            style="display: block; margin-bottom:20px;"
+            class="setting-option"
             v-model="isCloud"
             active-color="#13ce66"
             inactive-color="#ff4949"
             active-text="CLOUD"
             inactive-text="LOCAL">
         </el-switch>
-        <el-form ref="setting_page_form" size="mini" label-position="left" :model="getForms" label-width="60px" :rules="getRules">
-            <el-form-item label="JSON" prop="instances_path">
-                <el-input ref="test" type="file" v-model="form.instances_path" @change="onfileChange"></el-input>
-            </el-form-item>
-        </el-form>
+        <el-input v-if="!isCloud" size="small" class="setting-option" type="file"
+            v-model="form.local.instances_path" @change="onfileChange"></el-input>
+        <el-input v-if="isCloud" size="small" class="setting-option" placeholder="http://127.0.0.1:9000" v-model="form.cloud.url"></el-input>
     </div>
     <div class="modal-footer">
-        <el-button size="mini" @click="onSubmit()">OK</el-button>
+        <el-button size="mini" type="primary" @click="onSubmit()">OK</el-button>
         <el-button size="mini" @click="beforeModalClose()">CANCEL</el-button>
     </div>
 </modal>
@@ -51,25 +51,9 @@ export default {
                 },
                 local: {
                     instances: [],
-                    instances_path:''   
-                }
-            },
-            rules: {
-                cloud: {
-                    url:[{required:true,message:'Please input url', trigger:'blur'}],
-                },
-                local: {
-                    instances:[{required:true,message:'Please select json file', trigger:'blur'}]
+                    instances_path:''
                 }
             }
-        }
-    },
-    computed: {
-        getForms() {
-            return this.isCloud ? this.form["cloud"] : this.form["local"];
-        },
-        getRules() {
-            return this.isCloud ? this.rules["cloud"] : this.rules["local"];
         }
     },
     components:{
@@ -96,6 +80,13 @@ export default {
             reader.readAsText(file, "utf-8");
         },
         onSubmit() {
+            api.nodes.type = this.isCloud ? "cloud" : "local";
+            if(this.isCloud) {
+                api.nodes[api.nodes.type].url = this.form.cloud.url;
+            } else {
+                api.nodes[api.nodes.type].data = this.form.local.instances;
+            }
+
             var me = this;
             console.log(this.form);
             var param_instances = [];
@@ -129,14 +120,6 @@ export default {
                     type:"error"
                 });
             })
-            // api.pages.setPage({page_id:this.form.page_id, instances:this.form.instances}).then(function(res) {
-            //     console.log(res);
-            //     me.custom_events.emit('page', {});
-            //     me.$modal.hide('create-page');
-            // }).catch(function(err) {
-            //     console.log(err);
-            //     me.$modal.hide('create-page');
-            // })
         }
     },
     beforeCreate(){
@@ -172,11 +155,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 25px;
   padding: 0.5rem;
   border-bottom: 1px solid #e9ecef;
-  border-top-left-radius: .3rem;
-  border-top-right-radius: .3rem;
+  background: #66b1ff;
+  color:white;
+  font-size:1.2em;
 }
 
 .w-modal .modal-body {
@@ -189,20 +172,25 @@ export default {
     display: block;   
     text-align: center;
     padding: 0.5rem;
+    border-top: 1px solid #e9ecef;
 }
 
 .close-modal-btn {
     width: 20px;
     height: 20px;
     border-radius: 11px;
-    color: #3f6393;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    color:white;
+}
+.close-modal-btn:hover {
+    color: #e9ecef;
 }
 
-.close-modal-btn:hover {
-    color: #529eff;
+.setting-option {
+    display: block;
+    margin:10px 0px 10px 0px;
 }
 </style>

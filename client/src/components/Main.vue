@@ -74,7 +74,7 @@ export default {
                         label:"",
                         icon:"fas fa-code",
                         action:this.onFlow,
-                        disabled:true
+                        disabled:false
                     }],
                     panels:[{
                         name:'Page',
