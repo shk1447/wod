@@ -26,7 +26,7 @@
             active-text="CLOUD"
             inactive-text="LOCAL">
         </el-switch>
-        <el-input v-if="!isCloud" size="small" class="setting-option" type="file"
+        <el-input v-if="!isCloud" size="small" class="setting-option" type="file" ref="test"
             v-model="form.local.instances_path" @change="onfileChange"></el-input>
         <el-input v-if="isCloud" size="small" class="setting-option" placeholder="http://127.0.0.1:9000" v-model="form.cloud.url"></el-input>
     </div>
@@ -72,7 +72,7 @@ export default {
             var reader = new FileReader();
             reader.onload = function() {
                 try {
-                    me.form.instances = JSON.parse(reader.result);
+                    me.form.local.instances = JSON.parse(reader.result);
                 } catch(err) {
                     console.log(err);
                 }
@@ -80,46 +80,51 @@ export default {
             reader.readAsText(file, "utf-8");
         },
         onSubmit() {
-            api.nodes.type = this.isCloud ? "cloud" : "local";
+            var me = this;
+            console.log('test');
+            var type = this.isCloud ? "cloud" : "local";
             if(this.isCloud) {
-                api.nodes[api.nodes.type].url = this.form.cloud.url;
+                api.nodes.setConfig(type, this.form.cloud);
             } else {
-                api.nodes[api.nodes.type].data = this.form.local.instances;
+                api.nodes.setConfig(type, this.form.local);
             }
 
-            var me = this;
-            console.log(this.form);
-            var param_instances = [];
-            function recursive_instances(instances, parent_id) {
-                _.each(instances, function(v,i) {
-                    if(v.props.children && v.props.children.length > 0) {
-                        recursive_instances(v.props.children, v.id)
-                    }
-                    if(parent_id) v['parent_id'] = parent_id;
-                    if(v.props.children) delete v.props.children;
-                    v["page_id"] = me.form.page_id
-                    param_instances.push(v);
-                })
-            }
-            recursive_instances(this.form.instances);
-            console.log(param_instances);
-            api.nodes.saveNodes({instances:param_instances}).then((res) => {
-                console.log(res);
-                me.custom_events.emit('page', {});
-                me.custom_events.emit('outline', {});
-                me.$modal.hide('create-page');
-                me.$message({
-                    message:"페이지가 저장되었습니다.",
-                    type:"success"
-                });
-            }).catch(function(err) {
-                console.log(err);
-                me.$modal.hide('create-page');
-                me.$message({
-                    message:"페이지 저장이 실패하였습니다.",
-                    type:"error"
-                });
-            })
+            me.custom_events.emit('refresh', {});
+            me.$modal.hide('setting-page');
+
+            // var me = this;
+            // console.log(this.form);
+            // var param_instances = [];
+            // function recursive_instances(instances, parent_id) {
+            //     _.each(instances, function(v,i) {
+            //         if(v.props.children && v.props.children.length > 0) {
+            //             recursive_instances(v.props.children, v.id)
+            //         }
+            //         if(parent_id) v['parent_id'] = parent_id;
+            //         if(v.props.children) delete v.props.children;
+            //         v["page_id"] = me.form.page_id
+            //         param_instances.push(v);
+            //     })
+            // }
+            // recursive_instances(this.form.instances);
+            // console.log(param_instances);
+            // api.nodes.saveNodes({instances:param_instances}).then((res) => {
+            //     console.log(res);
+            //     me.custom_events.emit('refresh', {});
+            //     //me.custom_events.emit('outline', {});
+            //     me.$modal.hide('create-page');
+            //     me.$message({
+            //         message:"페이지가 저장되었습니다.",
+            //         type:"success"
+            //     });
+            // }).catch(function(err) {
+            //     console.log(err);
+            //     me.$modal.hide('create-page');
+            //     me.$message({
+            //         message:"페이지 저장이 실패하였습니다.",
+            //         type:"error"
+            //     });
+            // })
         }
     },
     beforeCreate(){

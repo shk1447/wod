@@ -73,25 +73,24 @@ export default {
             console.log(transfer_page);
             e.dataTransfer.setData("node", JSON.stringify(transfer_page));
         },
+        setActive(params) {
+            this.active_page = params;
+        },
         refresh(params) {
             var me = this;
             api.nodes.getComp().then(function(res){
                 me.comp_list = res;
             })
-        },
-        setActive(params) {
-            this.active_page = params;
         }
     },
     created() {
         var me = this;
-        me.custom_events.on('outline', me.refresh);
+        me.custom_events.on('refresh', me.refresh);
         me.custom_events.on('onloaded_page', me.setActive);
     },
     mounted() {
-        var me = this;
         console.log('mounted');
-        this.refresh();
+        //this.refresh();
     },
     updated() {
         console.log('updated');

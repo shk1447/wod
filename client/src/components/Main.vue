@@ -129,16 +129,16 @@ export default {
             var me = this;
             if(this.$refs.content_comp && this.$refs.content_comp.save) {
                 this.$refs.content_comp.save().then(function() {
-                    me.custom_events.emit('page', {});
-                    me.custom_events.emit('outline', {});
+                    me.custom_events.emit('refresh', {});
+                    //me.custom_events.emit('outline', {});
                 })
             }
         },
         onSaveFlow() {
             var me = this;
             this.core.flow.manager.saveFlow().then(function() {
-                me.custom_events.emit('page', {});
-                me.custom_events.emit('outline', {});
+                me.custom_events.emit('refresh', {});
+                //me.custom_events.emit('outline', {});
                 me.$refs.content_comp.reload();
             });
         },

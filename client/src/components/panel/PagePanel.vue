@@ -68,8 +68,8 @@ export default {
             console.log(param_instances);
             api.nodes.saveNodes({instances:param_instances}).then((res) => {
                 console.log(res);
-                me.custom_events.emit('page', {});
-                me.custom_events.emit('outline', {});
+                me.custom_events.emit('refresh', {});
+                //me.custom_events.emit('outline', {});
                 me.$message({
                     message:"페이지가 저장되었습니다.",
                     type:"success"
@@ -151,17 +151,14 @@ export default {
             api.nodes.getNodes().then(function(res){
                 me.page_list = res;
             })
-            // api.pages.getPage().then(function(res) {
-            //     me.page_list = res;
-            // })
         }
     },
     created() {
         var me = this;
-        me.custom_events.on('page', me.refresh);
+        me.custom_events.on('refresh', me.refresh);
     },
     mounted() {
-        this.refresh();
+
     },
     destroyed() {
         var me = this;
