@@ -4,11 +4,10 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start":"electron .",
-    "build":"electron-packager --overwrite --all ."
+    "start": "electron .",
+    "build": "electron-packager --overwrite --all ."
   },
   "devDependencies": {
-    "electron": "^7.1.7",
     "electron-packager": "^14.1.1",
     "electron-prebuilt": "^1.4.13"
   }
