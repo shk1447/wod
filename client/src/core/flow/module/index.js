@@ -1,32 +1,34 @@
+// const PushNode = require('./PushNode');
+// {
+//     compName:"push-comp",
+//     type:'flow_comp',
+//     input:false,
+//     output:true,
+//     class:PushNode,
+//     props:{
+//         setter:{
+//             data_key:""
+//         }
+//     },
+//     fields:{
+//         setter:[[{
+//             "key":"id",
+//             "label":" 아이디",
+//             "type":"el-input",
+//             "description":""
+//         }],[{
+//             "key":"props.setter.data_key",
+//             "label":"기준 키",
+//             "type":"el-input",
+//             "description":""
+//         }]]
+//     }
+// }
+
 const PollingNode = require('./PollingNode');
-const PushNode = require('./PushNode');
 const FunctionNode = require('./FunctionNode');
 
 module.exports = [{
-    compName:"push-comp",
-    type:'flow_comp',
-    input:false,
-    output:true,
-    class:PushNode,
-    props:{
-        setter:{
-            data_key:""
-        }
-    },
-    fields:{
-        setter:[[{
-            "key":"id",
-            "label":" 아이디",
-            "type":"el-input",
-            "description":""
-        }],[{
-            "key":"props.setter.data_key",
-            "label":"기준 키",
-            "type":"el-input",
-            "description":""
-        }]]
-    }
-},{
     compName:"polling-comp",
     type:'flow_comp',
     input:false,

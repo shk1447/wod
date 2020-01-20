@@ -136,7 +136,6 @@ d3.keybinding = function() {
 };
 
 const uuid = require('uuid/v4');
-const randomColor = require('randomcolor') ;
 const flow_modules = require('./module');
 
 module.exports = (function() {
@@ -535,7 +534,7 @@ module.exports = (function() {
 
             var text_node = node.append('svg:text').attr('x', node_size*5).attr('y', node_size)
                 .style('stroke', 'none').style('dominant-baseline', 'central').style("text-anchor", "middle").style('fill', 'rgb(53, 53, 53)')
-                .text(d.page_id +"/"+ d.id);
+                .text(d.compName);
 
             
             var ellipsis = function(words) {
@@ -545,10 +544,10 @@ module.exports = (function() {
                     ellipsis(words);
                 }
             }
-            ellipsis(d.page_id +"/"+ d.id);
+            ellipsis(d.compName);
 
             d.update = function() {
-                ellipsis(d.page_id +"/"+ d.id);
+                ellipsis(d.compName);
             };
             if(d.flow.wires && d.flow.wires.length > 0) {
                 _.each(d.flow.wires, function(target_id,i) {
@@ -611,15 +610,6 @@ module.exports = (function() {
         })
         link.exit().remove();
 
-        // var speed_texts = link_group.selectAll('.volume_power');
-
-        // speed_texts.each(function(d,i) {
-        //     var text = d3.select(this);
-        //     var text_width = text.node().getComputedTextLength()
-        //     text.attr('x', (d.sourceNode.x + d.targetNode.x)/2 - (text_width/2))
-        //     .attr('y', (d.sourceNode.y + d.targetNode.y)/2)
-        // })
-
         var links = link_group.selectAll('.link_path')
         links.each(function(d,i) {
             var thisLink = d3.select(this);
@@ -632,31 +622,7 @@ module.exports = (function() {
             } else {
                 thisLink.attr('stroke','#888');
             }
-            // if(selected_id === d.sourceNode.page_id+"/"+d.sourceNode.id || selected_id === d.targetNode.page_id+"/"+d.targetNode.id) {
-            //     var result = activeNodes.filter(function(a) {return a.page_id+"/"+a.id === d.sourceNode.page_id+"/"+d.sourceNode.id || a.page_id+"/"+a.id === d.targetNode.page_id+"/"+d.targetNode.id});
-            //     result.forEach(function(v,i) {
-            //         v.node.attr('filter', 'url(#' + activeDropShadow + ')' );
-            //     })
-            //     thisLink.attr('stroke', color_define.speed[d.speed] ? color_define.speed[d.speed] : '#ff7f0e');
-            // }
         })
-        // var anim_links = link_group.selectAll('.link_anim');
-        // anim_links.each(function(d,i) {
-        //     var thisLink = d3.select(this);
-        //     var path_data = lineGenerator([[d.sourceNode.x, d.sourceNode.y],[d.targetNode.x, d.targetNode.y]])
-        //     thisLink.attr("d", path_data).attr("stroke-width", node_size/4)
-        //         .attr('stroke', 'rgb(221,221,221)');
-        //     var totalLength = thisLink.node().getTotalLength();
-        //     thisLink.attr("stroke-dasharray", totalLength/8 + " " + totalLength);
-        //     function repeat() {
-        //         thisLink.attr('stroke-dashoffset', totalLength + (totalLength/4));
-        //         thisLink.transition()
-        //             .duration(20000/d.volume_percent)
-        //             .attr("stroke-dashoffset", totalLength/8)
-        //         .on("end", repeat)
-        //     }
-        //     repeat();
-        // })
     }
 
     function reload(data) {

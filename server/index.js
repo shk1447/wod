@@ -51,10 +51,10 @@ module.exports = function(config) {
             function eachWorker(callback) { for (var id in cluster.workers) { callback(cluster.workers[id]); } }
             
             if (cluster.isMaster) {
-                // var stats_path = path.resolve(process.env.root_path, './stats.json');
-                // var test = JSON.parse(fs.readFileSync(stats_path,'utf8'));
-                // var webpack_analyzer = require('webpack-bundle-analyzer')
-                // webpack_analyzer.start(test);
+                var stats_path = path.resolve(process.env.root_path, './stats.json');
+                var test = JSON.parse(fs.readFileSync(stats_path,'utf8'));
+                var webpack_analyzer = require('webpack-bundle-analyzer')
+                webpack_analyzer.start(test);
                 
                 for (i = 0; i < me.cpus; i += 1) {
                     var worker = cluster.fork();

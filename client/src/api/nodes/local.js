@@ -1,20 +1,64 @@
 import _ from 'lodash';
+import uuid from 'uuid/v4';
 
 export default {
+    instances:[],
     setConfig:function(params) {
         this.instances = params.instances;
     },
     removePage:function(params) {
-        
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            me.instances = me.instances.filter(function(d) {
+                return d.page_id !== params.page_id
+            });
+            resolve();
+        })
     },
     removeFlow:function(params) {
-        
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            var instances = params.instances;
+            if(instances.length > 0) {
+                for(var i in instances) {
+                    var instance = instances[i];
+                    var obj_id = instance["id"];
+                    if(instance.type === 'flow_comp') {
+                        var del_index = me.instances.findIndex((d) => { return d.id === obj_id});
+                        if(del_index >= 0) me.instances.splice(del_index, 1);
+                    } else {
+                        var del_inst = me.instances.find((d) => { return d.id === obj_id});
+                        if(del_inst) delete del_inst["flow"];
+                    }
+                }
+            }
+            resolve();
+        })
     },
     removeById:function(params) {
-        
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            var obj_id = params["id"];
+            var del_index = me.instances.findIndex((d) => { return d.id === obj_id});
+            if(del_index >= 0) me.instances.splice(del_index, 1);
+            resolve();
+        });
     },
     saveNodes: function(params) {
-        
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            var instances = params.instances;
+            for(var i in instances) {
+                var instance = instances[i];
+                var inst_index = me.instances.findIndex(function(d) { return d.id === instance.id });
+                if(inst_index >= 0) {
+                    me.instances[inst_index] = instance
+                } else {
+                    me.instances.push(instance);
+                }
+            }
+            resolve();
+        });
     },
     getNodes: function() {
         var me = this;
@@ -48,14 +92,25 @@ export default {
                     var page = page_list.find((d) => {return d.page_id === root.page_id});
                     page.instances.push(root);
                 })
-                resolve(page_list);
+                resolve(JSON.parse(JSON.stringify(page_list)));
             } catch (error) {
                 reject(error);
             }
         })
     },
     getFlow: function(page_id) {
-        
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            try {
+                var nodes = me.instances.filter((d) => {
+                    return d.page_id === page_id;
+                });
+                
+                resolve(JSON.parse(JSON.stringify(nodes)));
+            } catch (error) {
+                reject(error)
+            }
+        })
     },
     getComp: function() {
         var me = this;
@@ -64,7 +119,20 @@ export default {
                 var nodes = me.instances.filter((d) => {
                     return d.type !== 'flow_comp'
                 });
-                resolve(nodes);
+                resolve(JSON.parse(JSON.stringify(nodes)));
+            } catch (error) {
+                reject(error)
+            }
+        })
+    },
+    checkPage: function(page_id) {
+        var me = this;
+        return new Promise(function(resolve, reject) {
+            try {
+                var i = me.instances.findIndex((d) => {
+                    return d.page_id === page_id
+                });
+                resolve({result:i < 0});
             } catch (error) {
                 reject(error)
             }

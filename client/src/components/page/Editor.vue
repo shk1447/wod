@@ -1,5 +1,8 @@
 <template>
 <div class="editor-area" @dragover="dragover" @drop="drop" v-on:click.native="onInitialize($event)">
+    <div v-if="instances.length === 0" style="user-select:none; width:100%; height:100%; text-align: center; display: table;">
+        <div style="font-size:1.5em;display: table-cell;vertical-align: middle;">Please drag page & drop here!</div>
+    </div>
     <transform-area></transform-area>
     <component v-for="item in instances" :key="item._id" :is="item.compName" :meta="item"></component>
 </div>

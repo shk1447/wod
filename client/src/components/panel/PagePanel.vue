@@ -96,9 +96,9 @@ export default {
         onAddPage() {
             var me = this;
             var new_page = {
-                page_id: uuid(),
+                page_id: "NewPage",
                 instances: [{
-                    id: "two_layer",
+                    id: "basic_layer",
                     input:true,
                     output:false,
                     compName: "two-layer-comp",

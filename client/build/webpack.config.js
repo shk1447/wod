@@ -108,17 +108,9 @@ var webpack_config = {
   ]
 }
 
+webpack_config.plugins.push(new UglifyJsPlugin());
+
 if(process.env.mode === "development") {
-  webpack_config.plugins.push(new UglifyJsPlugin({
-    minimize:process.env.mode === 'development' ? true : false,
-    uglifyOptions: {
-      compress: {
-        warnings: false
-      }
-    },
-    sourceMap: process.env.mode === 'development' ? true : false,
-    parallel: true
-  }))
   webpack_config.plugins.push(
     new BundleAnalyzerPlugin({
       analyzerMode: 'disabled',
@@ -126,7 +118,7 @@ if(process.env.mode === "development") {
       statsOptions: { source: false }
     })
   );
-  webpack_config["devtool"] = 'eval-source-map';
+  webpack_config["devtool"] = 'cheap-module-eval-source-map';
 }
 
 var webpackConfig = merge(baseWebpackConfig, webpack_config)

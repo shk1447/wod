@@ -2,6 +2,9 @@
     <div class="flip-card">
         <div class="flip-card-content">
             <div class="viewer-area flip-card-side-front" @dragover="dragover" @drop="drop">
+                <div v-if="instances.length === 0" style="user-select:none; width:100%; height:100%; text-align: center; display: table;">
+                    <div style="font-size:1.5em;display: table-cell;vertical-align: middle;">Please drag page & drop here!</div>
+                </div>
                 <component v-for="item in instances" :key="item._id" :is="item.compName" :meta="item"></component>
             </div>
             <div class="flip-card-side-back">
