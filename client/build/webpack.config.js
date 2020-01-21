@@ -111,14 +111,14 @@ var webpack_config = {
 webpack_config.plugins.push(new UglifyJsPlugin());
 
 if(process.env.mode === "development") {
-  webpack_config.plugins.push(
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'disabled',
-      generateStatsFile: true,
-      statsOptions: { source: false }
-    })
-  );
-  webpack_config["devtool"] = 'cheap-module-eval-source-map';
+  // webpack_config.plugins.push(
+  //   new BundleAnalyzerPlugin({
+  //     analyzerMode: 'disabled',
+  //     generateStatsFile: true,
+  //     statsOptions: { source: false }
+  //   })
+  // );
+  webpack_config["devtool"] = 'cheap-eval-source-map';
 }
 
 var webpackConfig = merge(baseWebpackConfig, webpack_config)

@@ -21,9 +21,15 @@ export default {
                     title: 'VISUALIZATION'
                 },
                 {
-                    title: 'EDITOR',
+                    title: 'DRAW',
                     type:'content',
                     icon: 'fa fa-edit',
+                    href:'/draw'
+                },
+                {
+                    title: 'EDITOR',
+                    type:'content',
+                    icon: 'fa fa-layer-group',
                     href:'/editor'
                 },
                 {

@@ -5,6 +5,7 @@ Vue.use(Router);
 
 import Editor from '../components/page/Editor.vue';
 import Viewer from '../components/page/Viewer.vue';
+import Draw from '../components/page/Draw.vue';
 import Manager from '../components/page/Manager.vue';
 import Analysis from '../components/page/Analysis.vue';
 
@@ -23,6 +24,10 @@ export default new Router({
             path: '/viewer',
             name: 'viewer',
             component: Viewer
+      },{
+            path: '/draw',
+            name: 'draw',
+            component: Draw
       },{
             path: '/manager',
             name: 'manager',

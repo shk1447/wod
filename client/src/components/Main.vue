@@ -24,6 +24,7 @@ import ContextMenu from './menu/ContextMenu.vue'
 
 import Editor from './page/Editor.vue';
 import Viewer from './page/Viewer.vue';
+import Draw from './page/Draw.vue';
 import Manager from './page/Manager.vue';
 import Analysis from './page/Analysis.vue';
 
@@ -90,6 +91,11 @@ export default {
                     left:[],
                     right:[],
                     panels:[]
+                },
+                draw: {
+                    left:[],
+                    right:[],
+                    panels:[]
                 }
             },
             flow:false
@@ -104,6 +110,7 @@ export default {
         "side-bar" : Sidebar,
         "editor": Editor,
         "viewer": Viewer,
+        "draw": Draw,
         "manager": Manager,
         "analysis": Analysis
     },
