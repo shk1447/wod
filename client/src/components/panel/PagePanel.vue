@@ -96,7 +96,7 @@ export default {
         onAddPage() {
             var me = this;
             var new_page = {
-                page_id: "NewPage",
+                page_id: uuid(),
                 instances: [{
                     id: "basic_layer",
                     input:true,
@@ -158,11 +158,11 @@ export default {
         me.custom_events.on('refresh', me.refresh);
     },
     mounted() {
-
+        this.refresh();
     },
     destroyed() {
         var me = this;
-        me.custom_events.off('page', me.refresh);
+        me.custom_events.off('refresh', me.refresh);
     }
 }
 </script>

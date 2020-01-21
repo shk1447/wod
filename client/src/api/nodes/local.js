@@ -50,7 +50,7 @@ export default {
             var instances = params.instances;
             for(var i in instances) {
                 var instance = instances[i];
-                var inst_index = me.instances.findIndex(function(d) { return d.id === instance.id });
+                var inst_index = me.instances.findIndex(function(d) { return d.page_id === instance.page_id && d.id === instance.id });
                 if(inst_index >= 0) {
                     me.instances[inst_index] = instance
                 } else {
