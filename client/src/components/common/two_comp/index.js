@@ -6,6 +6,8 @@ import ButtonComp from "./ButtonComp.vue"
 import InputComp from "./InputComp.vue"
 import FrameComp from "./FrameComp.vue"
 
+import SvgComp from "./SvgComp.vue"
+
 export default [
-    TableComp, LineChartComp, BarChartComp, ButtonComp, FrameComp, InputComp
+    TableComp, LineChartComp, BarChartComp, ButtonComp, FrameComp, InputComp, SvgComp
 ];

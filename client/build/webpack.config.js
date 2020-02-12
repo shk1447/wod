@@ -110,6 +110,7 @@ var webpack_config = {
 
 webpack_config.plugins.push(new UglifyJsPlugin());
 
+
 if(process.env.mode === "development") {
   // webpack_config.plugins.push(
   //   new BundleAnalyzerPlugin({

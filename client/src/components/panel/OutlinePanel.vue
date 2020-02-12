@@ -97,7 +97,7 @@ export default {
     },
     destroyed() {
         var me = this;
-        me.custom_events.off('outline', me.refresh);
+        me.custom_events.off('refresh', me.refresh);
         me.custom_events.off('onloaded_page', me.setActive);
     }
 }

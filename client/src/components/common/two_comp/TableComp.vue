@@ -109,9 +109,13 @@ export default {
         input_data:function(data){
             var me = this;
             if(Array.isArray(data)) {
-                _.each(data, function(d,i) {
-                    me.pushData(d);
-                })
+                if(data.length > 0) {
+                    _.each(data, function(d,i) {
+                        me.pushData(d);
+                    })
+                } else {
+                    me.meta.data = [];
+                }
             } else {
                 this.pushData(data);
             }

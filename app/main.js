@@ -13,9 +13,9 @@ app.on('ready', function() {
         width: 1600, 
         height: 900,
         kiosk: false,
-        fullscreen: true,
-        fullscreenable:false,
-        resizable:false,
+        fullscreen: false,
+        fullscreenable:true,
+        resizable:true,
         frame:false
     });
 
